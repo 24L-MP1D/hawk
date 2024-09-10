@@ -1,1 +1,1 @@
-<div className="nimba"></div>;
+<div className="">nimba</div>;
