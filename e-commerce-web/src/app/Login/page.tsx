@@ -1,37 +1,25 @@
-"use client";
+import * as React from "react";
 
-import Image from "next/image";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-export default function Login() {
-  return (
-    <div className="pt-[96px] pb-[374px]">
-      <div className="mx-auto flex gap-[16px] flex-col w-[334px] text-center">
-        <div className="font-semibold">Нэвтрэх</div>
-        <Input
-          className="h-[36] rounded-[18px]"
-          type="email"
-          placeholder="Имэйл Хаяг"
-        />
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-        <Input
-          className="h-[36] rounded-[18px]"
-          type="password"
-          placeholder="Нууц үг"
-        />
-        <Button className="h-[36] rounded-[18px] bg-blue-700">Нэвтрэх</Button>
-        <Button variant="link" className="text-xs underline text-gray-600">
-          Нууц үгээ мартсан
-        </Button>
-        <Button
-          variant="outline"
-          className="h-[36] rounded-[18px] border-blue-700 text-blue-700 hover:text-blue-700 hover:bg-black mt-8"
-        >
-          Бүртгүүлэх
-        </Button>
-      </div>
-    </div>
-  );
-}
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, ...props }, ref) => {
+    return (
+      <input
+        type={type}
+        className={cn(
+          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Input.displayName = "Input";
+
+export { Input };
