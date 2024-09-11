@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/Card";
 import datas from "../datas.json";
-import { Input } from "@/components/ui/input";
+
 import { Checkbox } from "@/components/ui/checkbox";
 export type cardItems = {
   price: number;
