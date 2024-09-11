@@ -4,7 +4,33 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div>
-     Home
+      <div className="bg-blue-300"> image </div>
+      <div className="grid grid-cols-4 gap-4 mt-4">
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+      </div>
+      <div className="grid grid-cols-4 gap-4 mt-4">
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-pink-300 col-start-3 col-span-2 row-span-2">card1</div>
+        <div className="bg-pink-300 col-start-1 col-span-2 row-span-2">card1</div>
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+      </div>
+      <div className="grid grid-cols-4 gap-4 mt-4">
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+      </div>
+      <div className="grid grid-cols-4 gap-4 mt-4">
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+        <div className="bg-slate-300">card1</div>
+      </div>
     </div>
   );
 }
