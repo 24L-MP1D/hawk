@@ -7,10 +7,10 @@ import { HeartIconSvg } from "./HeartIcon";
 import Image from "next/image";
 
 export const Card = ({ cardItems }: { cardItems: cardItems }) => {
-  const [ready, setReady] = useState(false);
+  const [readyy, setReady] = useState(false);
 
   const filled = () => {
-    if (ready) {
+    if (readyy) {
       setReady(false);
     } else {
       setReady(true);
@@ -32,7 +32,7 @@ export const Card = ({ cardItems }: { cardItems: cardItems }) => {
         <div className="font-bold">{cardItems.price}</div>
       </div>
       <div onClick={filled} className="absolute top-3 right-3 cursor-pointer">
-        <HeartIconSvg fill={ready} />
+        <HeartIconSvg fill={readyy} />
       </div>
     </div>
   );
