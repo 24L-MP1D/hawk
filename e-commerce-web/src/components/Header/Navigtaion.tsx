@@ -21,7 +21,7 @@ export const Navigation = () => {
                 alt="logo"
               />
             </div>
-            <p>ECOMMERCE</p>
+            <p>ECOMMERCEE</p>
           </a>
           <div>
             <Link href={"/Category"}>Ангилал</Link>
