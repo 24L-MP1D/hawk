@@ -4,6 +4,7 @@ import { cardItems } from "@/app/Category/page";
 
 import { useState } from "react";
 import { HeartIconSvg } from "./HeartIcon";
+import Image from "next/image";
 
 export const Card = ({ cardItems }: { cardItems: cardItems }) => {
   const [ready, setReady] = useState(false);
@@ -17,10 +18,14 @@ export const Card = ({ cardItems }: { cardItems: cardItems }) => {
   };
   return (
     <div className="w-full flex flex-col gap-2 relative group">
-      <div className="rounded-2xl bg-slate-400 aspect-[3/4] overflow-hidden">
-        <div className="group-hover:scale-150 bg-slate-50 transition-[10s]">
-          fafsdfdsa
-        </div>
+      <div className="rounded-2xl bg-slate-400 aspect-[3/4] overflow-hidden relative hover:border-black border-[1px]">
+        <Image
+          alt="bunny"
+          src={"/Tuulai.png"}
+          width={500}
+          height={500}
+          className="bg-slate-50 absolute inset-0 h-full group-hover:scale-150"
+        />
       </div>
       <div className="flex flex-col gap-1">
         <div>{cardItems.title}</div>
