@@ -1,47 +1,17 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { Card } from "@/components/Card";
-// import datas from "../datas.json";
+import datas from "@/app/datas.json";
 
-import { Checkbox } from "@/components/ui/checkbox";
+export default function Home() {
+  return (
 
-export type cardItems = {
-  price: number;
-  title: string;
-};
-
-  export default function Home() {
-    return (
-      <div>
-        <div className="bg-blue-300"> image </div>
-        <div className="grid grid-cols-4 gap-4 mt-4">
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-        </div>
-        <div className="grid grid-cols-4 gap-4 mt-4">
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-pink-300 col-start-3 col-span-2 row-span-2">card1</div>
-          <div className="bg-pink-300 col-start-1 col-span-2 row-span-2">card1</div>
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-        </div>
-        <div className="grid grid-cols-4 gap-4 mt-4">
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-        </div>
-        <div className="grid grid-cols-4 gap-4 mt-4">
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-          <div className="bg-slate-300">card1</div>
-        </div>
+    <div className="max-w-[1039px] mx-auto flex gap-[20px] pb-[100px] pt-[52px]">
+      <div className="flex-1 grid grid-cols-4 gap-x-[21px] gap-y-12">
+        {datas.map((cardItems, index) => (
+          <Card cardItems={cardItems} key={index} />
+        ))}
       </div>
-    );
-  }
+    </div>
+  )
+}
