@@ -10,8 +10,8 @@ import Link from "next/link";
 
 export const Footer = () => {
   return (
-    <div className="container mx-auto bg-black text-white">
-      <div className="flex justify-between mt-16 items-center">
+    <div className="mx-auto bg-black text-white px-6">
+      <div className="flex justify-between pt-16 items-center">
         <div className="w-[41px] h-[35px]">
           <Image width={41} height={35} alt={"logo"} src={"/Pinecone@2x.png"} />
         </div>
@@ -33,7 +33,7 @@ export const Footer = () => {
 
       <div className="flex items-center h-[1.5px] bg-[#FFFFFF1A] my-11"></div>
 
-      <div className="flex justify-between items-center mb-16 ">
+      <div className="flex justify-between items-center pb-16">
         <div className="text-[14px]">© 2024 Ecommerce MN</div>
         <div className="flex gap-7">
           <Link href="https://www.facebook.com/">
