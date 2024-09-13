@@ -1,11 +1,15 @@
 // src/index.ts
-import express from 'express';
+
+import express from "express";
+import connectDB from "./database";
 
 const app = express();
-const port = 3000;
+const port = 4000;
+app.use(express);
 
-app.get('/', (req, res) => {
-  res.send('Hello, TypeScript with Express!');
+connectDB();
+app.get("/", (req, res) => {
+  res.send("Hello, TypeScript with Express!");
 });
 
 app.listen(port, () => {
