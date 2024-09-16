@@ -27,6 +27,8 @@ const save = [
 
 export default function Save() {
   // const [heart, setHeart] = useState([]);
+  const [cards, setCards] = useState();
+  // const savedCount = cards.length;
 
   return (
     <div className="max-w-[622px] mx-auto">
