@@ -9,7 +9,7 @@ import { Input } from "../ui/input";
 
 export const Navigation = () => {
   return (
-    <div className=" mx-auto py-4 px-6  bg-[#000000] text-white">
+    <div  className="mx-auto py-4 px-6  bg-[#000000] text-white">
       <div className="flex justify-between items-center">
         <div className="flex gap-8">
           <a href="/" className="flex gap-2">
@@ -40,7 +40,7 @@ export const Navigation = () => {
             <a href="">
               <Heart />
             </a>
-            <a href="">
+            <a href="/ProductDetail">
               <ShoppingCart />
             </a>
           </div>
