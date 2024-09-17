@@ -36,3 +36,5 @@ export const Card = ({ cardItems }: { cardItems: cardItems }) => {
     </div>
   );
 };
+
+export default Card;
