@@ -1,15 +1,16 @@
 "use client";
 
+import { HeartIconSvg } from "@/components/HeartIcon";
 import { Button } from "@/components/ui/button";
 import { Heart, Star } from "lucide-react";
 import { useState } from "react";
 
 export const ProductDetail = () => {
   const productPhotos = [
-    { photo: "picture1" },
-    { photo: "picture2" },
-    { photo: "picture3" },
-    { photo: "picture4" },
+    { photo: "item1" },
+    { photo: "item2" },
+    { photo: "item3" },
+    { photo: "item4" },
   ];
 
   const productSize = [
@@ -27,8 +28,16 @@ export const ProductDetail = () => {
     { name: "Galt", value: "Ваав гоё харагдаж байна. " },
     { name: "OyunDari", value: "Ваав материал ёстой гоё  байна" },
   ];
+  const [ready, setReady] = useState(false);
+  const filled = () => {
+    if (ready) {
+      setReady(false);
+    } else {
+      setReady(true);
+    }
+  };
 
-  const [selectPhoto, setSelectPhoto] = useState("picture1");
+  const [selectPhoto, setSelectPhoto] = useState("item1");
   const [number, setNumber] = useState<number>(1);
   const price: number = 120000;
 
@@ -44,7 +53,6 @@ export const ProductDetail = () => {
 
   return (
     <div className="max-w-[1040px] mx-auto flex justify-between gap-5 pt-[52px] pb-20">
-
       <div className="flex justify-center gap-5">
         <div className="w-[509px] flex gap-5">
           <div className="mt-[100px] flex flex-col gap-3">
@@ -75,10 +83,14 @@ export const ProductDetail = () => {
                     New
                   </div>
                   <div className="flex gap-2 items-center">
-                    <p className="text-2xl font-bold">title</p>
-                    <Heart />
+                    <p className="text-2xl font-bold ">Wildflower Hoodie</p>
+                    <div onClick={filled} className="cursor-pointer">
+                      <HeartIconSvg fill={ready}/>
+                    </div>
                   </div>
-                  <div className="text-base font-normal"></div>
+                  <div className="text-base font-normal ">
+                    Зэрлэг цэцгийн зурагтай даавуун материалтай цамц
+                  </div>
                 </div>
                 <div>
                   <div className="mb-2">Хэмжээний заавар</div>
@@ -100,7 +112,7 @@ export const ProductDetail = () => {
                   >
                     -
                   </div>
-                  <div className="size-8 text-center content-center text-xs font-normal outline-none">
+                  <div className="size-8 text-center content-center text-xs font-normal">
                     {number}
                   </div>
                   <div
@@ -219,7 +231,7 @@ export const Starrr = () => {
       <Star fill="#FDE047" stroke="" />
       <Star fill="#FDE047" stroke="" />
       <Star fill="#FDE047" stroke="" />
-      <Star fill="#FDE047" stroke="" />
+      <Star fill="gray" stroke="" />
     </div>
   );
 };
