@@ -1,10 +1,28 @@
 import { Button } from "@/components/ui/button";
+import { error } from "console";
+import { useState } from "react";
 
 type Props = {
   onClose: () => void;
 };
 
 export const AddProduct = ({ onClose }: Props) => {
+  const [productName, setProductName] = useState("");
+  const [productCode, setProductCode] = useState("");
+  const AddItems = async () => {
+    console.log(productName);
+    console.log(productCode);
+    const data = await fetch("http://localhost:4000/products", {
+      method: "POST",
+      body: JSON.stringify({
+        productName,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    console.log(data);
+  };
   return (
     <div className="w-full">
       <div className="flex py-4 bg-[#ffffff] items-center">
@@ -31,6 +49,8 @@ export const AddProduct = ({ onClose }: Props) => {
             <div className="flex flex-col gap-2">
               <div>Бүтээгдэхүүний нэр</div>
               <input
+                onChange={(e) => setProductName(e.target.value)}
+                value={productName}
                 className="w-full p-2 bg-[#F7F7F8]  rounded-[8px]"
                 type="text"
                 placeholder="Нэр"
@@ -46,6 +66,8 @@ export const AddProduct = ({ onClose }: Props) => {
             <div className="flex flex-col gap-2">
               <div>Барааны код</div>
               <input
+                value={productCode}
+                onChange={(e) => setProductCode(e.target.value)}
                 className="w-full p-2 bg-[#F7F7F8]  rounded-[8px]"
                 type="text"
                 placeholder="#12345678"
@@ -56,7 +78,7 @@ export const AddProduct = ({ onClose }: Props) => {
         <div className="flex-1"></div>
       </div>
       <div className="flex justify-end gap-6 px-6">
-        <Button>Нийтлэх</Button>
+        <Button onClick={AddItems}>Нийтлэх</Button>
       </div>
     </div>
   );
