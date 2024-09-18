@@ -3,7 +3,7 @@
 import { Card } from "@/components/Card";
 import datas from "@/app/datas.json";
 import Image from "next/image";
-import { Cardd, CardContent } from "@/components/ui/cardd";
+import { CardContent } from "@/components/ui/cardd";
 
 import * as React from "react";
 
@@ -62,11 +62,12 @@ export default function Home() {
             (cardItems, index) =>
               index < 18 && (
                 <div
+                  key={index + cardItems.price}
                   className={`${
                     index == 6 ? " col-start-3 col-span-2 row-span-2" : ""
                   } ${index == 7 ? " col-start-1 col-span-2 row-span-2" : ""}`}
                 >
-                  <Card cardItems={cardItems} key={index + cardItems.price} />
+                  <Card cardItems={cardItems} />
                 </div>
               )
           )}

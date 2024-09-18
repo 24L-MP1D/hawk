@@ -2,15 +2,17 @@
 
 import { HeartIconSvg } from "@/components/HeartIcon";
 import { Button } from "@/components/ui/button";
-import { Heart, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { useState } from "react";
+import datas from "@/app/datas.json"
+import Card from "@/components/Card";
 
 export const ProductDetail = () => {
   const productPhotos = [
-    { photo: "item1" },
-    { photo: "item2" },
-    { photo: "item3" },
-    { photo: "item4" },
+    { photo: "item1", qty: "4" },
+    { photo: "item2", qty: "4" },
+    { photo: "item3", qty: "4" },
+    { photo: "item4", qty: "4" },
   ];
 
   const productSize = [
@@ -52,30 +54,32 @@ export const ProductDetail = () => {
   const [enable, setEnable] = useState<boolean>(true);
 
   return (
-    <div className="max-w-[1040px] mx-auto flex justify-between gap-5 pt-[52px] pb-20">
-      <div className="flex justify-center gap-5">
-        <div className="w-[509px] flex gap-5">
-          <div className="mt-[100px] flex flex-col gap-3">
-            {productPhotos.map((item) => (
-              <div
-                className={`w-[67px] h-[67px] rounded-[4px] bg-slate-400 ${
-                  selectPhoto === item.photo ? "border border-black" : " "
-                }`}
-                onClick={() => setSelectPhoto(item.photo)}
-                key={item.photo}
-              >
-                {item.photo}
-              </div>
-            ))}
-          </div>
-          <div className="w-[422px] h-[521px] bg-slate-400 rounded-[16px] flex flex-col">
-            {selectPhoto}
+    <div className="max-w-[1040px] mx-auto gap-5 pt-[52px] pb-20">
+      <div className="flex justify-center gap-5 mb-20 ">
+        <div className=" w-[509px] ">
+          <div className=" flex gap-5 sticky top-10">
+            <div className="mt-[100px] flex flex-col gap-3">
+              {productPhotos.map((item,index) => (
+                <div
+                  className={`w-[67px] h-[67px] rounded-[4px] bg-slate-400 ${
+                    selectPhoto === item.photo ? "border border-black" : " "
+                  }`}
+                  onClick={() => setSelectPhoto(item.photo)}
+                  key={index}
+                >
+                  {item.photo}
+                </div>
+              ))}
+            </div>
+            <div className="w-[422px] h-[521px] bg-slate-400 rounded-[16px] flex flex-col">
+              {selectPhoto}
+            </div>
           </div>
         </div>
         {/* 2th divition*/}
 
         <div className="w-[511px]">
-          <div className="pt-[100px] mr-[93px] pb-[55px]">
+          <div className="pt-[100px]  pb-[55px]">
             <div className="mb-6">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
@@ -95,9 +99,9 @@ export const ProductDetail = () => {
                 <div>
                   <div className="mb-2">Хэмжээний заавар</div>
                   <div className="flex gap-1">
-                    {productSize.map((item) => (
+                    {productSize.map((item, index) => (
                       <div
-                        key={item.size}
+                        key={index}
                         className="size-8 rounded-[16px] border-black border-[1px] text-xs font-normal flex items-center justify-center"
                       >
                         {item.size}
@@ -206,6 +210,21 @@ export const ProductDetail = () => {
               </div>
             ) : null}
           </div>
+        </div>
+      </div>
+
+
+      <div className="grid ">
+        <div className="text-3xl font-bold mb-6">Холбоотой бараа</div>
+        <div className="flex-1 grid grid-cols-4 gap-x-[21px] gap-y-12">
+          {datas.map(
+            (cardItems, index) =>
+              index < 8 && (
+                <div key={index}>
+                  <Card cardItems={cardItems} />
+                </div>
+              )
+          )}
         </div>
       </div>
     </div>
