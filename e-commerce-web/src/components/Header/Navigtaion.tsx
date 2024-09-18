@@ -16,6 +16,7 @@ export const Navigation = () => {
             <a href="/" className="flex gap-2">
               <div className="w-8 h-[27px]">
                 <Image
+                  className="w-8 h-[27px]"
                   src={"/NavigationLogo.png"}
                   width={30}
                   height={30}
