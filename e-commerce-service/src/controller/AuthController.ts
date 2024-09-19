@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Product, User } from "../model/userModel";
+import { Product, User } from "../model/productModel";
 import bcrypt from "bcrypt";
 const register = async (req: Request, res: Response) => {
   try {
