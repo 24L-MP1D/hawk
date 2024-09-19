@@ -3,7 +3,7 @@
 import { Card } from "@/components/Card";
 import datas from "@/app/datas.json";
 import Image from "next/image";
-
+import { Cardd, CardContent } from "@/components/ui/cardd";
 
 import * as React from "react";
 
@@ -15,6 +15,8 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+
+import { BasketCard } from "@/components/BasketCard";
 
 export default function Home() {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -62,15 +64,24 @@ export default function Home() {
             (cardItems, index) =>
               index < 18 && (
                 <div
+                  key={index + cardItems.price}
                   className={`${
                     index == 6 ? " col-start-3 col-span-2 row-span-2" : ""
                   } ${index == 7 ? " col-start-1 col-span-2 row-span-2" : ""}`}
                 >
-                  <Card cardItems={cardItems} key={index + cardItems.price} />
+                  <Card cardItems={cardItems} />
                 </div>
               )
           )}
         </div>
+      </div>
+      <div className="flex">
+        {datas.map(
+          (cardItems, index) => 
+            <div>
+          <BasketCard cardItems={cardItems} key={index + cardItems.price}/>
+          </div>
+          )}
       </div>
     </div>
   );
