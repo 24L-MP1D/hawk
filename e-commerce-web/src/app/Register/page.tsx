@@ -87,7 +87,7 @@ export default function Register() {
             Нууц үг баталгаажлаа
           </li>
           <li className={lengGreater ? "text-green-500" : "text-[#E11D48]"}>
-            Нууц үгийн урт 8с багагүй
+            Нууц үгийн урт 8-с багагүй
           </li>
         </ul>
 
