@@ -23,8 +23,8 @@ export default function Home() {
   });
 
   return (
-    <div className="max-w-[1040px] mx-auto bg-[#F7F7F8]">
-      <div className="w-[374px] h-[185px] bg-white mt-[168px] mx-auto rounded-2xl px-[7px] py-[56px] ">
+    <div className="max-w-[1040px] mx-auto bg-[#F7F7F8] min-h-screen pt-[168px]">
+      <div className="w-[374px] h-[185px] bg-white  mx-auto rounded-2xl px-[7px] py-[56px] ">
         <div className="w-[360px] h-[73px] flex flex-col gap-[17px]">
           <div className="ml-[163px]">
             <CircleCheckBig className="text-[#2563EB]" />
