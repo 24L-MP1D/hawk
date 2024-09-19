@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BasketCard } from "@/components/BasketCard";
 import { cardItems } from "@/app/Category/page";
+import { CircleCheckBig } from "lucide-react";
 
 export default function Home() {
   const [current, setCurrent] = React.useState(0);
@@ -17,52 +18,18 @@ export default function Home() {
   const [counting, setCounting] = React.useState(0);
 
   let sum = 0;
-  basketProducts.forEach(product => {
+  basketProducts.forEach((product) => {
     sum = sum + product.price;
-  })
+  });
 
   return (
-    <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px] bg-[#F7F7F8]">
-      <div className="">
-        <div className="w-[256px] h-[32px] mx-auto flex items-center justify-center ">
-          <div className="h-[32px] w-[32px] rounded-full bg-blue-500 text-center items-center text-white">
-            1
+    <div className="max-w-[1040px] mx-auto bg-[#F7F7F8]">
+      <div className="w-[374px] h-[185px] bg-white mt-[168px] mx-auto rounded-2xl px-[7px] py-[56px] ">
+        <div className="w-[360px] h-[73px] flex flex-col gap-[17px]">
+          <div className="ml-[163px]">
+            <CircleCheckBig className="text-[#2563EB]" />
           </div>
-          <div className="w-[80px] h-[1px] bg-black top-7"></div>
-          <div className="h-[32px] w-[32px] rounded-full bg-slate-200 text-center items-center text-[#09090B]">
-            2
-          </div>
-          <div className="w-[80px] h-[1px] bg-black top-7"></div>
-          <div className="h-[32px] w-[32px] rounded-full bg-slate-200 text-center items-center text-[#09090B]">
-            3
-          </div>
-        </div>
-        <div className="w-[638px] h-[664px] rounded-2xl mx-auto p-[32px] bg-white mt-[58px]">
-          <div className="text-xl font-bold mt-[24px]">1. Сагс </div>
-          <div className="flex flex-col gap-[16px] mt-[16px]">
-            {basketProducts.map(
-              (cardItems, index) =>
-                index < 3 && (
-                  <div>
-                    <BasketCard
-                      cardItems={cardItems}
-                      key={index + cardItems.price}
-                    />
-                  </div>
-                )
-            )}
-          </div>
-          <div className="flex justify-between mt-4">
-            <div> Нийт төлөх дүн: </div>
-            <div className="font-bold ">{sum}
-            <div className="font-bold"></div></div>
-          </div>
-          <div className="justify-between flex ">
-            <div className=""> .</div>
-            <div className="w-[175px] h-[36px] rounded-2xl bg-[#2563EB] text-center px-[36px] py-[8px] text-[14px] text-white  mt-[24px] ">
-              Худалдан авах
-            </div>
-          </div>
+          <div className="text-center">Захиалга амжилттай баталгаажлаа.</div>
         </div>
       </div>
     </div>

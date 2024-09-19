@@ -23,23 +23,23 @@ export default function Home() {
   });
 
   return (
-    <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px] bg-[#F7F7F8]">
+    <div className=" mx-auto pt-[52px] pb-[100px] bg-[#F7F7F8]">
       <div className="">
-        <div className="w-[256px] h-[32px] mx-auto flex items-center justify-center ">
-          <div className="h-[32px] w-[32px] rounded-full font-bold bg-blue-500 text-center items-center text-white border-[1px]">
+        <div className="w-[256px] h-[32px] mx-auto flex items-center justify-center mb-[66px] ">
+          <div className="h-[32px] w-[32px] rounded-full font-bold bg-blue-500 text-center p-[4px] text-white border-[1px]">
             1
           </div>
           <div className="w-[80px] h-[1px] bg-black top-7"></div>
-          <div className="h-[32px] w-[32px] rounded-full bg-slate-200 text-center items-center text-[#09090B] border-[1px]">
+          <div className="h-[32px] w-[32px] rounded-full bg-white border-[1px] p-[4px] border-black text-center items-center text-[#09090B]">
             2
           </div>
           <div className="w-[80px] h-[1px] bg-black top-7"></div>
-          <div className="h-[32px] w-[32px] rounded-full bg-slate-200 text-center items-center text-[#09090B]">
+          <div className="h-[32px] w-[32px] rounded-full bg-white border-[1px] p-[4px] border-black text-center items-center text-[#09090B]">
             3
           </div>
         </div>
-        <div className="w-[638px] h-[664px] rounded-2xl mx-auto p-[32px] bg-white mt-[58px]">
-          <div className="text-xl font-bold mt-[24px]">1. Сагс </div>
+        <div className="w-[638px] h-[664px] rounded-2xl mx-auto p-[32px]  bg-white">
+          <div className="text-xl font-bold">1. Сагс </div>
           <div className="flex flex-col gap-[16px] mt-[16px]">
             {basketProducts.map(
               (cardItems, index) =>
@@ -61,9 +61,9 @@ export default function Home() {
             </div>
           </div>
           <div className="justify-between flex ">
-            <div className=""> .</div>
+            <div className=""></div>
             <Link
-              className="w-[175px] h-[36px] rounded-2xl bg-[#2563EB] text-center px-[36px] py-[8px] text-[14px] text-white  mt-[24px]"
+              className="w-[175px] h-[36px] rounded-2xl bg-[#2563EB] text-center px-[36px] py-[8px] text-[14px] text-white  mt-[36px]"
               rel="import"
               href="/Basket/Address"
             >
