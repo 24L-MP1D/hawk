@@ -18,9 +18,10 @@ import { filters } from "../Category/page";
 
 type Props = {
   onClose: () => void;
+  loadProduct: () => void;
 };
 
-export const AddProduct = ({ onClose }: Props) => {
+export const AddProduct = ({ onClose, loadProduct }: Props) => {
   const [productName, setProductName] = useState("");
   const [productCode, setProductCode] = useState(0);
   const [price, setPrice] = useState(0);
@@ -61,7 +62,10 @@ export const AddProduct = ({ onClose }: Props) => {
       <div className="flex py-4 bg-[#ffffff] items-center">
         <div className="px-4 hover:cursor-pointer">
           <svg
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              loadProduct();
+            }}
             width="20"
             height="20"
             viewBox="0 0 20 20"
