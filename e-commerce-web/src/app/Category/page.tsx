@@ -8,16 +8,19 @@ export type cardItems = {
   price: number;
   title: string;
 };
-
+export type filtType = {
+  filt: string;
+  value: string;
+};
+export const filters: filtType[] = [
+  { filt: "Малгай", value: "Малгай" },
+  { filt: "Усны сав", value: "Усны сав" },
+  { filt: "T-shirt", value: "T-shirt" },
+  { filt: "Hoodie", value: "Hoodie" },
+  { filt: "Төв", value: "Төв" },
+  { filt: "Цүнх", value: "Цүнх" },
+];
 const Category = () => {
-  const filters: string[] = [
-    "Малгай",
-    "Усны сав",
-    "T-shirt",
-    "Hoodie",
-    "Төв",
-    "Цүнх",
-  ];
   const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
   return (
     <div className="max-w-[1039px] mx-auto flex gap-[20px] pb-[100px] pt-[52px]">
@@ -25,9 +28,9 @@ const Category = () => {
         <div className="flex flex-col gap-4">
           <div className="font-bold">Ангилал</div>
           {filters.map((filter) => (
-            <div key={filter} className="flex gap-2 items-center">
+            <div key={filter.filt} className="flex gap-2 items-center">
               <Checkbox />
-              <div>{filter}</div>
+              <div>{filter.filt}</div>
             </div>
           ))}
         </div>
