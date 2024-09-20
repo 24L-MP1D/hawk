@@ -39,16 +39,26 @@ export default function Home() {
           3
         </div>
       </div>
-      <div className="w-[687px] h-[656.75px] mx-auto p-[32px] rounded-2xl flex flex-col gap-[24px] bg-white">
+      <div className="w-[687px] h-[656.75px] mx-auto p-[32px] rounded-2xl flex flex-col gap-3 bg-white">
         <div>3. Төлбөр төлөлт </div>
-
-        <Link
-          className="w-[114px] h-[36px] rounded-2xl border-[1px] border-[#E4E4E7] text-center px-[36px] py-[8px] text-[14px]"
-          rel="address"
-          href="/Basket/Address"
-        >
-          Буцах
-        </Link>
+        <div>
+          <Image
+            alt="pay" 
+            src={"/Pay.png"}
+            width={600}
+            height={480}
+            className="bg-slate-50 "
+          />
+        </div>
+        <div>
+          <Link
+            className="w-[114px] h-[36px] rounded-2xl border-[1px] border-[#E4E4E7] text-center px-[36px] py-[8px] text-[14px]"
+            rel="address"
+            href="/Basket/Address"
+          >
+            Буцах
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/Card";
-import basketProducts from "@/app/datas.json";
+import SidebarProducts from "@/app/datas.json";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,11 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BasketCard } from "@/components/BasketCard";
 import { cardItems } from "@/app/Category/page";
+import { SidebarCard } from "@/components/SidebarCard";
 
 export default function Home() {
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
-
   const [counting, setCounting] = React.useState(0);
 
   return (
@@ -33,7 +33,22 @@ export default function Home() {
           </div>
         </div>
       <div className="max-w-full h-[678px] flex gap-[20px]  mx-auto ">
-        <div className="w-[333px] h-[448px] rounded-2xl bg-white">Сагс</div>
+        <div className="w-[333px] h-[448px] rounded-2xl bg-white px-[24px] py-[32px] ">
+          <div className="font-bold">Сагс</div>
+        <div className="flex flex-col gap-[16px] mt-[16px] items-center">
+            {SidebarProducts.map(
+              (cardItems, index) =>
+                index < 3 && (
+                  <div>
+                    <SidebarCard
+                      cardItems={cardItems}
+                      key={index + cardItems.price}
+                    />
+                  </div>
+                )
+            )}
+          </div>
+        </div>
         <div className="w-[687px] h-[678px] rounded-2xl gap-[24px] bg-white p-[32px]">
           <div className=" text-[#09090B] mb-[36px]">2. Хүргэлтийн мэдээлэл оруулах</div>
           <div className="w-[623px] h-[478px] flex flex-col gap-[24px]">
