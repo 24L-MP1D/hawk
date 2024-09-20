@@ -4,8 +4,9 @@ import { HeartIconSvg } from "@/components/HeartIcon";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import { useState } from "react";
-import datas from "@/app/datas.json"
+import datas from "@/app/datas.json";
 import Card from "@/components/Card";
+import Link from "next/link";
 
 export const ProductDetail = () => {
   const productPhotos = [
@@ -59,7 +60,7 @@ export const ProductDetail = () => {
         <div className=" w-[509px] ">
           <div className=" flex gap-5 sticky top-10">
             <div className="mt-[100px] flex flex-col gap-3">
-              {productPhotos.map((item,index) => (
+              {productPhotos.map((item, index) => (
                 <div
                   className={`w-[67px] h-[67px] rounded-[4px] bg-slate-400 ${
                     selectPhoto === item.photo ? "border border-black" : " "
@@ -89,7 +90,7 @@ export const ProductDetail = () => {
                   <div className="flex gap-2 items-center">
                     <p className="text-2xl font-bold ">Wildflower Hoodie</p>
                     <div onClick={filled} className="cursor-pointer">
-                      <HeartIconSvg fill={ready}/>
+                      <HeartIconSvg fill={ready} />
                     </div>
                   </div>
                   <div className="text-base font-normal ">
@@ -128,10 +129,13 @@ export const ProductDetail = () => {
                 </div>
               </div>
               <div>
-                <div className="mb-2 font-bold text-xl">{price * number}₮</div>
-                <Button className="py-4 px-9 bg-[#2563EB] rounded-[20px]">
+                <div className="pb-2 font-bold text-xl">{price * number}₮</div>
+                <Link
+                  href="/Basket"
+                  className="py-2 px-9 bg-[#2563EB] rounded-[20px] text-white cursor-pointer hover:bg-[black] transition-all"
+                >
                   Сагсанд нэмэх
-                </Button>
+                </Link>
               </div>
             </div>
 
@@ -212,7 +216,6 @@ export const ProductDetail = () => {
           </div>
         </div>
       </div>
-
 
       <div className="grid ">
         <div className="text-3xl font-bold mb-6">Холбоотой бараа</div>
