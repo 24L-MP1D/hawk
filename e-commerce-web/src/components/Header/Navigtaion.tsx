@@ -13,7 +13,7 @@ export const Navigation = () => {
       <div className="max-w-[1440px] mx-auto py-4 px-6  bg-[#000000] text-white">
         <div className="flex justify-between items-center">
           <div className="flex gap-8">
-            <a href="/" className="flex gap-2">
+            <a href="/ProductDetail" className="flex gap-2">
               <div className="w-8 h-[27px]">
                 <Image
                   className="w-8 h-[27px]"
