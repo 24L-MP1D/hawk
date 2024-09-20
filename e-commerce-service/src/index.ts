@@ -12,8 +12,9 @@ import {
 import { productsRouter } from "./router/productsRouter";
 const app = express();
 const port = 4000;
-
+const cors = require("cors");
 connectDB();
+app.use(cors());
 app.use(express.json());
 
 // products CRUD done

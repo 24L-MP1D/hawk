@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
-import { Product } from "../model/userModel";
+import { Product } from "../model/productModel";
 export const createProduct = async (req: Request, res: Response) => {
   const products = req.body;
+  console.log(req.body);
   try {
     const product = await Product.create(products);
     res.send(product);
   } catch (error) {
+    console.error(error);
     res.send("find error");
   }
 };

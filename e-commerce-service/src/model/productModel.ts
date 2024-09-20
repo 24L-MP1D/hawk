@@ -3,6 +3,7 @@ import { model, Schema } from "mongoose";
 const schema = new Schema({
   productName: String,
   price: Number,
+  productId: Number,
   categoryId: String,
   qty: Number,
   thumbnails: String,
@@ -13,5 +14,6 @@ const schema = new Schema({
   viewCount: Number,
   createAt: Date,
   updateAt: Date,
+  categoryType: String,
 });
-export const Product = model("products", schema);
+export const Product = model("product", schema);
