@@ -92,7 +92,7 @@ export default function Home() {
                   <Link
                     className="w-[114px] h-[36px] rounded-2xl border-[1px] border-[#E4E4E7] text-center px-[36px] py-[8px] text-[14px]"
                     rel="address"
-                    href="/Basket/Cart"
+                    href="/Basket"
                   >
                     Буцах
                   </Link>
