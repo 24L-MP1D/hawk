@@ -32,16 +32,15 @@ const updateUser = ( req: Request, res: Response) => {
     async (req: Request, res: Response)=> {
         const { name, email } = req.body;
         const { id } = req.params;
-      
         try {
           const user = await UserModel.findByIdAndUpdate(id, { 
             name,
             email,
          });
-          res.send(user);
+          res.send({mesage: "amjilttai update hiilee"});
         }
         catch (error) {
-          res.status(400).json({errorMessage: 'Cannot create user!'});
+          res.status(400).json({errorMessage: 'Aldaa garlaa!'});
         }
       }
 }
