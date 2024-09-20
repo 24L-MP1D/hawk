@@ -28,6 +28,7 @@ export const AddProduct = ({ onClose }: Props) => {
   const [qty, setQty] = useState(0);
   const [categoryType, setCategoryType] = useState("");
   const [showCategory, setShowCategory] = useState(false);
+  const [productTag, setProductTag] = useState("");
   const AddItems = async () => {
     const data = await fetch("http://localhost:4000/products", {
       method: "POST",
@@ -38,6 +39,7 @@ export const AddProduct = ({ onClose }: Props) => {
         price,
         qty,
         categoryType: categoryType,
+        productTag,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -52,6 +54,7 @@ export const AddProduct = ({ onClose }: Props) => {
     setPrice(0);
     setDescription("");
     setQty(0);
+    setProductTag("");
   };
   return (
     <div className="w-full text-nowrap bg-[#F7F7F8]">
@@ -206,6 +209,8 @@ export const AddProduct = ({ onClose }: Props) => {
                 type="text"
                 placeholder="Таг нэмэх..."
                 className="px-2 pt-2 bg-[#F7F7F8]"
+                onChange={(e) => setProductTag(e.target.value)}
+                value={productTag}
               />
             </div>
             <div className="text-[#5E6166] text-base">
