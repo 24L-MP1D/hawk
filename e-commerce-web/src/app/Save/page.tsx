@@ -1,5 +1,5 @@
 "use client";
-
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaHeart } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -26,10 +26,14 @@ const save = [
 ];
 
 export default function Save() {
-  const [heart, setHeart] = useState([]);
+  const [heart, setHeart] = useState(true);
   const [cards, setCards] = useState();
   // const savedCount = cards.length;
 
+// useEffect(()=>{
+//    setHeart(true)
+// },[])
+console.log({heart})
   return (
     <div className="max-w-[622px] mx-auto">
       <div>
@@ -37,9 +41,19 @@ export default function Save() {
 
         <div className="flex flex-col gap-2 pb-4">
           {save.map((title) => (
-            <div
+            <motion.div
               key={title.title}
               className="flex justify-between border-2 rounded-xl"
+              animate={{
+                y: heart ? 0 : 10,
+                opacity: heart ? 0 : 1
+              }}
+              initial={{
+                opacity: 0.1
+              }}
+              transition={{
+                duration: 2
+              }}
             >
               <div className="flex gap-6 p-4">
                 <Link href="/ProductTetails">
@@ -55,18 +69,22 @@ export default function Save() {
                 <div className="flex flex-col gap-1">
                   <Link href="/ProductTetails">{title.title}</Link>
                   <p className="font-bold">{title.price}</p>
-                  <button className="bg-[#2563EB] w-[81px] h-[28px] rounded-3xl text-sm text-white">
+                  <button onClick={()=>setHeart(false)} className="bg-[#2563EB] w-[81px] h-[28px] rounded-3xl text-sm text-white">
                     Сагслах
                   </button>
                 </div>
               </div>
               <div className="flex p-4">
-                <HeartIconSvg fill={true} />
+                <FaHeart onClick={()=>setHeart(!heart)}/>
+               
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </div>
   );
 }
+
+{/* <HeartIconSvg fill={true} /> */}
+
