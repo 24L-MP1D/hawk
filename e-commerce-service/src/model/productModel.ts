@@ -15,5 +15,6 @@ const schema = new Schema({
   createAt: Date,
   updateAt: Date,
   categoryType: String,
+  productTag: String,
 });
 export const Product = model("product", schema);

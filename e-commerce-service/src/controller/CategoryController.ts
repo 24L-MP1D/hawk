@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import { Product } from "../model/productModel";
 export const createProduct = async (req: Request, res: Response) => {
   const products = req.body;
-  console.log(req.body);
+  products.createAt = new Date();
+  console.log({ products });
   try {
     const product = await Product.create(products);
     res.send(product);
