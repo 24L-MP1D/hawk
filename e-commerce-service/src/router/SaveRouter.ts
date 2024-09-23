@@ -1,12 +1,17 @@
-import  express  from "express";
-import {getSavedProducts, createSavedProducts, updateSavedProducts,deleteSavedProducts} from "../controllers/SaveController";
+import express from "express";
+import {
+  getSavedProducts,
+  createSavedProducts,
+  updateSavedProducts,
+  deleteSavedProducts,
+} from "../controllers/SaveController";
 
 const saveRouter = express.Router();
 
 saveRouter
-.get("/Save", getSavedProducts)
-.post("/Save", createSavedProducts)
-.put("/Save/:id", updateSavedProducts)
-.delete("/Save/:id",deleteSavedProducts)
+  .get("/save", getSavedProducts)
+  .post("/save", createSavedProducts)
+  .put("/save/:id", updateSavedProducts)
+  .delete("/save/:id", deleteSavedProducts);
 
-export {saveRouter}
+export { saveRouter };
