@@ -9,16 +9,19 @@ import { HeartIconSvg } from "@/components/HeartIcon";
 
 const save = [
   {
+    id: 1,
     title: "Chunky Glyph Tee",
     image: "/asian.png",
     price: "120.000₮",
   },
   {
+    id: 2,
     title: "Doodle Hoodie",
     image: "/black.png",
     price: "100.000₮",
   },
   {
+    id: 3,
     title: "Local Styles Crewneck",
     image: "/latino.png",
     price: "80.000₮",
@@ -27,13 +30,17 @@ const save = [
 
 export default function Save() {
   const [heart, setHeart] = useState(true);
-  const [cards, setCards] = useState();
+
+  // function LoadList () {
+  //   useEffect("/http://")fetch()
+  // }
+
   // const savedCount = cards.length;
 
-// useEffect(()=>{
-//    setHeart(true)
-// },[])
-console.log({heart})
+  // useEffect(()=>{
+  //    setHeart(true)
+  // },[])
+
   return (
     <div className="max-w-[622px] mx-auto">
       <div>
@@ -46,17 +53,17 @@ console.log({heart})
               className="flex justify-between border-2 rounded-xl"
               animate={{
                 y: heart ? 0 : 10,
-                opacity: heart ? 0 : 1
+                opacity: heart ? 0 : 1,
               }}
               initial={{
-                opacity: 0.1
+                opacity: 0.1,
               }}
               transition={{
-                duration: 2
+                duration: 2,
               }}
             >
               <div className="flex gap-6 p-4">
-                <Link href="/ProductTetails">
+                <Link href="/ProductDetails">
                   <Image
                     src={title.image}
                     alt="image"
@@ -67,16 +74,18 @@ console.log({heart})
                 </Link>
 
                 <div className="flex flex-col gap-1">
-                  <Link href="/ProductTetails">{title.title}</Link>
+                  <Link href="/ProductDetails">{title.title}</Link>
                   <p className="font-bold">{title.price}</p>
-                  <button onClick={()=>setHeart(false)} className="bg-[#2563EB] w-[81px] h-[28px] rounded-3xl text-sm text-white">
+                  <button
+                    onClick={() => setHeart(false)}
+                    className="bg-[#2563EB] w-[81px] h-[28px] rounded-3xl text-sm text-white"
+                  >
                     Сагслах
                   </button>
                 </div>
               </div>
               <div className="flex p-4">
-                <FaHeart onClick={()=>setHeart(!heart)}/>
-               
+                <FaHeart onClick={() => setHeart(!heart)} />
               </div>
             </motion.div>
           ))}
@@ -86,5 +95,6 @@ console.log({heart})
   );
 }
 
-{/* <HeartIconSvg fill={true} /> */}
-
+{
+  /* <HeartIconSvg fill={true} /> */
+}
