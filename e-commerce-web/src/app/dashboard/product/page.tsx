@@ -1,5 +1,5 @@
 "use client";
-
+import dayjs from "dayjs";
 import { DashboardAside } from "@/components/DashboardAside";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { EditIcon, Trash } from "lucide-react";
 
-type ProductType = {
+export type ProductType = {
   productName: string;
   price: number;
   productId: number;
@@ -50,6 +50,7 @@ const Product = () => {
     });
     loadProduct();
   };
+
   useEffect(() => {
     loadProduct();
   }, []);
@@ -236,12 +237,18 @@ const Product = () => {
                       <TableCell className="px-6 py-4 max-w-[156px]">
                         {product.qty}
                       </TableCell>
-                      <TableCell className="px-6 py-4">{product.qty}</TableCell>
+                      <TableCell className="px-6 py-4">
+                        {dayjs(product.createAt).format("YYYY-MM-DD")}
+                      </TableCell>
                       <TableCell className="px-6 py-4 flex gap-4 items-center">
                         <div onClick={() => deleteProduct(product._id)}>
                           <Trash className="text-[#1C20243D] hover:cursor-pointer" />
                         </div>
-                        <div>
+                        <div
+                          onClick={() => {
+                            setProduct(false);
+                          }}
+                        >
                           <EditIcon className="text-[#1C20243D] hover:cursor-pointer" />
                         </div>
                       </TableCell>

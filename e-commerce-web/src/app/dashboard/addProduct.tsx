@@ -15,6 +15,7 @@ import { Plus } from "lucide-react";
 import { useSelectedLayoutSegment } from "next/navigation";
 import { useState } from "react";
 import { filters } from "../Category/page";
+import { create } from "domain";
 
 type Props = {
   onClose: () => void;
@@ -22,6 +23,24 @@ type Props = {
 };
 
 export const AddProduct = ({ onClose, loadProduct }: Props) => {
+  const updateProduct = async (id: string) => {
+    await fetch(`http://localhost:4000/products/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        productName,
+        description,
+        productId: productCode,
+        price,
+        qty,
+        categoryType: categoryType,
+        productTag,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    loadProduct();
+  };
   const [productName, setProductName] = useState("");
   const [productCode, setProductCode] = useState(0);
   const [price, setPrice] = useState(0);

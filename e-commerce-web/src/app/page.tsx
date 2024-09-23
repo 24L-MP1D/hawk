@@ -1,9 +1,9 @@
 "use client";
 
 import { Card } from "@/components/Card";
-import datas from "@/app/datas.json";
-import Image from "next/image";
 
+import Image from "next/image";
+import datas from "./datas.json";
 import * as React from "react";
 
 import {
@@ -68,21 +68,19 @@ export default function Home() {
                     index == 6 ? " col-start-3 col-span-2 row-span-2" : ""
                   } ${index == 7 ? " col-start-1 col-span-2 row-span-2" : ""}`}
                 >
-                  <Card cardItems={cardItems} />
+                  {/* <Card cardItems={cardItems} /> */}
                 </div>
               )
           )}
         </div>
       </div>
       <div className="flex">
-        {datas.map(
-          (cardItems, index) => 
-            <div>
-          <BasketCard cardItems={cardItems} key={index + cardItems.price}/>
+        {datas.map((cardItems, index) => (
+          <div>
+            <BasketCard cardItems={cardItems} key={index + cardItems.price} />
           </div>
-          )}
+        ))}
       </div>
     </div>
   );
-
 }

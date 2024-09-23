@@ -4,10 +4,8 @@ import { Card } from "@/components/Card";
 import datas from "../datas.json";
 
 import { Checkbox } from "@/components/ui/checkbox";
-export type cardItems = {
-  price: number;
-  title: string;
-};
+import { useEffect, useState } from "react";
+
 export type filtType = {
   filt: string;
   value: string;
@@ -21,6 +19,15 @@ export const filters: filtType[] = [
   { filt: "Цүнх", value: "Цүнх" },
 ];
 const Category = () => {
+  const [cardList, setCardList] = useState([]);
+  const productList = async () => {
+    const response = await fetch("http://localhost:4000/products");
+    const data = await response.json();
+    setCardList(data);
+  };
+  useEffect(() => {
+    productList();
+  }, []);
   const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
   return (
     <div className="max-w-[1039px] mx-auto flex gap-[20px] pb-[100px] pt-[52px]">
@@ -45,7 +52,7 @@ const Category = () => {
         </div>
       </div>
       <div className="flex-1 grid grid-cols-3 gap-x-[21px] gap-y-12">
-        {datas.map((cardItems, index) => (
+        {cardList.map((cardItems, index) => (
           <Card cardItems={cardItems} key={index} />
         ))}
       </div>
