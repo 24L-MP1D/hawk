@@ -18,6 +18,7 @@ export const filters: filtType[] = [
   { filt: "Төв", value: "Төв" },
   { filt: "Цүнх", value: "Цүнх" },
 ];
+export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
 const Category = () => {
   const [cardList, setCardList] = useState([]);
   const productList = async () => {
@@ -28,7 +29,6 @@ const Category = () => {
   useEffect(() => {
     productList();
   }, []);
-  const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
   return (
     <div className="max-w-[1039px] mx-auto flex gap-[20px] pb-[100px] pt-[52px]">
       <div className="max-w-[245px] w-full flex flex-col gap-12">

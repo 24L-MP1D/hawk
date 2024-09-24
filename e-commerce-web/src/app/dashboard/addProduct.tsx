@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { error } from "console";
-import { Plus } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { useSelectedLayoutSegment } from "next/navigation";
 import { useState } from "react";
-import { filters } from "../Category/page";
+import { filters, sizes } from "../Category/page";
 import { create } from "domain";
 import { Value } from "@radix-ui/react-select";
 
@@ -51,7 +51,7 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
     });
     loadProduct();
   };
-
+  const [size, setSize] = useState(false);
   const [color, setColor] = useState(false);
   const [productName, setProductName] = useState("");
   const [productCode, setProductCode] = useState(0);
@@ -62,6 +62,7 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
   const [showCategory, setShowCategory] = useState(false);
   const [productTag, setProductTag] = useState("");
   const [productColor, setProductColor] = useState<string[]>([]);
+  const [productSize, setProductSize] = useState<string[]>([]);
   const AddItems = async () => {
     const data = await fetch("http://localhost:4000/products", {
       method: "POST",
@@ -74,6 +75,7 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
         categoryType: categoryType,
         productTag,
         color: productColor,
+        size: productSize,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -94,6 +96,36 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
     const newProductColor = [...productColor];
     newProductColor.push(color);
     setProductColor(newProductColor);
+  };
+  const checkColor = (color: string) => {
+    const includeColor = productColor.filter((item) => item !== color);
+    setProductColor(includeColor);
+  };
+  const addColorAndCheckColor = (color: string) => {
+    const checkedColor = productColor.includes(color);
+    if (checkedColor) {
+      checkColor(color);
+    } else {
+      addColor(color);
+    }
+  };
+  const addSizes = (size: string) => {
+    const newProductSize = [...productSize];
+    newProductSize.push(size);
+    setProductSize(newProductSize);
+    console.log(productSize);
+  };
+  const checkSizes = (size: string) => {
+    const checkSize = productSize.filter((item) => item !== size);
+    setProductSize(checkSize);
+  };
+  const addSizesAndCheckSizes = (size: string) => {
+    const checkedSize = productSize.includes(size);
+    if (checkedSize) {
+      checkSizes(size);
+      return;
+    }
+    addSizes(size);
   };
 
   return (
@@ -197,7 +229,7 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
                   />
                 </div>
                 {showCategory && (
-                  <div className="flex flex-col absolute w-full">
+                  <div className="flex flex-col absolute w-full z-20">
                     {filters.map((select) => (
                       <div
                         onClick={() => {
@@ -236,26 +268,58 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
                 >
                   <Plus width={15} height={15} />
                 </div>
-                <div></div>
+
                 {color && (
                   <div className="absolute flex right-0 gap-1 items-center">
                     {colors.map((color) => (
                       <div
-                        onClick={() => addColor(color.color)}
+                        onClick={() => {
+                          addColorAndCheckColor(color.color);
+                        }}
                         key={color.Value}
-                        className="w-6 h-6 rounded-full cursor-pointer"
+                        className="w-6 h-6 rounded-full cursor-pointer flex items-center justify-center"
                         style={{ backgroundColor: color.Value }}
-                      ></div>
+                      >
+                        {productColor.includes(color.color) && (
+                          <Check
+                            className="w-3 h-3
+                          "
+                          />
+                        )}
+                      </div>
                     ))}
                     <Button onClick={() => setColor(false)}>Хаах</Button>
                   </div>
                 )}
               </div>
-              <div className="flex gap-6 items-center">
+              <div className="flex gap-6 items-center relative">
                 <div>Хэмжээ</div>
-                <div className="bg-[#ECEDF0] rounded-full p-1 cursor-pointer w-8 h-8 flex justify-center items-center hover:bg-slate-300">
+                <div
+                  onClick={() => setSize(true)}
+                  className="bg-[#ECEDF0] rounded-full p-1 cursor-pointer w-8 h-8 flex justify-center items-center hover:bg-slate-300"
+                >
                   <Plus width={15} height={15} />
                 </div>
+                {size && (
+                  <div className="absolute flex right-0 gap-1 items-center">
+                    {sizes.map((size) => (
+                      <div
+                        onClick={() => {
+                          addSizesAndCheckSizes(size);
+                        }}
+                        key={size}
+                        className={`${
+                          productSize.includes(size)
+                            ? "bg-red-300"
+                            : "bg-slate-400 "
+                        } cursor-pointer flex items-center justify-center  p-2 rounded-xl`}
+                      >
+                        {size}
+                      </div>
+                    ))}
+                    <Button onClick={() => setSize(false)}>Хаах</Button>
+                  </div>
+                )}
               </div>
             </div>
             <div>
