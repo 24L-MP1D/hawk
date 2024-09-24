@@ -3,12 +3,26 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Formik } from "formik";
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setpasswordConfirm] = useState("");
+
+  const initialValues = {
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  };
+
+  // const formik = Formik({
+  //   initialValues: {
+  //     name,
+  //   },
+  // });
 
   //regex usage
   const hasUppercase = /[A-Z]/.test(password);
