@@ -1,7 +1,6 @@
 "use client";
 
 import { cardItems } from "@/app/Category/page";
-
 import { useState } from "react";
 import { HeartIconSvg } from "./HeartIcon";
 import Image from "next/image";
@@ -37,3 +36,5 @@ export const Card = ({ cardItems }: { cardItems: cardItems }) => {
     </div>
   );
 };
+
+export default Card;

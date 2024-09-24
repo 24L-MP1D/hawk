@@ -7,6 +7,6 @@ export const connect = async () => {
     );
     console.log("Connected to database successfully!Galt");
   } catch (error) {
-    console.error(error);
+    console.error("" + error);
   }
 };
