@@ -1,13 +1,59 @@
 "use client";
-
+import dayjs from "dayjs";
 import { DashboardAside } from "@/components/DashboardAside";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddProduct } from "../addProduct";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { EditIcon, Trash } from "lucide-react";
+
+export type ProductType = {
+  productName: string;
+  price: number;
+  productId: number;
+  categoryId: string;
+  qty: number;
+  thumbnails: string;
+  images: string;
+  coupon: string;
+  salePercent: number;
+  description: string;
+  viewCount: number;
+  createAt: Date;
+  updateAt: Date;
+  categoryType: string;
+  productTag: string;
+  _id: string;
+};
 
 const Product = () => {
+  const [readProduct, setReadProduct] = useState([]);
+  const loadProduct = async () => {
+    const response = await fetch(`http://localhost:4000/products`);
+    const data = await response.json();
+    setReadProduct(data);
+  };
+  const deleteProduct = async (id: string) => {
+    await fetch(`http://localhost:4000/products/${id}`, {
+      method: "DELETE",
+    });
+    loadProduct();
+  };
+
+  useEffect(() => {
+    loadProduct();
+  }, []);
   const [product, setProduct] = useState(true);
   return (
     <div className="flex min-h-screen">
@@ -141,52 +187,85 @@ const Product = () => {
                 <Input placeholder="Бүтээгдэхүүний нэр, SKU, UPC" />
               </div>
             </div>
-            <div className="bg-[#FFFFFF] rounded-xl">
-              <div className="flex border-b-2 border-[#F7F7F8] pl-[64px] ">
-                <div className="py-[14px] px-6 max-w-[156px] w-full">
-                  Бүтээгдэхүүн
-                </div>
-                <div className="py-[14px] px-6 max-w-[214px] w-full">
-                  Ангилал
-                </div>
-                <div className="py-[14px] px-6 max-w-[156px] w-full">Үнэ</div>
-                <div className="py-[14px] px-6 max-w-[156px] w-full">
-                  Үлдэгдэл
-                </div>
-                <div className="py-[14px] px-6 max-w-[156px] w-full">
-                  Зарагдсан
-                </div>
-                <div className="py-[14px] px-6 max-w-[156px] w-full">
-                   Нэмсэн огноо
-                </div>
-                <div className="max-w-[104px] w-full"></div>
-              </div>
-              <div className="flex border-b-2 items-center">
-                <div className="py-[26px] px-6">
-                  <Checkbox />
-                </div>
-                <div className="py-[26px] px-6 max-w-[156px] w-full">
-                  Laptop цүнх
-                </div>
-                <div className="py-[26px] px-6 max-w-[214px] w-full">
-                  {" "}
-                  Эмэгтэй, цүнх
-                </div>
-                <div className="py-[26px] px-6 max-w-[156px] w-full">
-                  19,000₮
-                </div>
-                <div className="py-[26px] px-6 max-w-[156px] w-full">76</div>
-                <div className="py-[26px] px-6 max-w-[156px] w-full">30</div>
-                <div className="py-[26px] px-6 max-w-[156px] w-full">
-                  2024-01-10
-                </div>
-                <div className="py-[26px] px-6 max-w-[104px] w-full">icon</div>
-              </div>
+            <div>
+              <Table className="bg-[#FFFFFF] border-b-[1px] rounded-xl">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead> </TableHead>
+                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                      Бүтээгдэхүүн
+                    </TableHead>
+                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                      Ангилал
+                    </TableHead>
+                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                      Үнэ
+                    </TableHead>
+                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                      Үлдэгдэл
+                    </TableHead>
+                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                      Зарагдсан
+                    </TableHead>
+                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                       Нэмсэн огноо
+                    </TableHead>
+                    <TableHead className="max-w-[104px]  px-6 py-[14px]">
+                       
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {readProduct.map((product: ProductType, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="px-6 py-[26px] max-w-[156px]">
+                        <Checkbox />
+                      </TableCell>
+                      <TableCell className="px-6 py-4 max-w-[156px]">
+                        {product.productName}
+                      </TableCell>
+                      <TableCell className="px-6 py-4 max-w-[156px]">
+                        {product.price}
+                      </TableCell>
+                      <TableCell className="px-6 py-4 max-w-[156px]">
+                        {" "}
+                        {product.productTag}
+                      </TableCell>
+                      <TableCell className="px-6 py-4 max-w-[156px]">
+                        {product.qty}
+                      </TableCell>
+                      <TableCell className="px-6 py-4 max-w-[156px]">
+                        {product.qty}
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        {dayjs(product.createAt).format("YYYY-MM-DD")}
+                      </TableCell>
+                      <TableCell className="px-6 py-4 flex gap-4 items-center">
+                        <div onClick={() => deleteProduct(product._id)}>
+                          <Trash className="text-[#1C20243D] hover:cursor-pointer" />
+                        </div>
+                        <div
+                          onClick={() => {
+                            setProduct(false);
+                          }}
+                        >
+                          <EditIcon className="text-[#1C20243D] hover:cursor-pointer" />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           </div>
         </div>
       )}
-      {!product && <AddProduct onClose={() => setProduct(true)} />}
+      {!product && (
+        <AddProduct
+          loadProduct={loadProduct}
+          onClose={() => setProduct(true)}
+        />
+      )}
     </div>
   );
 };
