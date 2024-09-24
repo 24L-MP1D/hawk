@@ -2,8 +2,11 @@
 
 import { Card } from "@/components/Card";
 
+
 import Image from "next/image";
 import datas from "./datas.json";
+
+
 import * as React from "react";
 
 import {
@@ -16,6 +19,10 @@ import {
 } from "@/components/ui/carousel";
 
 import { BasketCard } from "@/components/BasketCard";
+
+import { SidebarCard } from "@/components/SidebarCard";
+
+
 
 export default function Home() {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -81,6 +88,23 @@ export default function Home() {
           </div>
         ))}
       </div>
+
+
+
+      <div className="flex">
+        {datas.map(
+          (cardItems, index) => 
+            <div>
+          <SidebarCard cardItems={cardItems} key={index + cardItems.price}/>
+          </div>
+          )}
+      </div>
+
+    
+
+
+
+
     </div>
   );
 }
