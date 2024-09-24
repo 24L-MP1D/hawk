@@ -1,14 +1,16 @@
-import { model } from "mongoose";
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
-const schema = new Schema({ 
-    name: String, 
-    password: String, 
-    email: String, 
-    phoneNunber: String, 
+const schema = new Schema({
+  userName: String,
+  email: String,
+  phoneNumber: Number,
+  password: String,
+  address: String,
+  zipCode: Number,
+  cardId: String,
+  savedProductId: String,
+  createAt: Date,
+  updateAt: Date,
+  categoryType: String,
 });
-
-export const UserModel = model('User', schema);
-
-
-
+export const User = model("users", schema);
