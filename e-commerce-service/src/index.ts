@@ -1,10 +1,9 @@
 // src/index.ts
 import express from "express";
-import { connect } from "./config/mongodb";
+
 import { userRouter } from "./router/UserRouter";
 import { saveRouter } from "./router/SaveRouter";
 
-import express from "express";
 import connectDB from "./configs/database";
 
 import {
@@ -15,11 +14,11 @@ import {
 } from "./controller/CategoryController";
 import { productsRouter } from "./router/productsRouter";
 import { createUser } from "./controller/UserController";
-import { userRouter } from "./router/UserRouter";
+
 const app = express();
 const port = 4500;
 
-connect();
+connectDB();
 
 app.use(express.json());
 app.use(userRouter);
