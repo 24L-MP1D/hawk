@@ -1,4 +1,8 @@
 // src/index.ts
+import express from "express";
+import { connect } from "./config/mongodb";
+import { userRouter } from "./router/UserRouter";
+import { saveRouter } from "./router/SaveRouter";
 
 import express from "express";
 import connectDB from "./configs/database";
@@ -11,17 +15,15 @@ import {
 } from "./controller/CategoryController";
 import { productsRouter } from "./router/productsRouter";
 import { createUser } from "./controller/UserController";
-import { userRouter } from "./router/userRouter";
+import { userRouter } from "./router/UserRouter";
 const app = express();
-const port = 4000;
-const cors = require("cors");
-connectDB();
-app.use(cors());
-app.use(express.json());
+const port = 4500;
 
-// products CRUD done
-app.use(productsRouter);
+connect();
+
+app.use(express.json());
 app.use(userRouter);
+app.use(saveRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
