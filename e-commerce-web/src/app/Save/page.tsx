@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 // import { HeartIcon } from "@radix-ui/react-icons";
 import { HeartIconSvg } from "@/components/HeartIcon";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const save = [
   {
@@ -30,16 +32,14 @@ const save = [
 
 export default function Save() {
   const [heart, setHeart] = useState(true);
-
-  // function LoadList () {
-  //   useEffect("/http://")fetch()
-  // }
-
   // const savedCount = cards.length;
 
-  // useEffect(()=>{
-  //    setHeart(true)
-  // },[])
+  function LoadList() {
+    useEffect(() => {
+      fetch("/http://save");
+    });
+  }
+  function Run() {}
 
   return (
     <div className="max-w-[622px] mx-auto">
@@ -91,6 +91,10 @@ export default function Save() {
           ))}
         </div>
       </div>
+      <p>Backend</p>
+      <Input placeholder="name" />
+      <Input placeholder="amount" />
+      <Button onClick={() => Run()} />
     </div>
   );
 }
