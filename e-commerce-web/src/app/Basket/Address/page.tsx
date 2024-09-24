@@ -41,10 +41,10 @@ export default function Home() {
               {SidebarProducts.map(
                 (cardItems, index) =>
                   index < 3 && (
-                    <div>
+                    <div  key={index + cardItems.price}>
                       <SidebarCard
                         cardItems={cardItems}
-                        key={index + cardItems.price}
+                      
                       />
                     </div>
                   )

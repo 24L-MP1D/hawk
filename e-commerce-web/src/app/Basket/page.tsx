@@ -46,10 +46,9 @@ export default function Home() {
               {basketProducts.map(
                 (cardItems, index) =>
                   index < 3 && (
-                    <div>
+                    <div key={index + cardItems.price}>
                       <BasketCard
                         cardItems={cardItems}
-                        key={index + cardItems.price}
                       />
                     </div>
                   )
