@@ -16,11 +16,21 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import { useState } from "react";
 import { filters } from "../Category/page";
 import { create } from "domain";
+import { Value } from "@radix-ui/react-select";
 
 type Props = {
   onClose: () => void;
   loadProduct: () => void;
 };
+export const colors = [
+  { color: "blue", Value: "#4c4efd" },
+  { color: "red", Value: "#f23838" },
+  { color: "yellow", Value: "#ecb442" },
+  { color: "green", Value: "#00ff00" },
+  { color: "brown", Value: "#94463c" },
+  { color: "black", Value: "#151f2e" },
+  { color: "white", Value: "#fffbfc" },
+];
 
 export const AddProduct = ({ onClose, loadProduct }: Props) => {
   const updateProduct = async (id: string) => {
@@ -41,6 +51,8 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
     });
     loadProduct();
   };
+
+  const [color, setColor] = useState(false);
   const [productName, setProductName] = useState("");
   const [productCode, setProductCode] = useState(0);
   const [price, setPrice] = useState(0);
@@ -49,6 +61,7 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
   const [categoryType, setCategoryType] = useState("");
   const [showCategory, setShowCategory] = useState(false);
   const [productTag, setProductTag] = useState("");
+  const [productColor, setProductColor] = useState<string[]>([]);
   const AddItems = async () => {
     const data = await fetch("http://localhost:4000/products", {
       method: "POST",
@@ -60,6 +73,7 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
         qty,
         categoryType: categoryType,
         productTag,
+        color: productColor,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -76,6 +90,12 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
     setQty(0);
     setProductTag("");
   };
+  const addColor = (color: string) => {
+    const newProductColor = [...productColor];
+    newProductColor.push(color);
+    setProductColor(newProductColor);
+  };
+
   return (
     <div className="w-full text-nowrap bg-[#F7F7F8]">
       <div className="flex py-4 bg-[#ffffff] items-center">
@@ -206,11 +226,30 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
           <div className="p-6 flex flex-col gap-6 bg-[#FFFFFF] rounded-[8px]">
             <div>Төрөл</div>
             <div className="flex flex-col gap-2">
-              <div className="flex gap-6 items-center">
+              <div className="flex gap-6 items-center relative">
                 <div>Өнгө</div>
-                <div className="bg-[#ECEDF0] rounded-full p-1 cursor-pointer w-8 h-8 flex justify-center items-center hover:bg-slate-300">
+                <div
+                  onClick={() => {
+                    setColor(true);
+                  }}
+                  className="bg-[#ECEDF0] rounded-full p-1 cursor-pointer w-8 h-8 flex justify-center items-center hover:bg-slate-300"
+                >
                   <Plus width={15} height={15} />
                 </div>
+                <div></div>
+                {color && (
+                  <div className="absolute flex right-0 gap-1 items-center">
+                    {colors.map((color) => (
+                      <div
+                        onClick={() => addColor(color.color)}
+                        key={color.Value}
+                        className="w-6 h-6 rounded-full cursor-pointer"
+                        style={{ backgroundColor: color.Value }}
+                      ></div>
+                    ))}
+                    <Button onClick={() => setColor(false)}>Хаах</Button>
+                  </div>
+                )}
               </div>
               <div className="flex gap-6 items-center">
                 <div>Хэмжээ</div>
