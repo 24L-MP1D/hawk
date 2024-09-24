@@ -1,12 +1,9 @@
 import express from "express";
-import { getUsers, createUser, updateUser, deleteUser } from "../controllers/UserController";
+import { createUser, getUsers, updateUser } from "../controller/UserController";
 
-const userRouter = express.Router();
+export const userRouter = express.Router();
 
 userRouter
-.get("/users", getUsers)
-.post("/users", createUser)
-.put("/users/:id", updateUser )
-.delete("/users/:id", deleteUser);
-
-export { userRouter }; 
+  .post("/register", createUser)
+  .put("/updateUser/:id", updateUser)
+  .get("/getUsers", getUsers);

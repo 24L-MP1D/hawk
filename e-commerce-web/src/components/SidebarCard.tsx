@@ -16,7 +16,7 @@ export const SidebarCard = ({ cardItems }: { cardItems: cardItems }) => {
           src={"/Hat.png"}
           width={80}
           height={80}
-          className="bg-slate-50 absolute h-20 w-20"
+          className="bg-slate-50 absolute"
         />
       </div>
       <div className="flex flex-col">

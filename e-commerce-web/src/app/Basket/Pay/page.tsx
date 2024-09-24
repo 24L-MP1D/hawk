@@ -49,7 +49,7 @@ export default function Home() {
               src={"/Pay.png"}
               width={600}
               height={480}
-              className="bg-slate-50 w-full h-full"
+              className="bg-slate-50 "
             />
           </div>
           <div>

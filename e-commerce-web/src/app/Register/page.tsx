@@ -18,11 +18,11 @@ export default function Register() {
     passwordConfirm: "",
   };
 
-  // const formik = Formik({
-  //   initialValues: {
-  //     name,
-  //   },
-  // });
+  const formik = Formik({
+    initialValues: {
+      name,
+    },
+  });
 
   //regex usage
   const hasUppercase = /[A-Z]/.test(password);
