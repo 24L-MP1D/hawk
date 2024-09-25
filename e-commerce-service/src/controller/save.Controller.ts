@@ -23,8 +23,7 @@ const createSavedProducts = async (req: Request, res: Response) => {
   }
 };
 
-const updateSavedProducts = (req: Request, res: Response) => {
-  async (req: Request, res: Response) => {
+const updateSavedProducts = async (req: Request, res: Response) => {
     const { name, amount } = req.body;
     const { id } = req.params;
     try {
@@ -37,10 +36,9 @@ const updateSavedProducts = (req: Request, res: Response) => {
       res.status(400).json({ errorMessage: "Aldaa garlaa" });
     }
   };
-};
 
-const deleteSavedProducts = (req: Request, res: Response) => {
-  async (req: Request, res: Response) => {
+
+const deleteSavedProducts = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
       const savedProduct = await SavedModel.deleteOne({ _id: id });
@@ -49,7 +47,7 @@ const deleteSavedProducts = (req: Request, res: Response) => {
       res.status(400).json({ errorMessage: "Cannot create user!" });
     }
   };
-};
+
 export {
   getSavedProducts,
   createSavedProducts,
