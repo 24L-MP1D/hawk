@@ -11,11 +11,12 @@ export type filtType = {
   value: string;
 };
 export const filters: filtType[] = [
+  { filt: "Бүгд", value: "Бүгд" },
   { filt: "Малгай", value: "Малгай" },
   { filt: "Усны сав", value: "Усны сав" },
   { filt: "T-shirt", value: "T-shirt" },
   { filt: "Hoodie", value: "Hoodie" },
-  { filt: "Төв", value: "Төв" },
+  { filt: "Тее", value: "Тее" },
   { filt: "Цүнх", value: "Цүнх" },
 ];
 export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];

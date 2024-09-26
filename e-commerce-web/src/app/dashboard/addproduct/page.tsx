@@ -14,8 +14,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { error } from "console";
 import { Check, Plus } from "lucide-react";
-import { useSelectedLayoutSegment } from "next/navigation";
-import { useState } from "react";
+import {
+  useRouter,
+  useSearchParams,
+  useSelectedLayoutSegment,
+} from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { create } from "domain";
 import { Value } from "@radix-ui/react-select";
@@ -39,9 +43,12 @@ export const colors = [
   { color: "black", Value: "#151f2e" },
   { color: "white", Value: "#fffbfc" },
 ];
-const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
-  const updateProduct = async (id: string) => {
-    await fetch(`http://localhost:4000/products/${id}`, {
+const AddProduct = () => {
+  const searchParams = useSearchParams();
+  let edit = searchParams.get("id");
+
+  const updateProduct = async () => {
+    await fetch(`http://localhost:4000/products/${edit}`, {
       method: "PUT",
       body: JSON.stringify({
         productName,
@@ -56,7 +63,6 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
-    loadProduct();
   };
   const [editColor, setEditColor] = useState<string[]>([]);
   const [size, setSize] = useState(false);
@@ -99,6 +105,9 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
     setDescription("");
     setQty(0);
     setProductTag("");
+    setCategoryType("");
+    setProductColor([]);
+    setProductSize([]);
   };
   const addColor = (color: string) => {
     const newProductColor = [...productColor];
@@ -118,27 +127,7 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
       addColor(color);
     }
   };
-  const addColorProduct = (color: string) => {
-    const newColor = aProduct?.color;
-    newColor?.push(color);
-    if (newColor) setEditColor(newColor);
-  };
-  const checkColorProduct = (color: string) => {
-    if (aProduct?.color) {
-      let visualItem = aProduct.color;
-      const includeColor = aProduct?.color.filter((item) => item !== color);
-      visualItem = includeColor;
-      setEditColor(includeColor);
-    }
-  };
-  const editColorAndCheckColor = (color: string) => {
-    const checkedColor = aProduct?.color.includes(color);
-    if (checkedColor) {
-      addColorProduct(color);
-    } else {
-      checkColorProduct(color);
-    }
-  };
+
   const addSizes = (size: string) => {
     const newProductSize = [...productSize];
     newProductSize.push(size);
@@ -157,7 +146,24 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
     }
     addSizes(size);
   };
+  const getOneProduct = async () => {
+    const response = await fetch(`http://localhost:4000/products/${edit}`);
+    const data = await response.json();
+    setProductName(data.productName);
+    setCategoryType(data.categoryType);
+    setDescription(data.description);
+    setProductCode(data.productId);
+    setPrice(data.price);
+    setQty(data.qty);
+    setProductColor(data.color);
+    setProductTag(data.productTag);
+    setProductSize(data.size);
+  };
 
+  useEffect(() => {
+    getOneProduct();
+  }, []);
+  console.log({ edit });
   return (
     <div className="flex">
       <DashboardAside />
@@ -189,7 +195,7 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
                 <div>Бүтээгдэхүүний нэр</div>
                 <input
                   onChange={(e) => setProductName(e.target.value)}
-                  value={aProduct ? aProduct.productName : productName}
+                  value={productName}
                   className="w-full p-2 bg-[#F7F7F8]  rounded-[8px]"
                   type="text"
                   placeholder="Нэр"
@@ -199,7 +205,7 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
                 <div>Нэмэлт мэдээлэл</div>
 
                 <Textarea
-                  value={aProduct ? aProduct.description : description}
+                  value={description}
                   className="w-full"
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Гол онцлог, давуу тал, техникийн үзүүлэлтүүдийг онцолсон дэлгэрэнгүй, сонирхолтой тайлбар."
@@ -208,13 +214,7 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
               <div className="flex flex-col gap-2">
                 <div>Барааны код</div>
                 <input
-                  value={
-                    aProduct
-                      ? aProduct.productId
-                      : productCode !== 0
-                      ? productCode
-                      : ""
-                  }
+                  value={productCode !== 0 ? productCode : ""}
                   onChange={(e) => setProductCode(Number(e.target.value))}
                   className="w-full p-2 bg-[#F7F7F8]  rounded-[8px]"
                   type="number"
@@ -227,7 +227,7 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
                 <div>Үндсэн үнэ</div>
                 <Input
                   type="number"
-                  value={aProduct ? aProduct.price : price != 0 ? price : ""}
+                  value={price != 0 ? price : ""}
                   min="0"
                   max="10000"
                   step="1"
@@ -246,7 +246,7 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
                   type="number"
                   className="rounded-[8px] px-2 py-[14px]"
                   placeholder="Үлдэгдэл тоо ширхэг"
-                  value={aProduct ? aProduct.qty : qty !== 0 ? qty : ""}
+                  value={qty !== 0 ? qty : ""}
                 />
               </div>
             </div>
@@ -261,7 +261,7 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
                     <Input
                       className="cursor-pointer"
                       placeholder="Сонгох"
-                      value={aProduct ? aProduct.categoryType : categoryType}
+                      value={categoryType}
                       onChange={() => ""}
                     />
                   </div>
@@ -311,21 +311,14 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
                       {colors.map((color) => (
                         <div
                           onClick={() => {
-                            aProduct
-                              ? editColorAndCheckColor(color.color)
-                              : addColorAndCheckColor(color.color);
+                            addColorAndCheckColor(color.color);
                           }}
                           key={color.Value}
                           className="w-6 h-6 rounded-full cursor-pointer flex items-center justify-center"
                           style={{ backgroundColor: color.Value }}
                         >
-                          {(aProduct
-                            ? aProduct.color.includes(color.color)
-                            : productColor.includes(color.color)) && (
-                            <Check
-                              className="w-3 h-3
-                          "
-                            />
+                          {productColor.includes(color.color) && (
+                            <Check className="w-3 h-3" />
                           )}
                         </div>
                       ))}
@@ -390,7 +383,13 @@ const AddProduct = ({ onClose, loadProduct, aProduct, onVoid }: Props) => {
           <Button className="bg-[#FFFFFF] text-black border-[1px]">
             Ноорог
           </Button>
-          <Button onClick={AddItems}>Нийтлэх</Button>
+          <Button
+            onClick={() => {
+              edit ? updateProduct() : AddItems();
+            }}
+          >
+            {edit ? "засах" : "нийтлэх"}
+          </Button>
         </div>
       </div>
     </div>
