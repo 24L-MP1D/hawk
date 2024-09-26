@@ -12,7 +12,16 @@ export const createProduct = async (req: Request, res: Response) => {
     res.send("find error");
   }
 };
-
+export const getOneProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.findOne({ _id: id });
+    console.log(product);
+    res.send(product);
+  } catch (error) {
+    res.send("find error");
+  }
+};
 export const getProducts = async (req: Request, res: Response) => {
   try {
     const product = await Product.find();

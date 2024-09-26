@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { AddProduct } from "../addProduct";
+
 import {
   Table,
   TableBody,
@@ -17,27 +17,39 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EditIcon, Trash } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
-export type ProductType = {
-  productName: string;
-  price: number;
-  productId: number;
-  categoryId: string;
-  qty: number;
-  thumbnails: string;
-  images: string;
-  coupon: string;
-  salePercent: number;
-  description: string;
-  viewCount: number;
-  createAt: Date;
-  updateAt: Date;
-  categoryType: string;
-  productTag: string;
-  _id: string;
-};
+export type ProductType =
+  | {
+      productName: string;
+      price: number;
+      productId: number;
+      categoryId: string;
+      qty: number;
+      thumbnails: string;
+      images: string;
+      coupon: string;
+      salePercent: number;
+      description: string;
+      viewCount: number;
+      createAt: Date;
+      updateAt: Date;
+      categoryType: string;
+      productTag: string;
+      _id: string;
+      color: string[];
+    }
+  | undefined;
 
 const Product = () => {
+  const [aProduct, setAProduct] = useState<ProductType>();
+  const getOneProduct = async (id: string) => {
+    const response = await fetch(`http://localhost:4000/products/${id}`);
+    const data = await response.json();
+    setAProduct(data);
+  };
+
   const [readProduct, setReadProduct] = useState([]);
   const loadProduct = async () => {
     const response = await fetch(`http://localhost:4000/products`);
@@ -54,13 +66,16 @@ const Product = () => {
   useEffect(() => {
     loadProduct();
   }, []);
-  const [product, setProduct] = useState(true);
+  const searchParams = useSearchParams();
+  let product = searchParams.get(`product`);
+  const router = useRouter();
+  const [productEdit, setProductEdit] = useState(false);
   return (
     <div className="flex min-h-screen">
       <div className="bg-[#FFFFFF] w-[222px]">
         <DashboardAside />
       </div>
-      {product && (
+      {product !== "hide" && product !== "edit" && (
         <div className="bg-[#f7f7f8] flex flex-col gap-6 w-full">
           <div className="flex border-b-[1px]">
             <div className="p-4 border-b-2 border-black hover:cursor-pointer">
@@ -68,8 +83,8 @@ const Product = () => {
             </div>
             <div className="p-4 hover:cursor-pointer">Ангилал</div>
           </div>
-          <div
-            onClick={() => setProduct(false)}
+          <Link
+            href={"/dashboard/addproduct"}
             className="flex gap-1 bg-[#121316] px-[45px] py-3 hover:bg-blend-darken ml-6 rounded-[8px] max-w-[280px] w-full items-center hover:cursor-pointer "
           >
             <svg
@@ -83,7 +98,7 @@ const Product = () => {
             </svg>
 
             <div className="text-[#FFFFFF]">Бүтээгдэхүүн нэмэх</div>
-          </div>
+          </Link>
           <div className="flex flex-col gap-4 ml-6">
             <div className="flex justify-between">
               <div className="flex gap-[13px]">
@@ -216,55 +231,48 @@ const Product = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {readProduct.map((product: ProductType, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="px-6 py-[26px] max-w-[156px]">
-                        <Checkbox />
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {product.productName}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {product.price}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {" "}
-                        {product.productTag}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {product.qty}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {product.qty}
-                      </TableCell>
-                      <TableCell className="px-6 py-4">
-                        {dayjs(product.createAt).format("YYYY-MM-DD")}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 flex gap-4 items-center">
-                        <div onClick={() => deleteProduct(product._id)}>
-                          <Trash className="text-[#1C20243D] hover:cursor-pointer" />
-                        </div>
-                        <div
-                          onClick={() => {
-                            setProduct(false);
-                          }}
-                        >
-                          <EditIcon className="text-[#1C20243D] hover:cursor-pointer" />
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {readProduct.map(
+                    (product: ProductType, index) =>
+                      product && (
+                        <TableRow key={index}>
+                          <TableCell className="px-6 py-[26px] max-w-[156px]">
+                            <Checkbox />
+                          </TableCell>
+                          <TableCell className="px-6 py-4 max-w-[156px]">
+                            {product.productName}
+                          </TableCell>
+                          <TableCell className="px-6 py-4 max-w-[156px]">
+                            {product.price}
+                          </TableCell>
+                          <TableCell className="px-6 py-4 max-w-[156px]">
+                            {" "}
+                            {product.productTag}
+                          </TableCell>
+                          <TableCell className="px-6 py-4 max-w-[156px]">
+                            {product.qty}
+                          </TableCell>
+                          <TableCell className="px-6 py-4 max-w-[156px]">
+                            {product.qty}
+                          </TableCell>
+                          <TableCell className="px-6 py-4">
+                            {dayjs(product.createAt).format("YYYY-MM-DD")}
+                          </TableCell>
+                          <TableCell className="px-6 py-4 flex gap-4 items-center">
+                            <div onClick={() => deleteProduct(product._id)}>
+                              <Trash className="text-[#1C20243D] hover:cursor-pointer" />
+                            </div>
+                            <Link href={"/dashboard/addproduct?edit=true"}>
+                              <EditIcon className="text-[#1C20243D] hover:cursor-pointer" />
+                            </Link>
+                          </TableCell>
+                        </TableRow>
+                      )
+                  )}
                 </TableBody>
               </Table>
             </div>
           </div>
         </div>
-      )}
-      {!product && (
-        <AddProduct
-          loadProduct={loadProduct}
-          onClose={() => setProduct(true)}
-        />
       )}
     </div>
   );
