@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import { HeartIconSvg } from "./HeartIcon";
 import Image from "next/image";
 import { ProductType } from "@/app/dashboard/product/page";
-
-export const Card = ({ cardItems }: { cardItems: ProductType }) => {
+// protoType baigaa
+type Props = {
+  price:number,
+  title:string
+}
+export const Card = ({ cardItems }: { cardItems: Props }) => {
   const [ready, setReady] = useState(false);
 
   const filled = () => {
@@ -27,7 +31,7 @@ export const Card = ({ cardItems }: { cardItems: ProductType }) => {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <div>{cardItems.productName}</div>
+        <div>{cardItems.title}</div>
         <div className="font-bold">{cardItems.price}</div>
       </div>
       <div onClick={filled} className="absolute top-3 right-3 cursor-pointer">

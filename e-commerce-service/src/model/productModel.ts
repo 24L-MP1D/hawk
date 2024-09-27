@@ -18,3 +18,5 @@ const schema = new Schema({
   productTag: String,
 });
 export const Product = model("product", schema);
+
+
