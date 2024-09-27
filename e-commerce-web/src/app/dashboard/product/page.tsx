@@ -27,6 +27,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 export type ProductType =
   | {
@@ -57,38 +60,86 @@ const Product = () => {
   const [showPriceLimit, setShowPriceLimit] = useState(false);
   const [lowPrice, setLowPrice] = useState(0);
   const [highPrice, setHighPrice] = useState(0);
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<DateRange | undefined>();
   const [showDate, setShowDate] = useState(false);
+
   const loadProduct = async () => {
     const response = await fetch(`http://localhost:4000/products`);
     const data = await response.json();
     setReadProduct(data);
   };
+
+  console.log("lowPrice", lowPrice);
+  console.log("highPrice", highPrice);
+
   const deleteProduct = async (id: string) => {
     await fetch(`http://localhost:4000/products/${id}`, {
       method: "DELETE",
     });
     loadProduct();
   };
+
   const loadFiltProduct = async () => {
-    if (categoryTypeValue !== "Бүгд") {
+    // if (categoryTypeValue === "Бүгд") {
+    //   loadProduct();
+    //   return;
+    // }
+    if (categoryTypeValue !== "Бүгд" || lowPrice || highPrice || date) {
       const response = await fetch(
-        `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}&lowprice=${lowPrice}&highprice=${highPrice}`
+        `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}&lowprice=${lowPrice}&highprice=${highPrice}&date=${date}`
       );
       const data = await response.json();
       setReadProduct(data);
-    } else {
-      loadProduct();
+      return;
     }
+
+    // if (categoryTypeValue === "Бүгд" && lowPrice && highPrice && date) {
+    //   const response = await fetch(
+    //     `http://localhost:4000/filtproduct?lowprice=${lowPrice}&highprice=${highPrice}&date=${date}`
+    //   );
+    //   const data = await response.json();
+    //   setReadProduct(data);
+    //   return;
+    // }
+    // if (lowPrice && highPrice) {
+    //   const response = await fetch(
+    //     `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}&lowprice=${lowPrice}&highprice=${highPrice}`
+    //   );
+    //   const data = await response.json();
+    //   setReadProduct(data);
+    //   return;
+    // } else {
+    //   const response = await fetch(
+    //     `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}`
+    //   );
+    //   const data = await response.json();
+    //   setReadProduct(data);
+    //   return;
+    // }
+    // if (date) {
+    //   const response = await fetch(
+    //     `http://localhost:4000/filtproduct?lowprice=${lowPrice}&highprice=${highPrice}`
+    //   );
+    //   const data = await response.json();
+    //   setReadProduct(data);
+    // }
   };
+
+  // const DateCont = () => {
+  //   setDate(date);
+  //   setShowDate(false);
+  // };
+
   useEffect(() => {
     loadProduct();
   }, []);
+
   useEffect(() => {
     loadFiltProduct();
-  }, [categoryTypeValue || lowPrice || highPrice]);
+  }, [categoryTypeValue, lowPrice, highPrice, date]);
+  console.log(date);
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen text-nowrap">
       <div className="bg-[#FFFFFF] w-[222px]">
         <DashboardAside />
       </div>
@@ -234,51 +285,43 @@ const Product = () => {
                   </div>
                 )}
               </div>
-              <div
-                onClick={() => {
-                  setShowDate(true);
-                }}
-                className="flex gap-1 bg-[#FFFFFF] rounded-[8px] py-2 px-3 hover:cursor-pointer relative"
-              >
-                <div>
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    id="date"
+                    variant={"outline"}
+                    className={cn(
+                      "w-[300px] justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
                   >
-                    <path
-                      d="M20 3H19V1H17V3H7V1H5V3H4C2.9 3 2 3.9 2 5V21C2 22.1 2.9 23 4 23H20C21.1 23 22 22.1 22 21V5C22 3.9 21.1 3 20 3ZM20 21H4V10H20V21ZM20 8H4V5H20V8Z"
-                      fill="#121316"
-                    />
-                  </svg>
-                </div>
-                <div>Сараар</div>
-                <div>
-                  {" "}
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M16.59 8.29504L12 12.875L7.41 8.29504L6 9.70504L12 15.705L18 9.70504L16.59 8.29504Z"
-                      fill="#121316"
-                    />
-                  </svg>
-                </div>
-                {showDate && (
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date?.from ? (
+                      date.to ? (
+                        <>
+                          {format(date.from, "LLL dd, y")} -{" "}
+                          {format(date.to, "LLL dd, y")}
+                        </>
+                      ) : (
+                        format(date.from, "LLL dd, y")
+                      )
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
-                    className="absolute z-30 bg-[#ffffff]"
-                    mode="single"
+                    initialFocus
+                    mode="range"
+                    defaultMonth={date?.from}
                     selected={date}
                     onSelect={setDate}
+                    numberOfMonths={2}
                   />
-                )}
-              </div>
+                </PopoverContent>
+              </Popover>
             </div>
             <div>
               <Input placeholder="Бүтээгдэхүүний нэр, SKU, UPC" />

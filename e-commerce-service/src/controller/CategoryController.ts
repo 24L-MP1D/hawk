@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Product } from "../model/productModel";
+
 export const createProduct = async (req: Request, res: Response) => {
   const products = req.body;
   products.createAt = new Date();
@@ -33,31 +34,30 @@ export const getProducts = async (req: Request, res: Response) => {
 };
 export const getFiltProducts = async (req: Request, res: Response) => {
   try {
-    const { categoryType } = req.query;
-    const filtProduct = await Product.find({
-      categoryType,
-    });
+    const { categoryType, lowprice, highprice, date } = req.query;
+    type date = {
+      from: string;
+      to: string;
+    };
+    console.log("l", lowprice, "h", highprice);
+    console.log(typeof lowprice);
+    console.log(date);
+
+    const filter: {
+      categoryType?: string;
+      price?: { $gt: number; $lt: number };
+    } = {};
+
+    if (categoryType) {
+      filter.categoryType = String(categoryType);
+    }
+
+    if (lowprice && highprice) {
+      filter.price = { $gt: Number(lowprice), $lt: Number(highprice) };
+    }
+
+    const filtProduct = await Product.find(filter);
     res.send(filtProduct);
-    // if (categoryType && lowprice && highprice) {
-    //   const filtProduct = await Product.find({
-    //     categoryType,
-    //   });
-    //   const filteredProduct = filtProduct.filter(
-    //     (filt) =>
-    //       Number(filt.price) >= Number(lowprice) &&
-    //       Number(filt.price) <= Number(highprice)
-    //   );
-    //   return res.send(filteredProduct);
-    // }
-    // if (lowprice && highprice) {
-    //   const filtProduct = await Product.find();
-    //   const filteredProduct = filtProduct.filter(
-    //     (filt) =>
-    //       Number(filt.price) >= Number(lowprice) &&
-    //       Number(filt.price) <= Number(highprice)
-    //   );
-    //   return res.send(filteredProduct);
-    // }
   } catch (err) {
     res.send(err);
   }
