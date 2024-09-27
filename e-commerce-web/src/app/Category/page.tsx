@@ -11,7 +11,6 @@ export type filtType = {
   value: string;
 };
 export const filters: filtType[] = [
-  { filt: "Бүгд", value: "Бүгд" },
   { filt: "Малгай", value: "Малгай" },
   { filt: "Усны сав", value: "Усны сав" },
   { filt: "T-shirt", value: "T-shirt" },
