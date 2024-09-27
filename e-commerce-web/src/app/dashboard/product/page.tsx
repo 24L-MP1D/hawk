@@ -64,9 +64,17 @@ const Product = () => {
   const [showDate, setShowDate] = useState(false);
 
   const loadProduct = async () => {
-    const response = await fetch(`http://localhost:4000/products`);
-    const data = await response.json();
-    setReadProduct(data);
+    if (categoryTypeValue === "Бүгд" && lowPrice && highPrice) {
+      const response = await fetch(
+        `http://localhost:4000/products?lowprice=${lowPrice}&highprice=${highPrice}`
+      );
+      const data = await response.json();
+      setReadProduct(data);
+    } else {
+      const response = await fetch(`http://localhost:4000/products`);
+      const data = await response.json();
+      setReadProduct(data);
+    }
   };
 
   console.log("lowPrice", lowPrice);
@@ -86,11 +94,10 @@ const Product = () => {
     // }
     if (categoryTypeValue !== "Бүгд" || lowPrice || highPrice || date) {
       const response = await fetch(
-        `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}&lowprice=${lowPrice}&highprice=${highPrice}&date=${date}`
+        `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}&lowprice=${lowPrice}&highprice=${highPrice}&fromDate=${date?.from}&toDate=${date?.to}`
       );
       const data = await response.json();
       setReadProduct(data);
-      return;
     }
 
     // if (categoryTypeValue === "Бүгд" && lowPrice && highPrice && date) {
@@ -129,15 +136,17 @@ const Product = () => {
   //   setDate(date);
   //   setShowDate(false);
   // };
+  if (categoryTypeValue === "Бүгд") {
+    useEffect(() => {
+      loadProduct();
+    }, [, lowPrice, highPrice]);
+  } else {
+    useEffect(() => {
+      loadFiltProduct();
+    }, [categoryTypeValue, lowPrice, highPrice, date]);
+  }
 
-  useEffect(() => {
-    loadProduct();
-  }, []);
-
-  useEffect(() => {
-    loadFiltProduct();
-  }, [categoryTypeValue, lowPrice, highPrice, date]);
-  console.log(date);
+  console.log(date?.from);
   return (
     <div className="flex min-h-screen text-nowrap">
       <div className="bg-[#FFFFFF] w-[222px]">
