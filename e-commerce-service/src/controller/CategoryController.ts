@@ -24,6 +24,17 @@ export const getOneProduct = async (req: Request, res: Response) => {
   }
 };
 export const getProducts = async (req: Request, res: Response) => {
+  const { lowprice, highprice } = req.query;
+  console.log(req.query);
+  const filt: {
+    price?: { $gt: number; $lt: number };
+  } = {};
+  if (lowprice && highprice) {
+    filt.price = { $gt: Number(lowprice), $lt: Number(highprice) };
+    console.log("ff");
+    const product = await Product.find(filt);
+    return res.send(product);
+  }
   try {
     const product = await Product.find();
     console.log({ product });
@@ -34,29 +45,40 @@ export const getProducts = async (req: Request, res: Response) => {
 };
 export const getFiltProducts = async (req: Request, res: Response) => {
   try {
-    const { categoryType, lowprice, highprice, date } = req.query;
-    type date = {
-      from: string;
-      to: string;
-    };
-    console.log("l", lowprice, "h", highprice);
-    console.log(typeof lowprice);
-    console.log(date);
-
+    const { categoryType, lowprice, highprice, fromDate, toDate } = req.query;
+    console.log(fromDate);
+    console.log(req.query);
     const filter: {
       categoryType?: string;
       price?: { $gt: number; $lt: number };
+      // fromDate?: { $gt: string };
+      // toDate?: { $lt: string };
+      date?: { $gt: string; $lt: string };
     } = {};
 
     if (categoryType) {
       filter.categoryType = String(categoryType);
+      console.log(filter);
     }
 
     if (lowprice && highprice) {
       filter.price = { $gt: Number(lowprice), $lt: Number(highprice) };
+      console.log(filter);
     }
 
+    // if (fromDate && !toDate) {
+    //   filter.fromDate = { $gt: String(fromDate) };
+    // }
+    // if (!fromDate && toDate) {
+    //   filter.toDate = { $lt: String(toDate) };
+    // }
+    // if (fromDate && toDate) {
+    //   filter.date = { $gt: String(fromDate), $lt: String(toDate) };
+    //   console.log(filter);
+    // }
+
     const filtProduct = await Product.find(filter);
+    console.log(filtProduct);
     res.send(filtProduct);
   } catch (err) {
     res.send(err);
