@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import { HeartIconSvg } from "./HeartIcon";
 import Image from "next/image";
+
+import Link from "next/link";
 import { ProductType } from "@/app/dashboard/product/page";
-// protoType baigaa
-type Props = {
-  price:number,
-  title:string
-}
-export const Card = ({ cardItems }: { cardItems: Props }) => {
+
+export const Card = ({ cardItems }: { cardItems: ProductType }) => {
   const [ready, setReady] = useState(false);
 
   const filled = () => {
@@ -20,7 +18,10 @@ export const Card = ({ cardItems }: { cardItems: Props }) => {
     }
   };
   return (
-    <div className="w-full flex flex-col gap-2 relative group">
+    <Link
+      href={`ProductDetail?id=${cardItems?._id}`}
+      className="w-full flex flex-col gap-2 relative group"
+    >
       <div className="rounded-2xl bg-slate-400 aspect-[3/4] overflow-hidden relative hover:border-black border-[1px]">
         <Image
           alt="bunny"
@@ -31,13 +32,13 @@ export const Card = ({ cardItems }: { cardItems: Props }) => {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <div>{cardItems.title}</div>
-        <div className="font-bold">{cardItems.price}</div>
+        <div>{cardItems?.productName}</div>
+        <div className="font-bold">{cardItems?.price}</div>
       </div>
       <div onClick={filled} className="absolute top-3 right-3 cursor-pointer">
         <HeartIconSvg fill={ready} />
       </div>
-    </div>
+    </Link>
   );
 };
 

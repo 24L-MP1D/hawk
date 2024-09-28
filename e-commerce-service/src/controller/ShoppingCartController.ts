@@ -22,7 +22,7 @@ export const createShoppingCart = async (req: Request, res: Response) => {
 export const getShoppingCart = async (req: Request, res: Response) => {
   const { id } = req.params;
   try{
-    const Carts = await Product.findOne({ _id: id });
+    const Carts = await Product.find({_id: id});
     console.log(Carts)
     res.send(Carts)
   }catch(error){

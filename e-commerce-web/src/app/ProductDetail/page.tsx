@@ -2,7 +2,7 @@
 
 import { HeartIconSvg } from "@/components/HeartIcon";
 import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
+import { Star, Type } from "lucide-react";
 import { useEffect, useState } from "react";
 import datas from "@/app/datas.json";
 
@@ -10,6 +10,7 @@ import Link from "next/link";
 import Card from "@/components/Card";
 import { stringify } from "querystring";
 import { headers } from "next/headers";
+import { useSearchParams } from "next/navigation";
 
 export const ProductDetail = () => {
   const [selectPhoto, setSelectPhoto] = useState("item1");
@@ -44,8 +45,7 @@ export const ProductDetail = () => {
 
   useEffect(() => {
     if (currentQty === 0) {
-      const availableSize =
-        productSize.find((item) => item.qty > 0)?.size || "";
+      const availableSize = productSize.find((item) => item.qty > 0)?.size || "";
       setSelectedSize(availableSize);
       setNumber(0);
     }
@@ -81,16 +81,41 @@ export const ProductDetail = () => {
   const price: number = 120000;
   const [enable, setEnable] = useState<boolean>(true);
 
-  // const getShoppingCart = () => {
-  //   const data = fetch("/http://localhost:getShoppingCart", { 
-  //     method: "GET", 
-  //     body: JSON.stringify(
-        
 
-        
-  //     )
-  //   })
-  // }
+  // new
+  type test = {
+    productName: string,
+    price: number,
+    productId: number,
+    categoryId: string,
+    qty: number,
+    thumbnails: string,
+    images: string,
+    coupon: string,
+    salePercent: number,
+    description: string,
+    viewCount: number,
+    createAt: Date,
+    updateAt: Date,
+    categoryType: string,
+    productTag: string,
+  }
+  
+
+  
+  const [uploadShoppingCart , setUploadShoppingCart] = useState <test>();
+  const searchParams = useSearchParams();
+  const search = searchParams.get("id")
+
+  const getShoppingCart = async () => {
+    const response = await fetch(`/http://localhost:4000/products/${search}`);
+    const data = await response.json();
+    setUploadShoppingCart(data);
+    console.log(setUploadShoppingCart)
+  }
+  useEffect(() => {
+    getShoppingCart();
+  }, [])
 
   const createShoppingCart = async () => {
     const data = await fetch("http://localhost:4000/ShoppingCart" ,{
@@ -148,7 +173,7 @@ export const ProductDetail = () => {
                     New
                   </div>
                   <div className="flex gap-2 items-center">
-                    <p className="text-2xl font-bold ">Wildflower Hoodie</p>
+                    <p className="text-2xl font-bold ">{uploadShoppingCart?.productName}</p>
                     <div onClick={filled} className="cursor-pointer">
                       <HeartIconSvg fill={ready} />
                     </div>
@@ -295,7 +320,7 @@ export const ProductDetail = () => {
             (cardItems, index) =>
               index < 8 && (
                 <div key={index}>
-                  <Card cardItems={cardItems} />
+                  {/* <Card cardItems={cardItems} /> */}
                 </div>
               )
           )}

@@ -7,4 +7,4 @@ export const cartRouter = express.Router();
 
 cartRouter
   .post("/ShoppingCart", createShoppingCart)
-  .get("/getShoppingCart/:id", getShoppingCart)
+  .get("/ShoppingCart/:id", getShoppingCart)

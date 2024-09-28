@@ -93,7 +93,7 @@ export const AddProduct = ({ onClose, loadProduct }: Props) => {
   const addColor = (color: string) => {
     const newProductColor = [...productColor];
     newProductColor.push(color);
-    setProductColor(newProductColor);
+    setProductColor(newProductColor); 
   };
 
   return (
