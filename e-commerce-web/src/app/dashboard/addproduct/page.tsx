@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { error } from "console";
-import { Check, Plus } from "lucide-react";
+import { Check, Image, Plus } from "lucide-react";
 import {
   useRouter,
   useSearchParams,
@@ -220,6 +220,31 @@ const AddProduct = () => {
                   type="number"
                   placeholder="#12345678"
                 />
+              </div>
+            </div>
+            <div className="bg-[#FFFFFF] p-6">
+              <div className="mb-4 text-[#000000] text-lg">
+                Бүтээгдэхүүний зураг
+              </div>
+              <div className="flex gap-2">
+                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2 py-[53px]">
+                  <Image />
+                </div>
+                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2  py-[53px]">
+                  <Image />
+                </div>
+                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2 py-[53px]">
+                  <Image />
+                </div>
+                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2 py-[53px]">
+                  <div className="w-8 h-8 rounded-full bg-[#ECEDF0] grid place-items-center relative">
+                    <Input
+                      type="file"
+                      className="opacity-0 absolute z-50 w-full"
+                    />
+                    <Plus />
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex gap-4 bg-[#FFFFFF] p-6 rounded-[8px]">

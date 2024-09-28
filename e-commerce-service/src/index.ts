@@ -10,6 +10,7 @@ import {
   updateProducts,
 } from "./controller/CategoryController";
 import { productsRouter } from "./router/productsRouter";
+import { uploadRouter } from "./router/uploadRouter";
 const app = express();
 const port = 4000;
 const cors = require("cors");
@@ -19,6 +20,7 @@ app.use(express.json());
 
 // products CRUD done
 app.use(productsRouter);
+app.use(uploadRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

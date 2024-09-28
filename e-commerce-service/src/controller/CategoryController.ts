@@ -24,14 +24,26 @@ export const getOneProduct = async (req: Request, res: Response) => {
   }
 };
 export const getProducts = async (req: Request, res: Response) => {
-  const { lowprice, highprice } = req.query;
+  const { lowprice, highprice, toDate, fromDate } = req.query;
   console.log(req.query);
   const filt: {
     price?: { $gt: number; $lt: number };
+    createAt?: { $gt: Date; $lt: Date };
   } = {};
+  if (toDate !== "undefined" && fromDate !== "undefined") {
+    filt.createAt = {
+      $gt: new Date(String(fromDate)),
+      $lt: new Date(String(toDate)),
+    };
+  }
   if (lowprice && highprice) {
     filt.price = { $gt: Number(lowprice), $lt: Number(highprice) };
-    console.log("ff");
+  }
+  if (
+    lowprice ||
+    highprice ||
+    (toDate !== "undefined" && fromDate !== "undefined")
+  ) {
     const product = await Product.find(filt);
     return res.send(product);
   }
