@@ -19,7 +19,7 @@ import {
   useSearchParams,
   useSelectedLayoutSegment,
 } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import { create } from "domain";
 import { Value } from "@radix-ui/react-select";
@@ -64,7 +64,7 @@ const AddProduct = () => {
       },
     });
   };
-  const [editColor, setEditColor] = useState<string[]>([]);
+  const [image, setImage] = useState<File | null>(null);
   const [size, setSize] = useState(false);
   const [color, setColor] = useState(false);
   const [productName, setProductName] = useState("");
@@ -77,6 +77,30 @@ const AddProduct = () => {
   const [productTag, setProductTag] = useState("");
   const [productColor, setProductColor] = useState<string[]>([]);
   const [productSize, setProductSize] = useState<string[]>([]);
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.currentTarget.files;
+    if (files) {
+      setImage(files[0]);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!image) return;
+    const formDate = new FormData();
+    formDate.append("image", image);
+    try {
+      const response = await fetch(`http://localhost:4000/upload`, {
+        method: "POST",
+        body: formDate,
+      });
+      const data = await response.json();
+      console.log("uploaded", data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const AddItems = async () => {
     const data = await fetch("http://localhost:4000/products", {
       method: "POST",
@@ -163,6 +187,9 @@ const AddProduct = () => {
   useEffect(() => {
     getOneProduct();
   }, []);
+  useEffect(() => {
+    handleUpload();
+  }, [image]);
   console.log({ edit });
   return (
     <div className="flex">
@@ -222,25 +249,26 @@ const AddProduct = () => {
                 />
               </div>
             </div>
-            <div className="bg-[#FFFFFF] p-6">
+            <div className="bg-[#FFFFFF] p-6 rounded-[8px] ">
               <div className="mb-4 text-[#000000] text-lg">
                 Бүтээгдэхүүний зураг
               </div>
-              <div className="flex gap-2">
-                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2 py-[53px]">
+              <div className="flex gap-2 ">
+                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2 aspect-square">
                   <Image />
                 </div>
-                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2  py-[53px]">
+                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2">
                   <Image />
                 </div>
-                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2 py-[53px]">
+                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2">
                   <Image />
                 </div>
-                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2 py-[53px]">
+                <div className="flex-1 rounded-2xl grid place-items-center">
                   <div className="w-8 h-8 rounded-full bg-[#ECEDF0] grid place-items-center relative">
                     <Input
                       type="file"
                       className="opacity-0 absolute z-50 w-full"
+                      onChange={handleFileChange}
                     />
                     <Plus />
                   </div>
@@ -277,7 +305,7 @@ const AddProduct = () => {
             </div>
           </div>
           <div className="flex-1 flex flex-col gap-6">
-            <div className="bg-[#FFFFFF] rounded-[8px] p-6 flex flex-col gap-4">
+            <div className="bg-[#FFFFFF] rounded-[8px] flex-auto p-6 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <div>Ерөнхий ангилал</div>
 
@@ -308,7 +336,7 @@ const AddProduct = () => {
                   )}
                 </div>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 ">
                 <div>Дэд ангилал</div>
                 <Input
                   type="text"
@@ -317,7 +345,7 @@ const AddProduct = () => {
                 />
               </div>
             </div>
-            <div className="p-6 flex flex-col gap-6 bg-[#FFFFFF] rounded-[8px]">
+            <div className="p-6 flex flex-col gap-6 flex-auto bg-[#FFFFFF] rounded-[8px]">
               <div>Төрөл</div>
               <div className="flex flex-col gap-2">
                 <div className="flex gap-6 items-center">
@@ -387,7 +415,7 @@ const AddProduct = () => {
                 </Button>
               </div>
             </div>
-            <div className="flex flex-col gap-2 p-6 bg-[#FFFFFF] rounded-[8px]">
+            <div className="flex flex-col flex-auto gap-2 p-6 bg-[#FFFFFF] rounded-[8px]">
               <div>Таг</div>
               <div>
                 <Input
