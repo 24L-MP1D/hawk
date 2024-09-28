@@ -64,14 +64,16 @@ const Product = () => {
   const [showDate, setShowDate] = useState(false);
 
   const loadProduct = async () => {
-    if (categoryTypeValue === "Бүгд" && lowPrice && highPrice) {
+    if (lowPrice && highPrice) {
       const response = await fetch(
-        `http://localhost:4000/products?lowprice=${lowPrice}&highprice=${highPrice}`
+        `http://localhost:4000/products?lowprice=${lowPrice}&highprice=${highPrice}&fromDate=${date?.from}&toDate=${date?.to}`
       );
       const data = await response.json();
       setReadProduct(data);
     } else {
-      const response = await fetch(`http://localhost:4000/products`);
+      const response = await fetch(
+        `http://localhost:4000/products?fromDate=${date?.from}&toDate=${date?.to}`
+      );
       const data = await response.json();
       setReadProduct(data);
     }
@@ -139,7 +141,7 @@ const Product = () => {
   if (categoryTypeValue === "Бүгд") {
     useEffect(() => {
       loadProduct();
-    }, [, lowPrice, highPrice]);
+    }, [lowPrice, highPrice, date]);
   } else {
     useEffect(() => {
       loadFiltProduct();

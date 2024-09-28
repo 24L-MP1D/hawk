@@ -11,8 +11,9 @@ import {
 } from "./controller/CategoryController";
 import { productsRouter } from "./router/productsRouter";
 
-import { userRouter } from "./router/userRouter";
+
 import { saveRouter } from "./router/saveRouter";
+import { userRouter } from "./router/UserRouter";
 const app = express();
 const port = 4000;
 const cors = require("cors");
