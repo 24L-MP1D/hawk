@@ -3,12 +3,26 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Formik } from "formik";
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setpasswordConfirm] = useState("");
+
+  const initialValues = {
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  };
+
+  const formik = Formik({
+    initialValues: {
+      name,
+    },
+  });
 
   //regex usage
   const hasUppercase = /[A-Z]/.test(password);
@@ -30,7 +44,21 @@ export default function Register() {
     emailValidation &&
     name.length >= 4;
 
-  function submit() {}
+  const submit = async () => {
+    const data = await fetch("http://localhost:4000/register", {
+      method: "POST",
+      body: JSON.stringify({
+        userName: name,
+        password: password,
+        email: email,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    console.log(data);
+  };
+
   console.log({ name, email, password, passwordConfirm });
 
   return (
@@ -94,6 +122,7 @@ export default function Register() {
         <Button
           className="h-[36] rounded-[18px] bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={!isValid}
+          onClick={submit}
         >
           Үүсгэх
         </Button>
