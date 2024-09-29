@@ -35,12 +35,12 @@ export default function Page() {
       }),
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     }).then((res) => {
       if (res.ok) {
-        console.log("Success")
+        console.log("Success");
       } else {
-        console.log("Error")
+        console.log("Error");
       }
     });
   }
