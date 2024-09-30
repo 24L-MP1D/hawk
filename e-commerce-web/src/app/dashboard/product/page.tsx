@@ -32,9 +32,10 @@ import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 
 export type ProductType =
-  | {
+  {
       productName: string;
       price: number;
+      size:string[]
       productId: number;
       categoryId: string;
       qty: number;

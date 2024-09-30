@@ -29,6 +29,9 @@ export default function Home() {
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
 
+
+  
+
   React.useEffect(() => {
     if (!api) {
       return;
@@ -81,24 +84,11 @@ export default function Home() {
           )}
         </div>
       </div>
-      <div className="flex">
-        {datas.map((cardItems, index) => (
-          <div>
-            <BasketCard cardItems={cardItems} key={index + cardItems.price} />
-          </div>
-        ))}
-      </div>
+     
 
 
 
-      <div className="flex">
-        {datas.map(
-          (cardItems, index) => 
-            <div>
-          <SidebarCard cardItems={cardItems} key={index + cardItems.price}/>
-          </div>
-          )}
-      </div>
+     
 
     
 

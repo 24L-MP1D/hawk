@@ -2,28 +2,66 @@
 
 import { HeartIconSvg } from "@/components/HeartIcon";
 import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
-import { useState } from "react";
+import { Star, Type } from "lucide-react";
+import { useEffect, useState } from "react";
 import datas from "@/app/datas.json";
-import Card from "@/components/Card";
+
 import Link from "next/link";
+import Card from "@/components/Card";
+import { stringify } from "querystring";
+import { headers } from "next/headers";
+import { useSearchParams } from "next/navigation";
+import { ProductType } from "../dashboard/product/page";
 
 export const ProductDetail = () => {
+  const [selectPhoto, setSelectPhoto] = useState("item1");
+
   const productPhotos = [
-    { photo: "item1", qty: "4" },
-    { photo: "item2", qty: "4" },
-    { photo: "item3", qty: "4" },
-    { photo: "item4", qty: "4" },
+    { photo: "item1" },
+    { photo: "item2" },
+    { photo: "item3" },
+    { photo: "item4" },
   ];
+
+  const reset = () => {
+    setNumber(1);
+  };
 
   const productSize = [
-    { size: "S" },
-    { size: "M" },
-    { size: "L" },
-    { size: "XL" },
-    { size: "2XL" },
+    { size: "S", qty: 10},
+    { size: "M", qty: 10},
+    { size: "L", qty: 10},
+    { size: "XL", qty: 10},
+    { size: "2XL", qty: 10 },
   ];
 
+
+
+  const defaultSize = productSize.find((p) => p.qty > 0)?.size || "";
+  const [selectedSize, setSelectedSize] = useState<string>(defaultSize);
+  const [number, setNumber] = useState<number>(0);
+
+  const currentQty =
+    productSize.find((item) => item.size === selectedSize)?.qty || 0;
+
+  useEffect(() => {
+    if (currentQty === 0) {
+      const availableSize = productSize.find((item) => item.qty > 0)?.size || "";
+      setSelectedSize(availableSize);
+      setNumber(0);
+    }
+  }, [currentQty, productSize]);
+  const nemeh = () => {
+    setNumber((oldNumber) =>
+      oldNumber < currentQty ? oldNumber + 1 : oldNumber
+    );
+  };
+
+  const hasah = () => {
+    setNumber((oldNumber) => (oldNumber > 1 ? oldNumber - 1 : oldNumber));
+  };
+
+  
   const productComment = [
     { name: "Nymbaa", value: "Ваав материал ёстой гоё  байна 😍" },
     { name: "Tommy", value: "🔥🔥🔥" },
@@ -39,21 +77,50 @@ export const ProductDetail = () => {
       setReady(true);
     }
   };
+  // const [price, setPrice] = useState<number>(0);
 
-  const [selectPhoto, setSelectPhoto] = useState("item1");
-  const [number, setNumber] = useState<number>(1);
-  const price: number = 120000;
-
-  const nemeh = () => {
-    setNumber(number + 1);
-  };
-
-  const hasah = () => {
-    setNumber(number - 1);
-  };
-
+  
   const [enable, setEnable] = useState<boolean>(true);
+  
 
+  
+  const searchParams = useSearchParams();
+  const search = searchParams.get("id")
+  
+  const [uploadShoppingCart , setUploadShoppingCart] = useState <ProductType>();
+  
+  const getShoppingCart = async () => {
+    const response = await fetch(`http://localhost:4000/products/${search}`);
+    const data = await response.json();
+    setUploadShoppingCart(data);
+    console.log(setUploadShoppingCart)
+  }
+  useEffect(() => {
+    getShoppingCart();
+  }, [])
+
+  const createShoppingCart = async () => {
+    const data = await fetch("http://localhost:4000/ShoppingCart" ,{
+      method: "POST",
+      body: JSON.stringify({
+        // orderNumber: ,
+        productCount: number,
+        size: selectedSize,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      }
+    });
+    reseted(),
+    console.log(data)
+  }
+
+  const reseted = () => {
+    setSelectedSize(""),
+    setNumber(0)
+  }
+  
+  
   return (
     <div className="max-w-[1040px] mx-auto gap-5 pt-[52px] pb-20">
       <div className="flex justify-center gap-5 mb-20 ">
@@ -88,22 +155,34 @@ export const ProductDetail = () => {
                     New
                   </div>
                   <div className="flex gap-2 items-center">
-                    <p className="text-2xl font-bold ">Wildflower Hoodie</p>
+                    <p className="text-2xl font-bold ">{uploadShoppingCart?.productName}</p>
                     <div onClick={filled} className="cursor-pointer">
                       <HeartIconSvg fill={ready} />
                     </div>
                   </div>
                   <div className="text-base font-normal ">
-                    Зэрлэг цэцгийн зурагтай даавуун материалтай цамц
+                    {uploadShoppingCart?.description}
                   </div>
                 </div>
                 <div>
                   <div className="mb-2">Хэмжээний заавар</div>
                   <div className="flex gap-1">
-                    {productSize.map((item, index) => (
+                    {productSize.map((item) => (
                       <div
-                        key={index}
-                        className="size-8 rounded-[16px] border-black border-[1px] text-xs font-normal flex items-center justify-center"
+                        onClick={() => {
+                          item.qty > 0 && setSelectedSize(item.size);
+                          item.qty > 0 && reset();
+                        }}
+                        className={`size-8 rounded-full border border-black cursor-pointer font-normal text-xs text-center content-center ${ 
+                          selectedSize === item.size
+                            ? "bg-black text-white duration-500"
+                            : "duration-300"
+                        } ${
+                          item.qty === 0
+                            ? "bg-[#E4E4E7] opacity-50 text-black cursor-not-allowed"
+                            : ""
+                        }`}
+                        key={item.size}
                       >
                         {item.size}
                       </div>
@@ -129,13 +208,12 @@ export const ProductDetail = () => {
                 </div>
               </div>
               <div>
-                <div className="pb-2 font-bold text-xl">{price * number}₮</div>
-                <Link
-                  href="/Basket"
-                  className="py-2 px-9 bg-[#2563EB] rounded-[20px] text-white cursor-pointer hover:bg-[black] transition-all"
-                >
-                  Сагсанд нэмэх
-                </Link>
+                <div className="pb-2 font-bold text-xl">{uploadShoppingCart && uploadShoppingCart.price * number}₮</div>
+                <div>
+                  <Button onClick={createShoppingCart} className="py-2 px-9 bg-[#2563EB] rounded-[20px]">
+                    Сагсанд нэмэх
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -224,7 +302,7 @@ export const ProductDetail = () => {
             (cardItems, index) =>
               index < 8 && (
                 <div key={index}>
-                  <Card cardItems={cardItems} />
+                  {/* <Card cardItems={cardItems} /> */}
                 </div>
               )
           )}

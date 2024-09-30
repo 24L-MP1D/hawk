@@ -14,6 +14,7 @@ import { productsRouter } from "./router/productsRouter";
 import { saveRouter } from "./router/saveRouter";
 import { userRouter } from "./router/UserRouter";
 import { uploadRouter } from "./router/uploadRouter";
+import { cartRouter } from "./router/ShoppingCartRouter";
 const app = express();
 const port = 4000;
 const cors = require("cors");
@@ -32,3 +33,7 @@ app.use(saveRouter);
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+
+app.use(cartRouter);
