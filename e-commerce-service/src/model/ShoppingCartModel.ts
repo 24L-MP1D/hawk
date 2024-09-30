@@ -6,6 +6,8 @@ const schema = new Schema({
   size: String,
   createAt: Date,
   updateAt: Date,
+  productName: String,
+  price: Number,
 });
 
 export const ShoppingCart = model("shoppingCarts", schema);

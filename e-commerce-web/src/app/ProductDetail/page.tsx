@@ -106,6 +106,8 @@ export const ProductDetail = () => {
         // orderNumber: ,
         productCount: number,
         size: selectedSize,
+        productName:uploadShoppingCart?.productName,
+        price:uploadShoppingCart?.price,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",

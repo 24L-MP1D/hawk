@@ -4,12 +4,15 @@ import { Card } from "@/components/Card";
 import basketProducts from "@/app/datas.json";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useState } from "react";
 
 import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BasketCard } from "@/components/BasketCard";
-import { cardItems } from "@/app/Category/page";
+import { useSearchParams } from "next/navigation";
+import { ProductType } from "../dashboard/product/page";
 
 export default function Home() {
   const [current, setCurrent] = React.useState(0);
@@ -24,7 +27,6 @@ export default function Home() {
 
   return (
     <div className="bg-[#F7F7F8]">
-
       <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px] bg-[#F7F7F8]">
         <div className="">
           <div className="w-[256px] h-[32px] mx-auto flex items-center justify-center mb-[66px] ">
@@ -46,11 +48,8 @@ export default function Home() {
               {basketProducts.map(
                 (cardItems, index) =>
                   index < 3 && (
-                    <div>
-                      <BasketCard
-                        cardItems={cardItems}
-                        key={index + cardItems.price}
-                      />
+                    <div key={index}>
+                      <BasketCard />
                     </div>
                   )
               )}
