@@ -2,51 +2,50 @@
 import { IoMdClose } from "react-icons/io";
 import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { useState } from "react";
 
 export default function Page() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const validEmail = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]/.test(email);
+  const lengthGreater = password.length >= 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialCharacter = /[!@#$%^&*(){}_+:"<>?]/.test(password);
+
+  const isValid =
+    lengthGreater &&
+    lengthGreater &&
+    hasUpperCase &&
+    hasLowerCase &&
+    hasNumber &&
+    hasSpecialCharacter &&
+    validEmail;
+
+  console.log({ email, password });
+
+  function Submit() {
+    fetch("https://backend/signup", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+      // headers:
+    }).then((res) => {
+      if (res.ok) {
+        // success
+      } else {
+        // error
+      }
+    });
+  }
+
   return (
     <div className="flex flex-col vh-100%">
-      <div className="flex justify-between mb-[100px] relative z-10">
-        {/* <div>
-          <img
-            src="/Group.png"
-            alt="logo"
-            className="width-[20px] height-[10px}"
-          />
-        </div> */}
-        {/* <div className="border-2 rounded-md">
-          <div className="flex items-center border-b-2">
-            <Image
-              src="/_CompanyLogo.png"
-              alt="logo"
-              width={20}
-              height={20}
-              className="m-[17px]"
-            />
-            <p>Sign In to Pinecone with Google</p>
-            <IoMdClose className="m-[17px]" />
-          </div>
-          <div className="flex items-center border-b-2">
-            <img src="/Bagsh.png" alt="image" className="m-[17px]" />
-            <div className="flex flex-col">
-              <p className="text-[14px]">Naraa Tsatsaa</p>
-              <p className="text-[12px] text-[#5F6368]">naraa.ts@gmail.com</p>
-            </div>
-          </div>
-          <div className="flex items-center border-b-2">
-            <img src="/Bagsh.png" alt="image" className="m-[17px]" />
-            <div className="flex flex-col">
-              <p className="text-[14px]">Naraa Tsatsaa</p>
-              <p className="text-[12px] text-[#5F6368]">naraa.ts@gmail.com</p>
-            </div>
-          </div>
-          <div className="flex items-center justify-center">
-            <p className="m-[13px] text-[#5F6368]">4 more accounts</p>
-          </div>
-        </div> */}
-      </div>
-
-      <div className="flex flex-col mx-auto w-[440px] items-center border-2 rounded-lg mb-[100px]">
+      <div className="flex flex-col mx-auto w-[440px] items-center border-2 rounded-lg my-[100px]">
         <p className="text-[#121316] text-[32px] font-extrabold my-8">
           Бүртгүүлэх
         </p>
@@ -55,16 +54,50 @@ export default function Page() {
           <input
             placeholder="Имэйл"
             className="bg-[#F7F7F8] min-w-[360px] h-[56px] border-2 pl-2 rounded-md"
-          ></input>
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+          />
+          <p className={validEmail ? "text-green-600" : "text-red-600"}>
+            Имэйл-ээ оруулна уу.
+          </p>
         </div>
         <div className="min-w-[360px] my-3">
           <p className="mb-2">Таны нэр</p>
           <input
             placeholder="Нэр"
-            className="bg-[#F7F7F8] min-w-[360px] h-[56px] border-2 pl-2 rounded-md"
-          ></input>
+            className="bg-[#F7F7F8] min-w-[360px] h-[56px] border-2 pl-2 rounded-md mb-2"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+          />
+          <ul>
+            <li className={lengthGreater ? "text-green-600" : "text-red-600"}>
+              Үсэг 8-аас их байна.
+            </li>
+            <li className={hasUpperCase ? "text-green-600" : "text-red-600"}>
+              Том үсэг оруулсан байна.
+            </li>
+            <li className={hasLowerCase ? "text-green-600" : "text-red-600"}>
+              Жижиг үсэг оруулсан байна.
+            </li>
+            <li className={hasNumber ? "text-green-600" : "text-red-600"}>
+              Тоо оруулсан байна.
+            </li>
+            <li
+              className={
+                hasSpecialCharacter ? "text-green-600" : "text-red-600"
+              }
+            >
+              Тэмдэгт оруулсан байна.
+            </li>
+          </ul>
         </div>
-        <button className="flex items-center bg-black text-white min-w-[360px] h-[60px] text-[18px] text-center rounded-md my-3 pr-3">
+        <button
+          className="flex items-center bg-black text-white min-w-[360px] h-[60px] text-[18px] text-center rounded-md my-3 pr-3 disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={!isValid}
+          onClick={Submit}
+        >
           <div className="flex-1 text-center">Дараах</div>
           <FaArrowRightLong className="text-white" />
         </button>
@@ -106,4 +139,46 @@ export default function Page() {
       </div>
     </div>
   );
+}
+
+{
+  /* <div>
+          <img
+            src="/Group.png"
+            alt="logo"
+            className="width-[20px] height-[10px}"
+          />
+        </div> */
+}
+{
+  /* <div className="border-2 rounded-md">
+          <div className="flex items-center border-b-2">
+            <Image
+              src="/_CompanyLogo.png"
+              alt="logo"
+              width={20}
+              height={20}
+              className="m-[17px]"
+            />
+            <p>Sign In to Pinecone with Google</p>
+            <IoMdClose className="m-[17px]" />
+          </div>
+          <div className="flex items-center border-b-2">
+            <img src="/Bagsh.png" alt="image" className="m-[17px]" />
+            <div className="flex flex-col">
+              <p className="text-[14px]">Naraa Tsatsaa</p>
+              <p className="text-[12px] text-[#5F6368]">naraa.ts@gmail.com</p>
+            </div>
+          </div>
+          <div className="flex items-center border-b-2">
+            <img src="/Bagsh.png" alt="image" className="m-[17px]" />
+            <div className="flex flex-col">
+              <p className="text-[14px]">Naraa Tsatsaa</p>
+              <p className="text-[12px] text-[#5F6368]">naraa.ts@gmail.com</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-center">
+            <p className="m-[13px] text-[#5F6368]">4 more accounts</p>
+          </div>
+        </div> */
 }
