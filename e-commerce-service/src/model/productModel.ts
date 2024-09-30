@@ -9,7 +9,7 @@ const schema = new Schema({
   categoryId: String,
   qty: Number,
   thumbnails: String,
-  images: String,
+  images: [String],
   coupon: String,
   salePercent: Number,
   description: String,
