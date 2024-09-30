@@ -11,6 +11,7 @@ import Card from "@/components/Card";
 import { stringify } from "querystring";
 import { headers } from "next/headers";
 import { useSearchParams } from "next/navigation";
+import { ProductType } from "../dashboard/product/page";
 
 export const ProductDetail = () => {
   const [selectPhoto, setSelectPhoto] = useState("item1");
@@ -27,10 +28,10 @@ export const ProductDetail = () => {
   };
 
   const productSize = [
-    { size: "S", qty: 4 },
-    { size: "M", qty: 3 },
-    { size: "L", qty: 2 },
-    { size: "XL", qty: 0 },
+    { size: "S", qty: 10},
+    { size: "M", qty: 10},
+    { size: "L", qty: 10},
+    { size: "XL", qty: 10},
     { size: "2XL", qty: 10 },
   ];
 
@@ -78,37 +79,18 @@ export const ProductDetail = () => {
   };
   // const [price, setPrice] = useState<number>(0);
 
-  const price: number = 120000;
+  
   const [enable, setEnable] = useState<boolean>(true);
-
-
-  // new
-  type test = {
-    productName: string,
-    price: number,
-    productId: number,
-    categoryId: string,
-    qty: number,
-    thumbnails: string,
-    images: string,
-    coupon: string,
-    salePercent: number,
-    description: string,
-    viewCount: number,
-    createAt: Date,
-    updateAt: Date,
-    categoryType: string,
-    productTag: string,
-  }
   
 
   
-  const [uploadShoppingCart , setUploadShoppingCart] = useState <test>();
   const searchParams = useSearchParams();
   const search = searchParams.get("id")
-
+  
+  const [uploadShoppingCart , setUploadShoppingCart] = useState <ProductType>();
+  
   const getShoppingCart = async () => {
-    const response = await fetch(`/http://localhost:4000/products/${search}`);
+    const response = await fetch(`http://localhost:4000/products/${search}`);
     const data = await response.json();
     setUploadShoppingCart(data);
     console.log(setUploadShoppingCart)
@@ -179,7 +161,7 @@ export const ProductDetail = () => {
                     </div>
                   </div>
                   <div className="text-base font-normal ">
-                    Зэрлэг цэцгийн зурагтай даавуун материалтай цамц
+                    {uploadShoppingCart?.description}
                   </div>
                 </div>
                 <div>
@@ -191,13 +173,13 @@ export const ProductDetail = () => {
                           item.qty > 0 && setSelectedSize(item.size);
                           item.qty > 0 && reset();
                         }}
-                        className={`size-8 rounded-full border border-black cursor-pointer font-normal text-xs text-center content-center ${
+                        className={`size-8 rounded-full border border-black cursor-pointer font-normal text-xs text-center content-center ${ 
                           selectedSize === item.size
                             ? "bg-black text-white duration-500"
                             : "duration-300"
                         } ${
                           item.qty === 0
-                            ? "bg-[#E4E4E7] opacity-50 text-black cursor-no-drop"
+                            ? "bg-[#E4E4E7] opacity-50 text-black cursor-not-allowed"
                             : ""
                         }`}
                         key={item.size}
@@ -226,7 +208,7 @@ export const ProductDetail = () => {
                 </div>
               </div>
               <div>
-                <div className="pb-2 font-bold text-xl">{price * number}₮</div>
+                <div className="pb-2 font-bold text-xl">{uploadShoppingCart && uploadShoppingCart.price * number}₮</div>
                 <div>
                   <Button onClick={createShoppingCart} className="py-2 px-9 bg-[#2563EB] rounded-[20px]">
                     Сагсанд нэмэх

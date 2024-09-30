@@ -84,24 +84,11 @@ export default function Home() {
           )}
         </div>
       </div>
-      <div className="flex">
-        {datas.map((cardItems, index) => (
-          <div>
-            <BasketCard cardItems={cardItems} key={index + cardItems.price} />
-          </div>
-        ))}
-      </div>
+     
 
 
 
-      <div className="flex">
-        {datas.map(
-          (cardItems, index) => 
-            <div>
-          <SidebarCard cardItems={cardItems} key={index + cardItems.price}/>
-          </div>
-          )}
-      </div>
+     
 
     
 
