@@ -35,21 +35,12 @@ export default function Page() {
       }),
       headers: {
         "Content-Type": "application/json",
-<<<<<<< HEAD
       },
     }).then((res) => {
       if (res.ok) {
         console.log("Success");
       } else {
         console.log("Error");
-=======
-      }
-    }).then((res) => {
-      if (res.ok) {
-        console.log("Success")
-      } else {
-        console.log("Error")
->>>>>>> fa054cc (Auth/SignUp deer video uzej hiiv)
       }
     });
   }
