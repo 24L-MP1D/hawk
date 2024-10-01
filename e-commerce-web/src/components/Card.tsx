@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { HeartIconSvg } from "./HeartIcon";
 import Image from "next/image";
+
+import Link from "next/link";
 import { ProductType } from "@/app/dashboard/product/page";
 import Link from "next/link";
 
@@ -18,7 +20,11 @@ export const Card = ({ cardItems }: { cardItems: ProductType }) => {
   };
   return (
     <Link
+
       href={`/ProductDetail?id=${cardItems?._id}`}
+
+
+
       className="w-full flex flex-col gap-2 relative group"
     >
       <div className="rounded-2xl bg-slate-400 aspect-[3/4] overflow-hidden relative hover:border-black border-[1px]">
