@@ -39,7 +39,9 @@ export default function Page() {
     }).then((res) => {
       if (res.ok) {
         console.log("Success");
+        console.log("Success");
       } else {
+        console.log("Error");
         console.log("Error");
       }
     });
