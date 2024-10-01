@@ -7,14 +7,15 @@ import { useState } from "react";
 
 export const DashboardAside = () => {
   const [fill, setFill] = useState("Хяналтын самбар");
+  const searchParams = useSearchParams();
+  const select = searchParams.get("select");
 
   return (
     <div className="flex flex-col gap-4 text-base mt-6 bg-[#FFFFFF] min-h-screen">
       <Link
-        onClick={() => setFill("Хяналтын самбар")}
-        href={"/dashboard"}
+        href={"/dashboard?select=Хяналтын самбар"}
         className={`flex py-2 px-4 gap-2 hover:cursor-pointer ${
-          fill === "Хяналтын самбар" && "bg-[#F7F7F8]"
+          select === "Хяналтын самбар" && "bg-[#F7F7F8]"
         }`}
       >
         <div>
@@ -46,10 +47,9 @@ export const DashboardAside = () => {
         <div className="text-[#121316] text-nowrap">Хяналтын самбар</div>
       </Link>
       <Link
-        onClick={() => setFill("Захиaлга")}
-        href={"/dashboard/order"}
+        href={"/dashboard/order?select=Захиaлга"}
         className={`flex py-2 px-4 gap-2 hover:cursor-pointer ${
-          fill === "Захиaлга" && "bg-[#F7F7F8]"
+          select === "Захиaлга" && "bg-[#F7F7F8]"
         }`}
       >
         <div>
@@ -70,10 +70,9 @@ export const DashboardAside = () => {
         <div className="text-[#121316]">Захиaлга</div>
       </Link>
       <Link
-        onClick={() => setFill("Орлого")}
-        href={"/dashboard/income"}
+        href={"/dashboard/income?select=Орлого"}
         className={`flex py-2 px-4 gap-2 hover:cursor-pointer ${
-          fill === "Орлого" && "bg-[#F7F7F8]"
+          select === "Орлого" && "bg-[#F7F7F8]"
         }`}
       >
         <div>
@@ -98,10 +97,9 @@ export const DashboardAside = () => {
       </Link>
 
       <Link
-        onClick={() => setFill("Бүтээгдэхүүн")}
-        href={`/dashboard/product`}
+        href={`/dashboard/product?select=Бүтээгдэхүүн`}
         className={`flex py-2 px-4 gap-2 hover:cursor-pointer ${
-          fill === "Бүтээгдэхүүн" && "bg-[#F7F7F8]"
+          select === "Бүтээгдэхүүн" && "bg-[#F7F7F8]"
         }`}
       >
         <div>
@@ -122,10 +120,9 @@ export const DashboardAside = () => {
       </Link>
 
       <Link
-        onClick={() => setFill("Тохиргоо")}
-        href={"/dashboard/settings"}
+        href={"/dashboard/settings?select=Тохиргоо"}
         className={`flex py-2 px-4 gap-2 hover:cursor-pointer ${
-          fill === "Тохиргоо" && "bg-[#F7F7F8]"
+          select === "Тохиргоо" && "bg-[#F7F7F8]"
         }`}
       >
         <div>

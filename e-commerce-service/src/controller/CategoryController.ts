@@ -15,6 +15,7 @@ export const createProduct = async (req: Request, res: Response) => {
 };
 export const getOneProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
+  console.log({ id });
   try {
     const product = await Product.findOne({ _id: id });
     console.log(product);

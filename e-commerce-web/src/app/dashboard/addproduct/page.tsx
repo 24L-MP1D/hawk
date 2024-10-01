@@ -1,32 +1,18 @@
 "use client";
 
-import { DashboardSelect } from "@/components/dashboardSelect";
-import { savedValue } from "@/components/selectValue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Textarea } from "@/components/ui/textarea";
-import { error } from "console";
-import { Check, Image, Plus } from "lucide-react";
-import {
-  useRouter,
-  useSearchParams,
-  useSelectedLayoutSegment,
-} from "next/navigation";
+import { Check, ImageIcon, Plus } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
-import { create } from "domain";
-import { Value } from "@radix-ui/react-select";
 import { ProductType } from "../product/page";
 import { filters, sizes } from "@/app/Category/page";
 import Link from "next/link";
 import { DashboardAside } from "@/components/DashboardAside";
+import Image from "next/image";
 
 type Props = {
   onClose: () => void;
@@ -77,8 +63,10 @@ const AddProduct = () => {
   const [productTag, setProductTag] = useState("");
   const [productColor, setProductColor] = useState<string[]>([]);
   const [productSize, setProductSize] = useState<string[]>([]);
-
+  const [uploadImage, setUploadImage] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
     const files = event.currentTarget.files;
     if (files) {
       setImage(files[0]);
@@ -95,7 +83,11 @@ const AddProduct = () => {
         body: formDate,
       });
       const data = await response.json();
-      console.log("uploaded", data);
+      const imageArray = [...uploadImage];
+      imageArray.push(data.secure_url);
+      setUploadImage(imageArray);
+      setLoading(false);
+      console.log("ene heseg ajillaj bn");
     } catch (err) {
       console.error(err);
     }
@@ -114,6 +106,7 @@ const AddProduct = () => {
         productTag,
         color: productColor,
         size: productSize,
+        images: uploadImage,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -132,6 +125,8 @@ const AddProduct = () => {
     setCategoryType("");
     setProductColor([]);
     setProductSize([]);
+    setImage(null);
+    setUploadImage([]);
   };
   const addColor = (color: string) => {
     const newProductColor = [...productColor];
@@ -183,14 +178,18 @@ const AddProduct = () => {
     setProductTag(data.productTag);
     setProductSize(data.size);
   };
+  if (edit) {
+    useEffect(() => {
+      getOneProduct();
+    }, []);
+  }
 
-  useEffect(() => {
-    getOneProduct();
-  }, []);
   useEffect(() => {
     handleUpload();
   }, [image]);
-  console.log({ edit });
+
+  // console.log({ edit });
+
   return (
     <div className="flex">
       <DashboardAside />
@@ -253,16 +252,77 @@ const AddProduct = () => {
               <div className="mb-4 text-[#000000] text-lg">
                 Бүтээгдэхүүний зураг
               </div>
-              <div className="flex gap-2 ">
-                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2 aspect-square">
-                  <Image />
+              <div className="flex gap-2 items-center">
+                <div
+                  className={`flex-1 rounded-2xl grid place-items-center aspect-square relative ${
+                    uploadImage.length
+                      ? "border-none"
+                      : "border-dashed border-2"
+                  }`}
+                >
+                  <ImageIcon />
+                  <Image
+                    className={`${
+                      uploadImage.length
+                        ? "block absolute inset-0 w-full h-full rounded-lg"
+                        : "hidden"
+                    }`}
+                    alt="a"
+                    src={uploadImage[0] || "/"}
+                    width={100}
+                    height={100}
+                  />
                 </div>
-                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2">
-                  <Image />
+
+                <div
+                  className={`flex-1 rounded-2xl grid aspect-square place-items-center ${
+                    uploadImage.length > 1
+                      ? "border-none"
+                      : "border-dashed border-2"
+                  } relative`}
+                >
+                  <ImageIcon />
+                  <Image
+                    className={`${
+                      uploadImage.length > 1
+                        ? "block absolute inset-0 w-full h-full rounded-lg"
+                        : "hidden"
+                    }`}
+                    alt="a"
+                    src={uploadImage[1] || "/"}
+                    width={100}
+                    height={100}
+                  />
                 </div>
-                <div className="flex-1 rounded-2xl grid place-items-center border-dashed border-2">
-                  <Image />
+                <div
+                  className={`flex-1 rounded-2xl grid aspect-square place-items-center ${
+                    uploadImage.length > 2
+                      ? "border-none"
+                      : "border-dashed border-2"
+                  } relative`}
+                >
+                  <ImageIcon />
+                  <Image
+                    className={`${
+                      uploadImage.length > 2
+                        ? "block absolute w-full h-full inset-0 rounded-lg"
+                        : "hidden"
+                    }`}
+                    alt="a"
+                    src={uploadImage[2] || "/"}
+                    width={100}
+                    height={100}
+                  />
                 </div>
+                {loading && (
+                  <Image
+                    className="w-6 h-6 animate-spin"
+                    src={"/spinner.png"}
+                    width={40}
+                    height={40}
+                    alt="spinner"
+                  />
+                )}
                 <div className="flex-1 rounded-2xl grid place-items-center">
                   <div className="w-8 h-8 rounded-full bg-[#ECEDF0] grid place-items-center relative">
                     <Input
@@ -306,7 +366,7 @@ const AddProduct = () => {
           </div>
           <div className="flex-1 flex flex-col gap-6">
             <div className="bg-[#FFFFFF] rounded-[8px] flex-auto p-6 flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 relative">
                 <div>Ерөнхий ангилал</div>
 
                 <div className="">
@@ -319,7 +379,7 @@ const AddProduct = () => {
                     />
                   </div>
                   {showCategory && (
-                    <div className="flex flex-col relative w-full z-20">
+                    <div className="flex flex-col absolute w-full z-20">
                       {filters.map((select) => (
                         <div
                           onClick={() => {

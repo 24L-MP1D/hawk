@@ -22,7 +22,11 @@ export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
 const Category = () => {
   const [cardList, setCardList] = useState([]);
   const productList = async () => {
+
+  
+
     const response = await fetch("http://localhost:4000/products?fromDate=undefined&toDate=undefined");
+
     const data = await response.json();
     setCardList(data);
   };

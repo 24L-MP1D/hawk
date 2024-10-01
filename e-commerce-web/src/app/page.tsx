@@ -2,10 +2,8 @@
 
 import { Card } from "@/components/Card";
 
-
 import Image from "next/image";
 import datas from "./datas.json";
-
 
 import * as React from "react";
 
@@ -21,8 +19,6 @@ import {
 import { BasketCard } from "@/components/BasketCard";
 
 import { SidebarCard } from "@/components/SidebarCard";
-
-
 
 export default function Home() {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -84,6 +80,8 @@ export default function Home() {
           )}
         </div>
       </div>
+
+
      
 
 
@@ -91,6 +89,7 @@ export default function Home() {
      
 
     
+
 
 
 
