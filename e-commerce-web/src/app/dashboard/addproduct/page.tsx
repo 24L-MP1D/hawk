@@ -1,28 +1,13 @@
 "use client";
 
-import { DashboardSelect } from "@/components/dashboardSelect";
-import { savedValue } from "@/components/selectValue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Textarea } from "@/components/ui/textarea";
-import { error } from "console";
 import { Check, ImageIcon, Plus } from "lucide-react";
-import {
-  useRouter,
-  useSearchParams,
-  useSelectedLayoutSegment,
-} from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
-import { create } from "domain";
-import { Value } from "@radix-ui/react-select";
 import { ProductType } from "../product/page";
 import { filters, sizes } from "@/app/Category/page";
 import Link from "next/link";
@@ -79,7 +64,9 @@ const AddProduct = () => {
   const [productColor, setProductColor] = useState<string[]>([]);
   const [productSize, setProductSize] = useState<string[]>([]);
   const [uploadImage, setUploadImage] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
     const files = event.currentTarget.files;
     if (files) {
       setImage(files[0]);
@@ -99,7 +86,7 @@ const AddProduct = () => {
       const imageArray = [...uploadImage];
       imageArray.push(data.secure_url);
       setUploadImage(imageArray);
-
+      setLoading(false);
       console.log("ene heseg ajillaj bn");
     } catch (err) {
       console.error(err);
@@ -265,7 +252,7 @@ const AddProduct = () => {
               <div className="mb-4 text-[#000000] text-lg">
                 Бүтээгдэхүүний зураг
               </div>
-              <div className="flex gap-2 ">
+              <div className="flex gap-2 items-center">
                 <div
                   className={`flex-1 rounded-2xl grid place-items-center aspect-square relative ${
                     uploadImage.length
@@ -286,8 +273,9 @@ const AddProduct = () => {
                     height={100}
                   />
                 </div>
+
                 <div
-                  className={`flex-1 rounded-2xl grid place-items-center ${
+                  className={`flex-1 rounded-2xl grid aspect-square place-items-center ${
                     uploadImage.length > 1
                       ? "border-none"
                       : "border-dashed border-2"
@@ -307,7 +295,7 @@ const AddProduct = () => {
                   />
                 </div>
                 <div
-                  className={`flex-1 rounded-2xl grid place-items-center ${
+                  className={`flex-1 rounded-2xl grid aspect-square place-items-center ${
                     uploadImage.length > 2
                       ? "border-none"
                       : "border-dashed border-2"
@@ -326,6 +314,15 @@ const AddProduct = () => {
                     height={100}
                   />
                 </div>
+                {loading && (
+                  <Image
+                    className="w-6 h-6 animate-spin"
+                    src={"/spinner.png"}
+                    width={40}
+                    height={40}
+                    alt="spinner"
+                  />
+                )}
                 <div className="flex-1 rounded-2xl grid place-items-center">
                   <div className="w-8 h-8 rounded-full bg-[#ECEDF0] grid place-items-center relative">
                     <Input
@@ -369,7 +366,7 @@ const AddProduct = () => {
           </div>
           <div className="flex-1 flex flex-col gap-6">
             <div className="bg-[#FFFFFF] rounded-[8px] flex-auto p-6 flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 relative">
                 <div>Ерөнхий ангилал</div>
 
                 <div className="">
@@ -382,7 +379,7 @@ const AddProduct = () => {
                     />
                   </div>
                   {showCategory && (
-                    <div className="flex flex-col relative w-full z-20">
+                    <div className="flex flex-col absolute w-full z-20">
                       {filters.map((select) => (
                         <div
                           onClick={() => {

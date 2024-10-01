@@ -12,7 +12,7 @@ const Settings = () => {
             <div className="flex-1">Баннер зураг </div>
             <Link
               className="border-2 px-5 py-2.5 rounded-[8px] text-[#121316] text-base"
-              href={""}
+              href={"settings/commerce-profile"}
             >
               солих
             </Link>
@@ -21,7 +21,7 @@ const Settings = () => {
             <div className="flex-1">Эхний бүтээгдэхүүнээ нэмнэ үү</div>
             <Link
               className="border-2 px-5 py-2.5 rounded-[8px] text-[#121316] text-base"
-              href={""}
+              href={"addproduct"}
             >
               Бүтээгдэхүүн нэмэх
             </Link>
