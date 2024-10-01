@@ -24,7 +24,7 @@ export default function Page() {
     hasSpecialCharacter &&
     validEmail;
 
-  console.log({ email, password });
+  console.log("here: ", { email, password });
 
   function Submit() {
     fetch("http://localhost:4000/Auth/SignUp", {
