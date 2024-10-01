@@ -27,18 +27,20 @@ export default function Page() {
   console.log({ email, password });
 
   function Submit() {
-    fetch("https://backend/signup", {
+    fetch("http://localhost:4000/Auth/SignUp", {
       method: "POST",
       body: JSON.stringify({
         email,
         password,
       }),
-      // headers:
+      headers: {
+        "Content-Type": "application/json",
+      }
     }).then((res) => {
       if (res.ok) {
-        // success
+        console.log("Success")
       } else {
-        // error
+        console.log("Error")
       }
     });
   }
