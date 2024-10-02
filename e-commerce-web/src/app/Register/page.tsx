@@ -2,15 +2,16 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { FormikErrors, useFormik } from "formik";
+import * as yup from "yup";
+
 import { useState } from "react";
-import { Formik } from "formik";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { Toast } from "@radix-ui/react-toast";
 
 export default function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setpasswordConfirm] = useState("");
-
   const initialValues = {
     name: "",
     email: "",
@@ -18,121 +19,130 @@ export default function Register() {
     passwordConfirm: "",
   };
 
-  const formik = Formik({
-    initialValues: {
-      name,
-    },
+  interface FormValues {
+    name: string;
+    email: string;
+    password: string;
+    passwordConfirm: string;
+  }
+
+  const validationSchema = yup.object({
+    name: yup.string().min(1).required("Нэр оруулна уу "),
+    email: yup
+      .string()
+      .email("Зөв имэйл хаяг оруулна уу")
+      .required("Зөв имэйл хаяг оруулна уу"),
+    password: yup
+      .string()
+      .required("")
+      .min(8)
+      .matches(RegExp("(.*[a-z].*)"), "Жижиг үсэг орсон байх")
+      .matches(RegExp("(.*[A-Z].*)"), "Том үсэг орсон")
+      .matches(RegExp("(.*\\d.*)"), "Тоо орсон байх")
+      .matches(RegExp('[_!@#$%^&*(),.?":{}|<>]'), "Тэмдэгт орсон байх"),
+
+    passwordConfirm: yup
+      .string()
+      .oneOf([yup.ref("password")], "Нууц үг ижил биш байна")
+      .required("Нууц үг ижил биш байна"),
   });
 
-  //regex usage
-  const hasUppercase = /[A-Z]/.test(password);
-  const lengGreater = password.length >= 8;
-  const hasLowercase = /[a-z]/.test(password);
-  const hasNumber = /[0-9]/.test(password);
-  const hasSepcialChar = /[$&+,:;=?@#|'<>_.^*()%!-]/.test(password);
-  const emailValidation = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
-  const passwordsAreSame = password === passwordConfirm && password !== "";
+  const [Loader, setLoader] = useState(false);
 
-  //make valid
-  const isValid =
-    lengGreater &&
-    hasLowercase &&
-    hasUppercase &&
-    hasNumber &&
-    hasSepcialChar &&
-    passwordsAreSame &&
-    emailValidation &&
-    name.length >= 4;
+  const formik = useFormik({
+    initialValues,
 
-  const submit = async () => {
-    const data = await fetch("http://localhost:4000/register", {
-      method: "POST",
-      body: JSON.stringify({
-        userName: name,
-        password: password,
-        email: email,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-    console.log(data);
-  };
-
-  console.log({ name, email, password, passwordConfirm });
-
+    onSubmit: async (values) => {
+      setLoader(true);
+      const data = await fetch("http://localhost:4000/register", {
+        method: "POST",
+        body: JSON.stringify({
+          userName: values.name,
+          password: values.password,
+          email: values.email,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      setLoader(false);
+      toast({
+        title: "Алдаа гарлаа",
+        description: "Backend ээс имэйл давхардсан байвал энд гаргаж өгнө",
+        // action: (
+        //   <ToastAction className="text-red-500" altText="Try again">
+        //     Try again
+        //   </ToastAction>
+        // ),
+      });
+      console.log(data);
+    },
+    validationSchema,
+  });
   return (
     <div className="pt-[96px] pb-[374px]">
-      <div className="mx-auto flex gap-[16px] flex-col w-[334px] text-center">
+      <Toaster />
+      <form
+        className="mx-auto flex flex-col gap-4 w-[334px] text-center"
+        onSubmit={formik.handleSubmit}
+      >
         <div className="font-semibold">Бүртгүүлэх</div>
-        <Input
-          className="h-[36] rounded-[18px]"
-          type="email"
-          placeholder="Имэйл Хаяг"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
+        <div className="text-start">
+          <Input
+            className="h-[36] rounded-[18px]"
+            type="email"
+            placeholder="Имэйл Хаяг"
+            id="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+          />
+          <div className="text-red-500 text-sm pl-2">{formik.errors.email}</div>
+        </div>
         <Input
           className="h-[36] rounded-[18px]"
           type="name"
           placeholder="Нэр"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          id="name"
+          value={formik.values.name}
+          onChange={formik.handleChange}
         />
-
         <Input
           className="h-[36] rounded-[18px]"
           type="password"
           placeholder="Нууц үг"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          id="password"
+          value={formik.values.password}
+          onChange={formik.handleChange}
         />
-        <Input
-          className="h-[36] rounded-[18px]"
-          type="password"
-          placeholder="Нууц үг давтах"
-          value={passwordConfirm}
-          onChange={(e) => setpasswordConfirm(e.target.value)}
-        />
-
-        <ul className="list-disc text-start flex flex-col gap-2 text-xs pl-5">
-          <li className={hasUppercase ? "text-green-500" : "text-[#E11D48]"}>
-            Том үсэг орсон байх
-          </li>
-          <li className={hasLowercase ? "text-green-500" : "text-[#E11D48]"}>
-            Жижиг үсэг орсон байх
-          </li>
-          <li className={hasNumber ? "text-green-500" : "text-[#E11D48]"}>
-            Тоо орсон байх
-          </li>
-          <li className={hasSepcialChar ? "text-green-500" : "text-[#E11D48]"}>
-            Тэмдэг орсон байх
-          </li>
-          <li
-            className={passwordsAreSame ? "text-green-500" : "text-[#E11D48]"}
-          >
-            Нууц үг баталгаажлаа
-          </li>
-          <li className={lengGreater ? "text-green-500" : "text-[#E11D48]"}>
-            Нууц үгийн урт 8-с багагүй
-          </li>
-        </ul>
-
+        <div className="text-start">
+          <Input
+            className="h-[36] rounded-[18px]"
+            type="password"
+            placeholder="Нууц үг давтах"
+            id="passwordConfirm"
+            value={formik.values.passwordConfirm}
+            onChange={formik.handleChange}
+          />
+          <div className="text-red-500 text-sm pl-2">
+            {formik.errors.passwordConfirm}
+          </div>
+        </div>
         <Button
+          type="submit"
           className="h-[36] rounded-[18px] bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={!isValid}
-          onClick={submit}
         >
           Үүсгэх
         </Button>
+        <div className="text-red-500 text-sm pl-2 text-start">
+          <div>{formik.errors.password}</div>
+        </div>
         <Button
           variant="outline"
           className="h-[36] rounded-[18px] border-blue-700 text-blue-700 hover:text-blue-700 hover:bg-black mt-8"
         >
           Нэвтрэх
         </Button>
-      </div>
+      </form>
     </div>
   );
 }
