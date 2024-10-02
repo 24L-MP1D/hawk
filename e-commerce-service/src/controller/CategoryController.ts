@@ -58,9 +58,8 @@ export const getProducts = async (req: Request, res: Response) => {
 };
 export const getFiltProducts = async (req: Request, res: Response) => {
   try {
-    const { categoryType, lowprice, highprice, fromDate, toDate } = req.query;
-    console.log(fromDate);
-    console.log(req.query);
+    let { categoryType, lowprice, highprice, fromDate, toDate } = req.query;
+
     const filter: {
       categoryType?: string;
       price?: { $gt: number; $lt: number };
@@ -71,27 +70,21 @@ export const getFiltProducts = async (req: Request, res: Response) => {
 
     if (categoryType) {
       filter.categoryType = String(categoryType);
-      console.log(filter);
     }
 
-    if (lowprice && highprice) {
+    if (Number(lowprice) != 0 && Number(highprice) != 0) {
       filter.price = { $gt: Number(lowprice), $lt: Number(highprice) };
-      console.log(filter);
     }
 
-    // if (fromDate && !toDate) {
-    //   filter.fromDate = { $gt: String(fromDate) };
-    // }
     // if (!fromDate && toDate) {
     //   filter.toDate = { $lt: String(toDate) };
     // }
-    // if (fromDate && toDate) {
-    //   filter.date = { $gt: String(fromDate), $lt: String(toDate) };
-    //   console.log(filter);
-    // }
+    if (fromDate != "undefined" && toDate != "undefined") {
+      filter.date = { $gt: String(fromDate), $lt: String(toDate) };
+    }
 
     const filtProduct = await Product.find(filter);
-    console.log(filtProduct);
+
     res.send(filtProduct);
   } catch (err) {
     res.send(err);
