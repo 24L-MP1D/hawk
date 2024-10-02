@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { AddProduct } from "../addProduct";
+
 import {
   Table,
   TableBody,
@@ -17,33 +17,72 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EditIcon, Trash } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { filters } from "@/app/Category/page";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { DateRange } from "react-day-picker";
 
-export type ProductType = {
-  productName: string;
-  price: number;
-  productId: number;
-  categoryId: string;
-  qty: number;
-  thumbnails: string;
-  images: string;
-  coupon: string;
-  salePercent: number;
-  description: string;
-  viewCount: number;
-  createAt: Date;
-  updateAt: Date;
-  categoryType: string;
-  productTag: string;
-  _id: string;
-};
+export type ProductType =
+  {
+      productName: string;
+      price: number;
+      size:string[]
+      productId: number;
+      categoryId: string;
+      qty: number;
+      thumbnails: string;
+      images: string;
+      coupon: string;
+      salePercent: number;
+      description: string;
+      viewCount: number;
+      createAt: Date;
+      updateAt: Date;
+      categoryType: string;
+      productTag: string;
+      _id: string;
+      color: string[];
+    }
+  | undefined;
 
 const Product = () => {
+  const [categoryTypeValue, setCategoryTypeValue] = useState("Бүгд");
   const [readProduct, setReadProduct] = useState([]);
+  const [showCategories, setShowCategories] = useState(false);
+  const [showPriceLimit, setShowPriceLimit] = useState(false);
+  const [lowPrice, setLowPrice] = useState(0);
+  const [highPrice, setHighPrice] = useState(0);
+  const [date, setDate] = useState<DateRange | undefined>();
+  const [showDate, setShowDate] = useState(false);
+
   const loadProduct = async () => {
-    const response = await fetch(`http://localhost:4000/products`);
-    const data = await response.json();
-    setReadProduct(data);
+    if (lowPrice && highPrice) {
+      const response = await fetch(
+        `http://localhost:4000/products?lowprice=${lowPrice}&highprice=${highPrice}&fromDate=${date?.from}&toDate=${date?.to}`
+      );
+      const data = await response.json();
+      setReadProduct(data);
+    } else {
+      const response = await fetch(
+        `http://localhost:4000/products?fromDate=${date?.from}&toDate=${date?.to}`
+      );
+      const data = await response.json();
+      setReadProduct(data);
+    }
   };
+
+  console.log("lowPrice", lowPrice);
+  console.log("highPrice", highPrice);
+
   const deleteProduct = async (id: string) => {
     await fetch(`http://localhost:4000/products/${id}`, {
       method: "DELETE",
@@ -51,43 +90,103 @@ const Product = () => {
     loadProduct();
   };
 
-  useEffect(() => {
-    loadProduct();
-  }, []);
-  const [product, setProduct] = useState(true);
+  const loadFiltProduct = async () => {
+    // if (categoryTypeValue === "Бүгд") {
+    //   loadProduct();
+    //   return;
+    // }
+    if (categoryTypeValue !== "Бүгд" || lowPrice || highPrice || date) {
+      const response = await fetch(
+        `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}&lowprice=${lowPrice}&highprice=${highPrice}&fromDate=${date?.from}&toDate=${date?.to}`
+      );
+      const data = await response.json();
+      setReadProduct(data);
+    }
+
+    // if (categoryTypeValue === "Бүгд" && lowPrice && highPrice && date) {
+    //   const response = await fetch(
+    //     `http://localhost:4000/filtproduct?lowprice=${lowPrice}&highprice=${highPrice}&date=${date}`
+    //   );
+    //   const data = await response.json();
+    //   setReadProduct(data);
+    //   return;
+    // }
+    // if (lowPrice && highPrice) {
+    //   const response = await fetch(
+    //     `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}&lowprice=${lowPrice}&highprice=${highPrice}`
+    //   );
+    //   const data = await response.json();
+    //   setReadProduct(data);
+    //   return;
+    // } else {
+    //   const response = await fetch(
+    //     `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}`
+    //   );
+    //   const data = await response.json();
+    //   setReadProduct(data);
+    //   return;
+    // }
+    // if (date) {
+    //   const response = await fetch(
+    //     `http://localhost:4000/filtproduct?lowprice=${lowPrice}&highprice=${highPrice}`
+    //   );
+    //   const data = await response.json();
+    //   setReadProduct(data);
+    // }
+  };
+
+  // const DateCont = () => {
+  //   setDate(date);
+  //   setShowDate(false);
+  // };
+  if (categoryTypeValue === "Бүгд") {
+    useEffect(() => {
+      loadProduct();
+    }, [lowPrice, highPrice, date]);
+  } else {
+    useEffect(() => {
+      loadFiltProduct();
+    }, [categoryTypeValue, lowPrice, highPrice, date]);
+  }
+
+  console.log(date?.from);
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen text-nowrap">
       <div className="bg-[#FFFFFF] w-[222px]">
         <DashboardAside />
       </div>
-      {product && (
-        <div className="bg-[#f7f7f8] flex flex-col gap-6 w-full">
-          <div className="flex border-b-[1px]">
-            <div className="p-4 border-b-2 border-black hover:cursor-pointer">
-              Бүтээгдэхүүн
-            </div>
-            <div className="p-4 hover:cursor-pointer">Ангилал</div>
-          </div>
-          <div
-            onClick={() => setProduct(false)}
-            className="flex gap-1 bg-[#121316] px-[45px] py-3 hover:bg-blend-darken ml-6 rounded-[8px] max-w-[280px] w-full items-center hover:cursor-pointer "
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="white" />
-            </svg>
 
-            <div className="text-[#FFFFFF]">Бүтээгдэхүүн нэмэх</div>
+      <div className="bg-[#f7f7f8] flex flex-col gap-6 w-full">
+        <div className="flex border-b-[1px]">
+          <div className="p-4 border-b-2 border-black hover:cursor-pointer">
+            Бүтээгдэхүүн
           </div>
-          <div className="flex flex-col gap-4 ml-6">
-            <div className="flex justify-between">
-              <div className="flex gap-[13px]">
-                <div className="flex gap-1 bg-[#FFFFFF] rounded-[8px] py-2 px-3 hover:cursor-pointer">
+          <div className="p-4 hover:cursor-pointer">Ангилал</div>
+        </div>
+        <Link
+          href={"/dashboard/addproduct"}
+          className="flex gap-1 bg-[#121316] px-[45px] py-3 hover:bg-blend-darken ml-6 rounded-[8px] max-w-[280px] w-full items-center hover:cursor-pointer "
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="white" />
+          </svg>
+
+          <div className="text-[#FFFFFF]">Бүтээгдэхүүн нэмэх</div>
+        </Link>
+        <div className="flex flex-col gap-4 ml-6">
+          <div className="flex justify-between">
+            <div className="flex gap-[13px]">
+              <div className="relative">
+                <div
+                  onClick={() => setShowCategories(true)}
+                  className="flex gap-1 bg-[#FFFFFF] rounded-[8px] hover:cursor-pointer py-2 px-3"
+                >
                   <div>
                     <svg
                       width="24"
@@ -118,7 +217,32 @@ const Product = () => {
                     </svg>
                   </div>
                 </div>
-                <div className="flex gap-1 bg-[#FFFFFF] rounded-[8px] py-2 px-3 hover:cursor-pointer">
+                {showCategories && (
+                  <div className="absolute bg-[#FFFFFF] z-20 w-full text-center top-10">
+                    {filters.map((filter) => (
+                      <div
+                        key={filter.value}
+                        onClick={() => {
+                          setShowCategories(false);
+                          setCategoryTypeValue(filter.value);
+                        }}
+                        className="p-2 border-[1px] cursor-pointer rounded-xl"
+                      >
+                        {filter.filt}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="relatvie">
+                <div
+                  onClick={() => {
+                    showPriceLimit
+                      ? setShowPriceLimit(false)
+                      : setShowPriceLimit(true);
+                  }}
+                  className="flex gap-1 bg-[#FFFFFF] rounded-[8px] py-2 px-3 hover:cursor-pointer"
+                >
                   <div>
                     <svg
                       width="24"
@@ -150,122 +274,144 @@ const Product = () => {
                     </svg>
                   </div>
                 </div>
-                <div className="flex gap-1 bg-[#FFFFFF] rounded-[8px] py-2 px-3 hover:cursor-pointer">
-                  <div>
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M20 3H19V1H17V3H7V1H5V3H4C2.9 3 2 3.9 2 5V21C2 22.1 2.9 23 4 23H20C21.1 23 22 22.1 22 21V5C22 3.9 21.1 3 20 3ZM20 21H4V10H20V21ZM20 8H4V5H20V8Z"
-                        fill="#121316"
-                      />
-                    </svg>
+                {showPriceLimit && (
+                  <div className="absolute bg-[#ffffff] z-20">
+                    <Input
+                      className="p-2"
+                      placeholder="enter low price"
+                      type="number"
+                      value={lowPrice === 0 ? "" : lowPrice}
+                      onChange={(e) => {
+                        setLowPrice(Number(e.target.value));
+                      }}
+                    />
+                    <Input
+                      onChange={(e) => {
+                        setHighPrice(Number(e.target.value));
+                      }}
+                      type="number"
+                      className="p-2"
+                      placeholder="enter high price"
+                      value={highPrice === 0 ? "" : highPrice}
+                    />
                   </div>
-                  <div>Сараар</div>
-                  <div>
-                    {" "}
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M16.59 8.29504L12 12.875L7.41 8.29504L6 9.70504L12 15.705L18 9.70504L16.59 8.29504Z"
-                        fill="#121316"
-                      />
-                    </svg>
-                  </div>
-                </div>
+                )}
               </div>
-              <div>
-                <Input placeholder="Бүтээгдэхүүний нэр, SKU, UPC" />
-              </div>
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    id="date"
+                    variant={"outline"}
+                    className={cn(
+                      "w-[300px] justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date?.from ? (
+                      date.to ? (
+                        <>
+                          {format(date.from, "LLL dd, y")} -{" "}
+                          {format(date.to, "LLL dd, y")}
+                        </>
+                      ) : (
+                        format(date.from, "LLL dd, y")
+                      )
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    initialFocus
+                    mode="range"
+                    defaultMonth={date?.from}
+                    selected={date}
+                    onSelect={setDate}
+                    numberOfMonths={2}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <div>
-              <Table className="bg-[#FFFFFF] border-b-[1px] rounded-xl">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead> </TableHead>
-                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
-                      Бүтээгдэхүүн
-                    </TableHead>
-                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
-                      Ангилал
-                    </TableHead>
-                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
-                      Үнэ
-                    </TableHead>
-                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
-                      Үлдэгдэл
-                    </TableHead>
-                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
-                      Зарагдсан
-                    </TableHead>
-                    <TableHead className="max-w-[156px]  px-5 py-[14px]">
-                       Нэмсэн огноо
-                    </TableHead>
-                    <TableHead className="max-w-[104px]  px-6 py-[14px]">
-                       
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {readProduct.map((product: ProductType, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="px-6 py-[26px] max-w-[156px]">
-                        <Checkbox />
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {product.productName}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {product.price}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {" "}
-                        {product.productTag}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {product.qty}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 max-w-[156px]">
-                        {product.qty}
-                      </TableCell>
-                      <TableCell className="px-6 py-4">
-                        {dayjs(product.createAt).format("YYYY-MM-DD")}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 flex gap-4 items-center">
-                        <div onClick={() => deleteProduct(product._id)}>
-                          <Trash className="text-[#1C20243D] hover:cursor-pointer" />
-                        </div>
-                        <div
-                          onClick={() => {
-                            setProduct(false);
-                          }}
-                        >
-                          <EditIcon className="text-[#1C20243D] hover:cursor-pointer" />
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <Input placeholder="Бүтээгдэхүүний нэр, SKU, UPC" />
             </div>
           </div>
+          <div>
+            <Table className="bg-[#FFFFFF] border-b-[1px] rounded-xl">
+              <TableHeader>
+                <TableRow>
+                  <TableHead> </TableHead>
+                  <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                    Бүтээгдэхүүн
+                  </TableHead>
+                  <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                    Ангилал
+                  </TableHead>
+                  <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                    Үнэ
+                  </TableHead>
+                  <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                    Үлдэгдэл
+                  </TableHead>
+                  <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                    Зарагдсан
+                  </TableHead>
+                  <TableHead className="max-w-[156px]  px-5 py-[14px]">
+                     Нэмсэн огноо
+                  </TableHead>
+                  <TableHead className="max-w-[104px]  px-6 py-[14px]">
+                     
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {readProduct.map(
+                  (product: ProductType, index) =>
+                    product && (
+                      <TableRow key={index}>
+                        <TableCell className="px-6 py-[26px] max-w-[156px]">
+                          <Checkbox />
+                        </TableCell>
+                        <TableCell className="px-6 py-4 max-w-[156px]">
+                          {product.productName}
+                        </TableCell>
+                        <TableCell className="px-6 py-4 max-w-[156px]">
+                          {product.price + " ₮"}
+                        </TableCell>
+                        <TableCell className="px-6 py-4 max-w-[156px]">
+                          {" "}
+                          {product.productTag}
+                        </TableCell>
+                        <TableCell className="px-6 py-4 max-w-[156px]">
+                          {product.qty}
+                        </TableCell>
+                        <TableCell className="px-6 py-4 max-w-[156px]">
+                          {product.qty}
+                        </TableCell>
+                        <TableCell className="px-6 py-4">
+                          {dayjs(product.createAt).format("YYYY-MM-DD")}
+                        </TableCell>
+                        <TableCell className="px-6 py-4 flex gap-4 items-center">
+                          <div onClick={() => deleteProduct(product._id)}>
+                            <Trash className="text-[#1C20243D] hover:cursor-pointer" />
+                          </div>
+                          <Link
+                            href={`/dashboard/addproduct?id=${product._id}`}
+                          >
+                            <EditIcon className="text-[#1C20243D] hover:cursor-pointer" />
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    )
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      )}
-      {!product && (
-        <AddProduct
-          loadProduct={loadProduct}
-          onClose={() => setProduct(true)}
-        />
-      )}
+      </div>
     </div>
   );
 };

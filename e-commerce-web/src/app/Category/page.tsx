@@ -15,20 +15,24 @@ export const filters: filtType[] = [
   { filt: "Усны сав", value: "Усны сав" },
   { filt: "T-shirt", value: "T-shirt" },
   { filt: "Hoodie", value: "Hoodie" },
-  { filt: "Төв", value: "Төв" },
+  { filt: "Тее", value: "Тее" },
   { filt: "Цүнх", value: "Цүнх" },
 ];
+export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
 const Category = () => {
   const [cardList, setCardList] = useState([]);
   const productList = async () => {
-    const response = await fetch("http://localhost:4000/products");
+
+  
+
+    const response = await fetch("http://localhost:4000/products?fromDate=undefined&toDate=undefined");
+
     const data = await response.json();
     setCardList(data);
   };
   useEffect(() => {
     productList();
   }, []);
-  const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
   return (
     <div className="max-w-[1039px] mx-auto flex gap-[20px] pb-[100px] pt-[52px]">
       <div className="max-w-[245px] w-full flex flex-col gap-12">

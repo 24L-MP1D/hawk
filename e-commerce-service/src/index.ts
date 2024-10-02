@@ -10,8 +10,11 @@ import {
   updateProducts,
 } from "./controller/CategoryController";
 import { productsRouter } from "./router/productsRouter";
-import { createUser } from "./controller/UserController";
-import { userRouter } from "./router/userRouter";
+
+import { saveRouter } from "./router/saveRouter";
+import { userRouter } from "./router/UserRouter";
+import { uploadRouter } from "./router/uploadRouter";
+import { cartRouter } from "./router/ShoppingCartRouter";
 const app = express();
 const port = 4000;
 const cors = require("cors");
@@ -21,8 +24,16 @@ app.use(express.json());
 
 // products CRUD done
 app.use(productsRouter);
+
+app.use(uploadRouter);
+
 app.use(userRouter);
+app.use(saveRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+
+app.use(cartRouter);
