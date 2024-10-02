@@ -4,7 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormikErrors, useFormik } from "formik";
 import * as yup from "yup";
-import { Regex } from "lucide-react";
+
+import { useState } from "react";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { Toast } from "@radix-ui/react-toast";
 
 export default function Register() {
   const initialValues = {
@@ -23,24 +28,32 @@ export default function Register() {
 
   const validationSchema = yup.object({
     name: yup.string().min(1).required("Нэр оруулна уу "),
-    email: yup.string().email("wrong Email").required("email is required"),
+    email: yup
+      .string()
+      .email("Зөв имэйл хаяг оруулна уу")
+      .required("Зөв имэйл хаяг оруулна уу"),
     password: yup
       .string()
-      .required()
+      .required("")
       .min(8)
       .matches(RegExp("(.*[a-z].*)"), "Жижиг үсэг орсон байх")
       .matches(RegExp("(.*[A-Z].*)"), "Том үсэг орсон")
       .matches(RegExp("(.*\\d.*)"), "Тоо орсон байх")
       .matches(RegExp('[_!@#$%^&*(),.?":{}|<>]'), "Тэмдэгт орсон байх"),
+
     passwordConfirm: yup
       .string()
-      .oneOf([yup.ref("password")], "Password must match")
-      .required("Password agian"),
+      .oneOf([yup.ref("password")], "Нууц үг ижил биш байна")
+      .required("Нууц үг ижил биш байна"),
   });
+
+  const [Loader, setLoader] = useState(false);
 
   const formik = useFormik({
     initialValues,
+
     onSubmit: async (values) => {
+      setLoader(true);
       const data = await fetch("http://localhost:4000/register", {
         method: "POST",
         body: JSON.stringify({
@@ -52,28 +65,23 @@ export default function Register() {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
+      setLoader(false);
+      toast({
+        title: "Алдаа гарлаа",
+        description: "Backend ээс имэйл давхардсан байвал энд гаргаж өгнө",
+        // action: (
+        //   <ToastAction className="text-red-500" altText="Try again">
+        //     Try again
+        //   </ToastAction>
+        // ),
+      });
       console.log(data);
     },
     validationSchema,
   });
-
-  // const submit = async () => {
-  //   const data = await fetch("http://localhost:4000/register", {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       userName: name,
-  //       password: password,
-  //       email: email,
-  //     }),
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8",
-  //     },
-  //   });
-  //   console.log(data);
-  // };
-
   return (
     <div className="pt-[96px] pb-[374px]">
+      <Toaster />
       <form
         className="mx-auto flex flex-col gap-4 w-[334px] text-center"
         onSubmit={formik.handleSubmit}
@@ -126,7 +134,7 @@ export default function Register() {
           Үүсгэх
         </Button>
         <div className="text-red-500 text-sm pl-2 text-start">
-          {formik.errors.password}
+          <div>{formik.errors.password}</div>
         </div>
         <Button
           variant="outline"
