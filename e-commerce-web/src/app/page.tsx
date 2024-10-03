@@ -29,7 +29,7 @@ export default function Home() {
 
   const loadProduct = async () => {
     const response = await fetch(
-      `http://localhost:4000/products`
+      `http://localhost:4000/products`   // aldaa zaasan 
     );
     const data = await response.json();
     setProducts(data);
@@ -57,7 +57,7 @@ export default function Home() {
                 <div className="font-bold text-[36px]">
                   {firstProduct?.price}{" "}
                 </div>
-                {/* <div>{datas[0].title}</div> */}
+           
               </div>
             </div>
           </div>

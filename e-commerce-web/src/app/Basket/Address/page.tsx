@@ -10,7 +10,7 @@ import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BasketCard } from "@/components/BasketCard";
-import { cardItems } from "@/app/Category/page";
+
 import { SidebarCard } from "@/components/SidebarCard";
 import { string } from "yup";
 
@@ -33,6 +33,7 @@ export default function Home() {
 
   useEffect(() => {
     getAddress();
+    editAddress();
   }, []);
 
   //update
@@ -51,9 +52,7 @@ export default function Home() {
     setUpdateAddresses(data);
   };
 
-  useEffect(() => {
-    editAddress();
-  }, []);
+
 
   return (
     <div className="bg-[#F7F7F8]">
