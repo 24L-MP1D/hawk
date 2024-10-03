@@ -2,14 +2,10 @@
 
 import { ArrowRight } from "lucide-react";
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+const data = {
+  date: ["01/06", "01/07", "01/08", "01/09", "01/10", "01/11", "01/12"],
+  sales: [400000, 300000, 200000, 100000, 0],
+};
 
 export function DashboardChart() {
   return (
@@ -20,26 +16,16 @@ export function DashboardChart() {
           <ArrowRight />
         </div>
       </div>
-      <div className="">
-        <div className="flex gap-3">
-          <div className="flex flex-col gap-9">
-            <div>400K</div>
-            <div>300K</div>
-            <div>200K</div>
-            <div>100K</div>
-            <div>0K</div>
-          </div>
-          <div className="py-1.5 flex-1">
-            <div className="flex flex-col gap-[53px]">
-              <div className="w-full border-[#D6D8DB] border-dashed border-[1px]"></div>
-              <div className="w-full border-[#D6D8DB] border-dashed border-[1px]"></div>
-              <div className="w-full border-[#D6D8DB] border-dashed border-[1px]"></div>
-              <div className="w-full border-[#D6D8DB] border-dashed border-[1px]"></div>
-              <div className="w-full border-[#D6D8DB] border-dashed border-[1px]"></div>
+      <div className="flex flex-col gap-[14px] relative">
+        <div className="flex flex-col gap-9">
+          {data.sales.map((amount) => (
+            <div className="flex gap-[14px] items-center">
+              <div className="w-[38px]">{amount / 1000}K</div>
+              <div className="flex-1 border-dashed border-[#D6D8DB] border-[1px] h-[1px]"></div>
             </div>
-          </div>
+          ))}
         </div>
-        <div></div>
+        <div className="absolute"></div>
       </div>
     </div>
   );
