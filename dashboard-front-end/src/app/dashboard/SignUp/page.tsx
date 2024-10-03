@@ -38,9 +38,8 @@ export default function Page() {
     }).then((res) => {
       if (res.ok) {
         console.log("Success");
-        console.log("Success");
+        
       } else {
-        console.log("Error");
         console.log("Error");
       }
     });
@@ -66,7 +65,7 @@ export default function Page() {
           </p>
         </div>
         <div className="min-w-[360px] my-3">
-          <p className="mb-2">Таны нэр</p>
+          <p className="mb-2">Нууц үгээ оруулна уу</p>
           <input
             placeholder="Нэр"
             className="bg-[#F7F7F8] min-w-[360px] h-[56px] border-2 pl-2 rounded-md mb-2"
