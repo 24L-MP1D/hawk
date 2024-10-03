@@ -5,9 +5,29 @@ import { HeartIconSvg } from "./HeartIcon";
 import Image from "next/image";
 
 import Link from "next/link";
-import { ProductType } from "@/app/dashboard/product/page";
-import Link from "next/link";
 
+export type ProductType =
+  | {
+      productName: string;
+      price: number;
+      size: string[];
+      productId: number;
+      categoryId: string;
+      qty: number;
+      thumbnails: string;
+      images: string[];
+      coupon: string;
+      salePercent: number;
+      description: string;
+      viewCount: number;
+      createAt: Date;
+      updateAt: Date;
+      categoryType: string;
+      productTag: string;
+      _id: string;
+      color: string[];
+    }
+  | undefined;
 export const Card = ({ cardItems }: { cardItems: ProductType }) => {
   const [ready, setReady] = useState(false);
 
@@ -20,11 +40,7 @@ export const Card = ({ cardItems }: { cardItems: ProductType }) => {
   };
   return (
     <Link
-
       href={`/ProductDetail?id=${cardItems?._id}`}
-
-
-
       className="w-full flex flex-col gap-2 relative group"
     >
       <div className="rounded-2xl bg-slate-400 aspect-[3/4] overflow-hidden relative hover:border-black border-[1px]">
@@ -33,7 +49,7 @@ export const Card = ({ cardItems }: { cardItems: ProductType }) => {
           src={"/Tuulai.png"}
           width={500}
           height={500}
-          className="bg-slate-50 absolute inset-0 h-full group-hover:scale-150"
+          className="bg-slate-50 absolute w-full object-cover h-full inset-0 group-hover:scale-150"
         />
       </div>
       <div className="flex flex-col gap-1">

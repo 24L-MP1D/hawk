@@ -68,7 +68,6 @@ const AddProduct = () => {
   const [uploadImage, setUploadImage] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setLoading(true);
     const files = event.currentTarget.files;
     if (files) {
       setImage(files[0]);
@@ -77,6 +76,7 @@ const AddProduct = () => {
 
   const handleUpload = async () => {
     if (!image) return;
+    setLoading(true);
     const formDate = new FormData();
     formDate.append("image", image);
     try {
@@ -89,7 +89,6 @@ const AddProduct = () => {
       imageArray.push(data.secure_url);
       setUploadImage(imageArray);
       setLoading(false);
-      console.log("ene heseg ajillaj bn");
     } catch (err) {
       console.error(err);
     }
