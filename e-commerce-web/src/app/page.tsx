@@ -29,61 +29,41 @@ export default function Home() {
 
   const loadProduct = async () => {
     const response = await fetch(
-      `http://localhost:4000/products?fromDate=undefined&toDate=undefined`
+      `http://localhost:4000/products`
     );
     const data = await response.json();
     setProducts(data);
   };
 
-  // useEffect(() => {
-  //   if (!api) {
-  //     return;
-  //   }
   useEffect(() => {
     loadProduct();
-    console.log(products);
   }, []);
 
-  //   setCount(api.scrollSnapList().length);
-  //   setCurrent(api.selectedScrollSnap() + 1);
-
-  //   api.on("select", () => {
-  //     setCurrent(api.selectedScrollSnap() + 1);
-  //   });
-  // }, [api]);
   return (
     <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px]">
-      {/* <div className="mx-auto max-w-xs">
-        <Carousel setApi={setApi} className="w-full max-w-xs">
-          <CarouselContent>
-            <div>  
-              {datas.({ length: 5 }).map((cardItems, index) => (
-                <Card cardItems={cardItems} key={index + cardItems.price} />
-              ))}
-            </div>
-          </CarouselContent>
-        </Carousel>
-      </div> */}
       <div>
-        {/* {product.map(
-          (product: ProductType, index) =>
-            product &&
-            product.images.length && (
-              <div>
-                <Image
-                  src={product.images[0]}
-                  width={100}
-                  height={100}
-                  alt="a"
-                  className="w-full max-h-[446px] rounded-2xl object-cover"
-                />
+        <div>
+          <div className="max-w-[1040px] mx-auto ">
+            <div className="mb-[20px] relative ">
+              <Image
+                className=" rounded-lg object-cover w-[1040px] h-[446px] relative  "
+                width={1040}
+                height={446}
+                src={"/Shirt.png"}
+                alt="item"
+              />
+              <div className="flex flex-col gap-1 absolute bottom-[32px] left-[32px]">
+                <div className="text-[18px]">{firstProduct?.productName} </div>
+                <div className="font-bold text-[36px]">
+                  {firstProduct?.price}{" "}
+                </div>
+                {/* <div>{datas[0].title}</div> */}
               </div>
-            )
-        )} */}
+            </div>
+          </div>
+        </div>
       </div>
       <div className="grid">
-        <Card cardItems={firstProduct} />
-
         <div className="flex-1 grid grid-cols-4 gap-x-[21px] gap-y-12">
           {otherProducs.map(
             (cardItems: ProductType, index) =>
@@ -91,11 +71,11 @@ export default function Home() {
               index < 18 && (
                 <div
                   key={index + cardItems.price}
-                  className={`object-cover ${
+                  className={` ${
                     index == 6 ? " col-start-3 col-span-2 row-span-2" : ""
                   } ${index == 7 ? " col-start-1 col-span-2 row-span-2" : ""}`}
                 >
-                  <Card cardItems={cardItems} />
+                  <Card index={index} cardItems={cardItems} />
                 </div>
               )
           )}

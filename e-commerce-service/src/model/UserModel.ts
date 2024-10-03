@@ -12,5 +12,6 @@ const schema = new Schema({
   createAt: Date,
   updateAt: Date,
   categoryType: String,
+ 
 });
 export const User = model("users", schema);

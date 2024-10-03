@@ -4,6 +4,7 @@ import { Card } from "@/components/Card";
 import SidebarProducts from "@/app/datas.json";
 import Image from "next/image";
 import Link from "next/link";
+import { use, useEffect, useState } from "react";
 
 import * as React from "react";
 import { Input } from "@/components/ui/input";
@@ -11,33 +12,69 @@ import { Button } from "@/components/ui/button";
 import { BasketCard } from "@/components/BasketCard";
 import { cardItems } from "@/app/Category/page";
 import { SidebarCard } from "@/components/SidebarCard";
+import { string } from "yup";
 
 export default function Home() {
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
   const [counting, setCounting] = React.useState(0);
 
+  const [address, setAddresses] = React.useState(0);
+  const [deleteAddress, setDeleteAddresses] = useState(0);
+  const [updateAddress, setUpdateAddresses] = useState(0);
+  // const [Addresses, setDeleteAddresses] = useState(0);
+
+  //get
+  const getAddress = async () => {
+    const response = await fetch(`http://localhost:4000/register`);
+    const data = await response.json();
+    setAddresses(data);
+  };
+
+  useEffect(() => {
+    getAddress();
+  }, []);
+
+  //update
+
+  const editAddress = async () => {
+    const response = await fetch(`http://localhost:4000/updateUser/:id`, {
+      method: "PUT",
+      body: JSON.stringify({
+        address: string,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await response.json();
+    setUpdateAddresses(data);
+  };
+
+  useEffect(() => {
+    editAddress();
+  }, []);
+
   return (
     <div className="bg-[#F7F7F8]">
-
       <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px] bg-[#F7F7F8]">
         <div className="w-[256px] h-[32px] mx-auto flex items-center justify-center mb-[66px] ">
-            <div className="h-[32px] w-[32px] rounded-full font-bold bg-blue-500  text-white text-center p-[4px] border-[1px]">
-            ✓ 
-            </div>
-            <div className="w-[80px] h-[1px] bg-black top-7"></div>
-            <div className="h-[32px] w-[32px] rounded-full font-bold bg-blue-500  text-white p-[4px] border-black text-center items-center">
-            2
-            </div>
-            <div className="w-[80px] h-[1px] bg-black top-7"></div>
-            <div className="h-[32px] w-[32px] rounded-full bg-white border-[1px] p-[4px] border-black text-center items-center text-[#09090B]">
-              3
-            </div>
+          <div className="h-[32px] w-[32px] rounded-full font-bold bg-blue-500  text-white text-center p-[4px] border-[1px]">
+            ✓
           </div>
+          <div className="w-[80px] h-[1px] bg-black top-7"></div>
+          <div className="h-[32px] w-[32px] rounded-full font-bold bg-blue-500  text-white p-[4px] border-black text-center items-center">
+            2
+          </div>
+          <div className="w-[80px] h-[1px] bg-black top-7"></div>
+          <div className="h-[32px] w-[32px] rounded-full bg-white border-[1px] p-[4px] border-black text-center items-center text-[#09090B]">
+            3
+          </div>
+        </div>
         <div className="max-w-full h-[678px] flex gap-[20px]  mx-auto ">
           <div className="w-[333px] h-[448px] rounded-2xl bg-white px-[24px] py-[32px] ">
             <div className="font-bold">Сагс</div>
-          <div className="flex flex-col gap-[16px] mt-[16px] items-center">
+            <div className="flex flex-col gap-[16px] mt-[16px] items-center">
               {SidebarProducts.map(
                 (cardItems, index) =>
                   index < 3 && (
@@ -52,7 +89,9 @@ export default function Home() {
             </div>
           </div>
           <div className="w-[687px] h-[678px] rounded-2xl gap-[24px] bg-white p-[32px]">
-            <div className=" text-[#09090B] mb-[36px]">2. Хүргэлтийн мэдээлэл оруулах</div>
+            <div className=" text-[#09090B] mb-[36px]">
+              2. Хүргэлтийн мэдээлэл оруулах
+            </div>
             <div className="w-[623px] h-[478px] flex flex-col gap-[24px]">
               <div className="h-[50px]">
                 <div>Овог:</div>
@@ -120,7 +159,6 @@ export default function Home() {
                     >
                       Төлбөр төлөх
                     </Link>
-                  
                   </div>
                 </div>
               </div>
