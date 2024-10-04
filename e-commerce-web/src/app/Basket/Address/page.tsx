@@ -24,7 +24,7 @@ export default function Home() {
   const [updateAddress, setUpdateAddresses] = useState(0);
   // const [Addresses, setDeleteAddresses] = useState(0);
 
-  //get
+  //get huselt gantsaaraa browseroor damjij bolno busad ni ylgaatai 
   const getAddress = async () => {
     const response = await fetch(`http://localhost:4000/register`);
     const data = await response.json();
@@ -151,6 +151,7 @@ export default function Home() {
                     >
                       Буцах
                     </Link>
+                    <Button>Хүргэлтийн мэдээллийг хадгалах</Button>
                     <Link
                       className="bg-[#2563EB] rounded-[18px] w-[166px] h-[36px] text-white px-[29px] py-[5px] text-[14px]"
                       rel="address"
