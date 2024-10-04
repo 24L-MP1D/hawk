@@ -43,7 +43,7 @@
             <div className="min-w-[360px] my-3">
               <p className="mb-2">Таны имэйл</p>
               <input
-                placeholder="Имэйл"
+                placeholder="E-mail"
                 className="bg-[#F7F7F8] min-w-[360px] h-[56px] border-2 pl-2 rounded-md"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -56,7 +56,7 @@
             <div className="min-w-[360px] my-3">
               <p className="mb-2">Нууц үгээ оруулна уу</p>
               <input
-                placeholder="Нэр"
+                placeholder="Password"
                 className="bg-[#F7F7F8] min-w-[360px] h-[56px] border-2 pl-2 rounded-md mb-2"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
