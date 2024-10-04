@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { EditIcon, Trash } from "lucide-react";
+import { EditIcon, Trash, TrashIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -31,6 +31,8 @@ import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { DashboardAside } from "@/components/Dashboard";
 import { filters } from "@/components/DashboardSelect";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export type ProductType =
   | {
@@ -57,13 +59,22 @@ export type ProductType =
 
 const Product = () => {
   const [categoryTypeValue, setCategoryTypeValue] = useState("Бүгд");
+
   const [readProduct, setReadProduct] = useState([]);
+
   const [showCategories, setShowCategories] = useState(false);
+
   const [showPriceLimit, setShowPriceLimit] = useState(false);
+
   const [lowPrice, setLowPrice] = useState(0);
+
   const [highPrice, setHighPrice] = useState(0);
+
   const [date, setDate] = useState<DateRange | undefined>();
+
   const [showDate, setShowDate] = useState(false);
+
+  const [deleteList, setDeleteList] = useState<string[]>([]);
 
   const loadProduct = async () => {
     if (lowPrice && highPrice) {
@@ -100,43 +111,8 @@ const Product = () => {
       const data = await response.json();
       setReadProduct(data);
     }
-
-    // if (categoryTypeValue === "Бүгд" && lowPrice && highPrice && date) {
-    //   const response = await fetch(
-    //     `http://localhost:4000/filtproduct?lowprice=${lowPrice}&highprice=${highPrice}&date=${date}`
-    //   );
-    //   const data = await response.json();
-    //   setReadProduct(data);
-    //   return;
-    // }
-    // if (lowPrice && highPrice) {
-    //   const response = await fetch(
-    //     `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}&lowprice=${lowPrice}&highprice=${highPrice}`
-    //   );
-    //   const data = await response.json();
-    //   setReadProduct(data);
-    //   return;
-    // } else {
-    //   const response = await fetch(
-    //     `http://localhost:4000/filtproduct?categoryType=${categoryTypeValue}`
-    //   );
-    //   const data = await response.json();
-    //   setReadProduct(data);
-    //   return;
-    // }
-    // if (date) {
-    //   const response = await fetch(
-    //     `http://localhost:4000/filtproduct?lowprice=${lowPrice}&highprice=${highPrice}`
-    //   );
-    //   const data = await response.json();
-    //   setReadProduct(data);
-    // }
   };
 
-  // const DateCont = () => {
-  //   setDate(date);
-  //   setShowDate(false);
-  // };
   if (categoryTypeValue === "Бүгд") {
     useEffect(() => {
       loadProduct();
@@ -146,7 +122,32 @@ const Product = () => {
       loadFiltProduct();
     }, [categoryTypeValue, lowPrice, highPrice, date]);
   }
+  const deleteAll = (id: string) => {
+    if (deleteList.includes(id)) {
+      const changedDeleteList = deleteList.filter((item) => item !== id);
+      setDeleteList(changedDeleteList);
+    } else {
+      const newDeleteItems = [...deleteList];
+      newDeleteItems.push(id);
+      setDeleteList(newDeleteItems);
+    }
+  };
 
+  const deleteAllItem = async () => {
+    try {
+      await fetch(`http://localhost:4000/products`, {
+        method: "DELETE",
+        body: JSON.stringify({ deleteList }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      loadProduct();
+      setDeleteList([]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div className="flex min-h-screen text-nowrap">
       <div className="bg-[#FFFFFF] w-[222px]">
@@ -331,6 +332,11 @@ const Product = () => {
                   />
                 </PopoverContent>
               </Popover>
+              {deleteList.length > 0 && (
+                <div className="hover:cursor-pointer">
+                  <TrashIcon onClick={deleteAllItem} />
+                </div>
+              )}
             </div>
             <div>
               <Input placeholder="Бүтээгдэхүүний нэр, SKU, UPC" />
@@ -366,14 +372,26 @@ const Product = () => {
               </TableHeader>
               <TableBody>
                 {readProduct.map(
-                  (product: ProductType, index) =>
+                  (product: ProductType) =>
                     product && (
-                      <TableRow key={index}>
+                      <TableRow key={product._id}>
                         <TableCell className="px-6 py-[26px] max-w-[156px]">
-                          <Checkbox />
+                          <Checkbox
+                            onClick={() => deleteAll(product._id)}
+                            checked={deleteList.includes(product._id)}
+                          />
                         </TableCell>
-                        <TableCell className="px-6 py-4 max-w-[156px]">
-                          {product.productName}
+                        <TableCell className="px-6 py-4 max-w-[156px] flex items-center gap-2">
+                          {product.images[0] && (
+                            <Avatar>
+                              <AvatarImage
+                                src={product.images[0]}
+                                alt="image"
+                              />
+                              <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                          )}
+                          <div>{product.productName}</div>
                         </TableCell>
                         <TableCell className="px-6 py-4 max-w-[156px]">
                           {product.price + " ₮"}
