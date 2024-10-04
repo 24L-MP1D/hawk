@@ -26,7 +26,7 @@ export default function Page() {
   console.log("here: ", { email, password });
 
   function Submit() {
-    fetch("http://localhost:4000/Auth/SignUp", {
+    fetch("http://localhost:4000/SignUp", {
       method: "POST",
       body: JSON.stringify({
         email,

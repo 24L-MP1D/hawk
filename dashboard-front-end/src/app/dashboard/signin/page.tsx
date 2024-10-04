@@ -3,7 +3,7 @@
 
  export default function login () {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState();
+  const [password, setPassword] = useState("");
 
   const validEmail = true;
   const lengthGreater = true;
