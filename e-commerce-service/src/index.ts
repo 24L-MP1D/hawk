@@ -3,8 +3,6 @@
 import express from "express";
 import connectDB from "./configs/database";
 import cors from "cors";
-import jwt from 'jsonwebtoken';
-import bcrypt from "bcrypt";
 import {
   createProduct,
   deleteProducts,
@@ -18,6 +16,9 @@ import { userRouter } from "./router/UserRouter";
 import { uploadRouter } from "./router/uploadRouter";
 import { cartRouter } from "./router/ShoppingCartRouter";
 import { createUserSignUp } from "./controller/SignUpController";
+import { createUserSignIn } from "./controller/SignInController";
+import { login } from "./controller/loginController";
+
 const app = express();
 const port = 4000;
 
@@ -33,31 +34,11 @@ app.use(uploadRouter);
 app.use(userRouter);
 app.use(saveRouter);
 
-app.post("/Auth/SignUp", createUserSignUp);
+app.post("/SignUp", createUserSignUp);
 
-app.post("/signin", (req: Request, res: Response) => {
-const {email, password} = req.body;
-const isAuthenticated = true;  // DB user fetch compare
+app.post("/signin", createUserSignIn);
 
-const saltRounds = 10;
-const salt = bcrypt.genSaltSync(saltRounds);
-const hashedPass = bcrypt.hashSync(password.password, salt);
-
-const form = {
-    email: email.email,
-    password: hashedPass,
-  };
-  console.log({ form });
-
-if(isAuthenticated) {
-  const privateKey = "1234"; // .env file deeree nuuna
-  const token = jwt.sign({ email: email }, privateKey, { expiresIn: '2h' }); 
-
-return res.json({token})
-} else {
-return res.sendStatus(401);
-}
-})
+app.post("/login", login);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

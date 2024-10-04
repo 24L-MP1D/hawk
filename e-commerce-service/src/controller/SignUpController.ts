@@ -3,18 +3,20 @@ import { UserSignUpModel } from "../model/SignUpModel";
 import bcrypt from "bcrypt";
 
 export const createUserSignUp = async (req: Request, res: Response) => {
-  const userSignUp = req.body;
+  const { email, password } = req.body;
   console.log(req.body);
 
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
-  const hashedPass = bcrypt.hashSync(userSignUp.password, salt);
+  const hashedPass = bcrypt.hashSync(password, salt);
+
+  console.log({ hashedPass });
 
   const form = {
-    name: userSignUp.name,
-    email: userSignUp.email,
+    email,
     password: hashedPass,
   };
+
   console.log({ form });
 
   try {
