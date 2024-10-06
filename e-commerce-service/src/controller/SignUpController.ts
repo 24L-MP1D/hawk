@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { UserSignUpModel } from "../model/SignUpModel";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const createUserSignUp = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  const isAuthenticated = true;
   console.log(req.body);
 
   const saltRounds = 10;
@@ -13,7 +15,7 @@ export const createUserSignUp = async (req: Request, res: Response) => {
   console.log({ hashedPass });
 
   const form = {
-    email,
+    email: email,
     password: hashedPass,
   };
 
@@ -21,8 +23,19 @@ export const createUserSignUp = async (req: Request, res: Response) => {
 
   try {
     const user = await UserSignUpModel.create(form);
-    res.send(user);
+
+    if (isAuthenticated) {
+      const privateKey = "1234"; // .env file deeree nuuna
+      const token = jwt.sign({ email: email }, privateKey, {
+        expiresIn: "2h",
+      });
+
+      return res.send({ token });
+    } else {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
   } catch (error) {
+    return;
     res.send("Error, to SignUp!");
   }
 };
