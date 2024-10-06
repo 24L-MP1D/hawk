@@ -25,3 +25,13 @@ export const login = async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Unauthorized user" });
   }
 };
+
+// const login = async (req: Request, res: Response) => {
+//   // try {
+//   //     const {loginUser} = req.body;
+//   //     // const user = await .findOne({mail});
+//   // //     if ()
+//   // // } catch (error) {
+//   // //     res.send({error: "Not valid email or password"})
+//   // // }
+// };

@@ -5,7 +5,12 @@ import jwt from "jsonwebtoken";
 
 export const createUserSignUp = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const isAuthenticated = true;
+  const isAuthenticated = true; // DB user fetch compare
+  // if(password.length >=8) {
+  // return res.sendStatus(401).json({message:"password 7oos urt baih yoestoi"})
+  // if(tom useg orson bn uu) {
+  // return res.sendStatus(401).json({message:"password 1 tom useg orson baih yoestoi"})
+
   console.log(req.body);
 
   const saltRounds = 10;
