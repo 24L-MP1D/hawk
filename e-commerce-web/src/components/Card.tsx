@@ -28,7 +28,13 @@ export type ProductType =
       color: string[];
     }
   | undefined;
-export const Card = ({ cardItems }: { cardItems: ProductType }) => {
+export const Card = ({
+  cardItems,
+  index,
+}: {
+  cardItems: ProductType;
+  index: number;
+}) => {
   const [ready, setReady] = useState(false);
 
   const filled = () => {
@@ -57,7 +63,7 @@ export const Card = ({ cardItems }: { cardItems: ProductType }) => {
         <div className="font-bold">{cardItems?.price}</div>
       </div>
       <div onClick={filled} className="absolute top-3 right-3 cursor-pointer">
-        <HeartIconSvg fill={ready} />
+        {index != 6 && index != 7 && <HeartIconSvg fill={ready} />}
       </div>
     </Link>
   );
