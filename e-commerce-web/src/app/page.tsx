@@ -11,10 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-import { BasketCard } from "@/components/BasketCard";
-
-import { SidebarCard } from "@/components/SidebarCard";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "@/components/Card";
 
 type ProductType = {
@@ -39,12 +36,7 @@ type ProductType = {
 };
 
 export default function Home() {
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
   const [products, setProducts] = useState<ProductType[]>([]);
-
-  // const [fiveProduct, ...otherProducs] = products;
-
   const loadProduct = async () => {
     const response = await fetch(
       `http://localhost:4000/products?fromDate=undefined&toDate=undefined`
@@ -59,7 +51,7 @@ export default function Home() {
 
   return (
     <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px]">
-      <div className="w-[1040px] h-[446px]">
+      <div className="w-[1040px] h-[446px] mb-[20px]">
         <Carousel className=" ">
           <CarouselContent>
             {products.map(
@@ -77,11 +69,12 @@ export default function Home() {
                               src={product.images[0]}
                               alt="item"
                             />
-
                             <div className="flex flex-col gap-1 absolute bottom-[32px] left-[32px]">
-                              <div className="text-[18px]">{product.price}</div>
-                              <div className="font-bold text-[36px]">
+                              <div className="text-[18px]">
                                 {product.productName}
+                              </div>
+                              <div className="font-bold text-[36px]">
+                                {product.price}
                               </div>
                             </div>
                           </div>
@@ -97,27 +90,6 @@ export default function Home() {
         </Carousel>
       </div>
 
-      <div>
-        <div>
-          {/* <div className="max-w-[1040px] mx-auto ">
-            <div className="mb-[20px] relative ">
-              <Image
-                className=" rounded-lg object-cover w-[1040px] h-[446px] relative  "
-                width={1040}
-                height={446}
-                src={"/Shirt.png"}
-                alt="item"
-              />
-              <div className="flex flex-col gap-1 absolute bottom-[32px] left-[32px]">
-                <div className="text-[18px]">{firstProduct?.productName} </div>
-                <div className="font-bold text-[36px]">
-                  {firstProduct?.price}{" "}
-                </div>
-              </div>
-            </div>
-          </div> */}
-        </div>
-      </div>
       <div className="grid">
         <div className="flex-1 grid grid-cols-4 gap-x-[21px] gap-y-12">
           {products.map(
