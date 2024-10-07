@@ -69,6 +69,9 @@ const AddProduct = () => {
   const [uploadImage, setUploadImage] = useState<string[]>([]);
 
   const [image, setImage] = useState<File | null>(null);
+  const [files, setFiles] = useState<FileList | null>();
+  const imageURls: string[] = [];
+
   const initialValues = {
     productName: "",
     description: "",

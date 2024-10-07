@@ -14,16 +14,25 @@ export const AddImage = ({
   uploadImage,
   setUploadImage,
 }: Props) => {
-  const [loading, setLoading] = useState(false);
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.currentTarget.files;
-    if (files) {
-      setImage(files[0]);
-    }
-  };
+  const [files, setFiles] = useState<FileList | null>();
+  const [array, setArray] = useState<FileList[]>([]);
+  if (files) {
+    array.push(files);
+  }
+  const imageURLs: string[] = [];
+  array.forEach((file, index) => {
+    const imageURl = URL.createObjectURL(file[index]);
+    imageURLs.push(imageURl);
+  });
+
+  // const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.currentTarget.files;
+  //   if (files) {
+  //     setImage(files[0]);
+  //   }
+  // };
   const handleUpload = async () => {
     if (!image) return;
-    setLoading(true);
     const formDate = new FormData();
     formDate.append("image", image);
     try {
@@ -35,7 +44,6 @@ export const AddImage = ({
       const imageArray = [...uploadImage];
       imageArray.push(data.secure_url);
       setUploadImage(imageArray);
-      setLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -55,12 +63,12 @@ export const AddImage = ({
           <ImageIcon />
           <Image
             className={`${
-              uploadImage.length
+              imageURLs.length
                 ? "block absolute inset-0 w-full h-full rounded-lg"
                 : "hidden"
             }`}
             alt="a"
-            src={uploadImage[0] || "/"}
+            src={imageURLs[0] || "/"}
             width={100}
             height={100}
           />
@@ -68,55 +76,48 @@ export const AddImage = ({
 
         <div
           className={`flex-1 rounded-2xl grid aspect-square place-items-center ${
-            uploadImage.length > 1 ? "border-none" : "border-dashed border-2"
+            imageURLs.length > 1 ? "border-none" : "border-dashed border-2"
           } relative`}
         >
           <ImageIcon />
           <Image
             className={`${
-              uploadImage.length > 1
+              imageURLs.length > 1
                 ? "block absolute inset-0 w-full h-full rounded-lg"
                 : "hidden"
             }`}
             alt="a"
-            src={uploadImage[1] || "/"}
+            src={imageURLs[1] || "/"}
             width={100}
             height={100}
           />
         </div>
         <div
           className={`flex-1 rounded-2xl grid aspect-square place-items-center ${
-            uploadImage.length > 2 ? "border-none" : "border-dashed border-2"
+            imageURLs.length > 2 ? "border-none" : "border-dashed border-2"
           } relative`}
         >
           <ImageIcon />
           <Image
             className={`${
-              uploadImage.length > 2
+              imageURLs.length > 2
                 ? "block absolute w-full h-full inset-0 rounded-lg"
                 : "hidden"
             }`}
             alt="a"
-            src={uploadImage[2] || "/"}
+            src={imageURLs[2] || "/"}
             width={100}
             height={100}
           />
         </div>
-        {loading && (
-          <Image
-            className="w-6 h-6 animate-spin"
-            src={"/spinner.png"}
-            width={40}
-            height={40}
-            alt="spinner"
-          />
-        )}
+
         <div className="flex-1 rounded-2xl grid place-items-center">
           <div className="w-8 h-8 rounded-full bg-[#ECEDF0] grid place-items-center relative">
             <Input
+              multiple
               type="file"
               className="opacity-0 absolute z-50 w-full"
-              onChange={handleFileChange}
+              onChange={(e) => setFiles(e.currentTarget.files)}
             />
             <Plus />
           </div>
