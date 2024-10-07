@@ -51,8 +51,8 @@ export const Card = ({
     >
       <div className="rounded-2xl bg-slate-400 aspect-[3/4] overflow-hidden relative hover:border-black border-[1px]">
         <Image
-          alt="bunny"
-          src={"/Tuulai.png"}
+          alt="product_image"
+          src={cardItems?.images[0] || ""} 
           width={500}
           height={500}
           className="bg-slate-50 absolute w-full object-cover h-full inset-0 group-hover:scale-150"
