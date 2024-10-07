@@ -1,53 +1,56 @@
+import { FormValues } from "@/app/dashboard/addproduct/page";
 import { Textarea } from "./ui/textarea";
-
+import { ChangeEvent } from "react";
+import { FormikErrors } from "formik";
 type Props = {
-  productName: string;
-  setProductName: (value: string) => void;
-  description: string;
-  setDescription: (value: string) => void;
-  productCode: number;
-  setProductCode: (value: number) => void;
+  values: FormValues;
+  valuesChange: (e: ChangeEvent) => void;
+  valueError: FormikErrors<FormValues>;
 };
-
-export const AddProductName = ({
-  productName,
-  setProductName,
-  description,
-  setDescription,
-  productCode,
-  setProductCode,
-}: Props) => {
+export const AddProductName = ({ values, valuesChange, valueError }: Props) => {
   return (
     <div className="p-6 flex flex-col gap-4 bg-[#ffffff] rounded-[8px]">
       <div className="flex flex-col gap-2">
         <div>Бүтээгдэхүүний нэр</div>
         <input
-          onChange={(e) => setProductName(e.target.value)}
-          value={productName}
+          id="productName"
+          onChange={valuesChange}
+          value={values.productName}
           className="w-full p-2 bg-[#F7F7F8]  rounded-[8px]"
           type="text"
           placeholder="Нэр"
         />
+        {valueError.productName && (
+          <p className="text-red-500 text-sm pl-2">{valueError.productName}</p>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <div>Нэмэлт мэдээлэл</div>
 
         <Textarea
-          value={description}
+          id="description"
+          value={values.description}
           className="w-full"
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={valuesChange}
           placeholder="Гол онцлог, давуу тал, техникийн үзүүлэлтүүдийг онцолсон дэлгэрэнгүй, сонирхолтой тайлбар."
         />
+        {valueError.description && (
+          <p className="text-red-500 text-sm pl-2">{valueError.description}</p>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <div>Барааны код</div>
         <input
-          value={productCode !== 0 ? productCode : ""}
-          onChange={(e) => setProductCode(Number(e.target.value))}
+          id="productCode"
+          value={values.productCode !== 0 ? values.productCode : ""}
+          onChange={valuesChange}
           className="w-full p-2 bg-[#F7F7F8]  rounded-[8px]"
           type="number"
           placeholder="#12345678"
         />
+        {valueError.productCode && (
+          <p className="text-red-500 text-sm pl-2">{valueError.productCode}</p>
+        )}
       </div>
     </div>
   );

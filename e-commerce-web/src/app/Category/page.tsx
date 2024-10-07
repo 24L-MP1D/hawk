@@ -18,11 +18,21 @@ export const filters: filtType[] = [
   { filt: "Тее", value: "Тее" },
   { filt: "Цүнх", value: "Цүнх" },
 ];
+export const filtersArray = [
+  "Малгай",
+  "Усны сав",
+  "T-shirt",
+  "Hoodie",
+  "Тее",
+  "Цүнх",
+];
 export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
 const Category = () => {
   const [cardList, setCardList] = useState<ProductType[]>([]);
   const [categoryType, setCategoryType] = useState("");
   const [sizee, setSizee] = useState("");
+  const [categoryTypeArray, setCategoryTypeArray] = useState<string[]>([]);
+  const [sizeeArray, setSizeeArray] = useState<string[]>([]);
   const productList = async () => {
     const response = await fetch(
       "http://localhost:4000/products?fromDate=undefined&toDate=undefined"
@@ -43,14 +53,34 @@ const Category = () => {
     productList();
   }, []);
 
-  const typeFilter = async (value: string) => {
-    await setCategoryType(value);
-    filtproduct();
+  const typeFilter = (value: string) => {
+    if (categoryTypeArray.includes(value)) {
+      const array = categoryTypeArray.filter((filt) => filt !== value);
+      setCategoryTypeArray(array);
+      setCategoryType("");
+    } else {
+      const array = [...categoryTypeArray];
+      array.push(value);
+      setCategoryTypeArray(array);
+      setCategoryType(value);
+    }
   };
 
-  const sizeFilter = async (value: string) => {
-    await setSizee(value);
+  useEffect(() => {
     filtproduct();
+  }, [categoryType, sizee]);
+
+  const sizeFilter = (value: string) => {
+    if (sizeeArray.includes(value)) {
+      const array = sizeeArray.filter((filt) => filt !== value);
+      setSizeeArray(array);
+      setSizee("");
+    } else {
+      const array = [...sizeeArray];
+      array.push(value);
+      setSizeeArray(array);
+      setSizee(value);
+    }
   };
   return (
     <div className="max-w-[1039px] mx-auto flex gap-[20px] pb-[100px] pt-[52px]">

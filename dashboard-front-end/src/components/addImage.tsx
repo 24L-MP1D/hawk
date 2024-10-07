@@ -40,9 +40,9 @@ export const AddImage = ({
       console.error(err);
     }
   };
-  useEffect(() => {
-    handleUpload();
-  }, [image]);
+  // useEffect(() => {
+  //   handleUpload();
+  // }, [image]);
   return (
     <div className="bg-[#FFFFFF] p-6 rounded-[8px] ">
       <div className="mb-4 text-[#000000] text-lg">Бүтээгдэхүүний зураг</div>

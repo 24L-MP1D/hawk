@@ -3,38 +3,42 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { colors } from "@/app/dashboard/addProduct";
 import { filters } from "./DashboardSelect";
-import { sizes } from "@/app/dashboard/addproduct/page";
+import { FormValues, sizes } from "@/app/dashboard/addproduct/page";
+import { ChangeEvent } from "react";
+import { FormikErrors } from "formik";
 type Props = {
   setShowCategory: (value: boolean) => void;
-  categoryType: string;
   showCategory: boolean;
-  setCategoryType: (value: string) => void;
   color: boolean;
   setColor: (value: boolean) => void;
   size: boolean;
   setSize: (value: boolean) => void;
-  productTag: string;
-  setProductTag: (value: string) => void;
   productColor: string[];
   productSize: string[];
   setProductColor: (value: string[]) => void;
   setProductSize: (value: string[]) => void;
+  values: FormValues;
+  valuesChange: (e: ChangeEvent) => void;
+  categoryType: string;
+  setCategoryType: (value: string) => void;
+  valueError: FormikErrors<FormValues>;
 };
 export const AddCategory = ({
-  setShowCategory,
   categoryType,
-  showCategory,
+  valueError,
   setCategoryType,
+  setShowCategory,
+  showCategory,
   color,
   setColor,
   size,
   setSize,
-  productTag,
-  setProductTag,
   productColor,
   productSize,
   setProductSize,
   setProductColor,
+  values,
+  valuesChange,
 }: Props) => {
   const addSizes = (size: string) => {
     const newProductSize = [...productSize];
@@ -83,6 +87,7 @@ export const AddCategory = ({
           <div className="">
             <div onClick={() => setShowCategory(true)}>
               <Input
+                id="categoryType"
                 className="cursor-pointer"
                 placeholder="Сонгох"
                 value={categoryType}
@@ -190,12 +195,16 @@ export const AddCategory = ({
         <div>Таг</div>
         <div>
           <Input
+            id="productTag"
             type="text"
             placeholder="Таг нэмэх..."
             className="px-2 pt-2 bg-[#F7F7F8]"
-            onChange={(e) => setProductTag(e.target.value)}
-            value={productTag}
+            onChange={valuesChange}
+            value={values.productTag}
           />
+          {valueError.productTag && (
+            <p className="text-red-500 text-sm pl-2">{valueError.productTag}</p>
+          )}
         </div>
         <div className="text-[#5E6166] text-base">
           Санал болгох: Гутал , Цүнх , Эмэгтэй{" "}
