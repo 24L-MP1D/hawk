@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import * as yup from "yup";
 import { useFormik, FormikErrors } from "formik";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import Link from "next/link";
 
@@ -13,6 +13,7 @@ import { AddImage } from "@/components/addImage";
 import { AddProductName } from "@/components/addProductName";
 import { AddPrice } from "@/components/addPrice";
 import { AddCategory } from "@/components/addCategory";
+
 export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
 
 export const colors = [
@@ -36,6 +37,7 @@ export type FormValues = {
 const AddProduct = () => {
   const searchParams = useSearchParams();
   let edit = searchParams.get("id");
+  const router = useRouter();
 
   const updateProduct = async (values: FormValues) => {
     await fetch(`http://localhost:4000/products/${edit}`, {
@@ -68,7 +70,7 @@ const AddProduct = () => {
 
   const [uploadImage, setUploadImage] = useState<string[]>([]);
 
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<FileList | null>(null);
 
   const [files, setFiles] = useState<FileList | null>();
   const [create, setCreate] = useState("");
@@ -100,7 +102,6 @@ const AddProduct = () => {
       if (edit) {
         updateProduct(values);
       } else {
-        setCreate("ajil");
         AddItems(values);
         resetForm();
       }
@@ -108,7 +109,31 @@ const AddProduct = () => {
 
     validationSchema,
   });
+  const handleUpload = async () => {
+    if (!image?.length) return;
+    console.log({ image });
+    const imageArray = [...uploadImage];
+    for (let i = 0; i < image.length; i++) {
+      const formDate = new FormData();
+      formDate.append("image", image[i]);
+      try {
+        const response = await fetch(`http://localhost:4000/upload`, {
+          method: "POST",
+          body: formDate,
+        });
+        const data = await response.json();
+
+        imageArray.push(data.secure_url);
+
+        console.log({ imageArray });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    return imageArray;
+  };
   const AddItems = async (values: FormValues) => {
+    const images = await handleUpload();
     await fetch("http://localhost:4000/products", {
       method: "POST",
       body: JSON.stringify({
@@ -121,12 +146,13 @@ const AddProduct = () => {
         productTag: values.productTag,
         color: productColor,
         size: productSize,
-        images: uploadImage,
+        images: images,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
+
     reset();
   };
   const reset = () => {
@@ -135,7 +161,6 @@ const AddProduct = () => {
     setProductSize([]);
     setImage(null);
     setUploadImage([]);
-    setCreate("");
   };
 
   const getOneProduct = async () => {
@@ -149,7 +174,9 @@ const AddProduct = () => {
       getOneProduct();
     }, []);
   }
-
+  useEffect(() => {
+    console.log({ uploadImage });
+  }, [uploadImage]);
   return (
     <div>
       <form onSubmit={formik.handleSubmit} className="flex">
@@ -184,6 +211,7 @@ const AddProduct = () => {
               />
               <AddImage
                 create={create}
+                setCreate={setCreate}
                 uploadImage={uploadImage}
                 setUploadImage={setUploadImage}
                 setImage={setImage}

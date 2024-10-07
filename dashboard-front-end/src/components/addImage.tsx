@@ -3,12 +3,14 @@ import { Input } from "./ui/input";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { useRouter, useSearchParams } from "next/navigation";
 type Props = {
-  setImage: (value: File) => void;
-  image: File | null;
+  setImage: (value: FileList) => void;
+  image: FileList | null;
   uploadImage: string[];
   setUploadImage: (value: string[]) => void;
   create: string;
+  setCreate: (value: string) => void;
 };
 export const AddImage = ({
   image,
@@ -16,57 +18,28 @@ export const AddImage = ({
   setImage,
   uploadImage,
   setUploadImage,
+  setCreate,
 }: Props) => {
-  const [files, setFiles] = useState<FileList | null>();
   const [imageURLs, setImageURLs] = useState<string[]>([]);
-  const imageArray: File[] = [];
 
   useEffect(() => {
     const urls: string[] = [];
 
-    Array.from(files ?? []).forEach((file) => {
+    Array.from(image ?? []).forEach((file) => {
       const imageURl = URL.createObjectURL(file);
       urls.push(imageURl);
     });
 
     setImageURLs([...imageURLs, ...urls]);
     setUploadImage(imageURLs);
-  }, [files]);
+  }, [image]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFiles(event.currentTarget.files);
     const files = event.currentTarget.files;
-    if (!files) return;
-    for (let i = 0; i < files?.length; i++) {
-      imageArray.push(files[i]);
+    if (files) {
+      setImage(files);
     }
   };
-  useEffect(() => {
-    handleUpload();
-  }, [create]);
-
-  const handleUpload = async () => {
-    try {
-      for (let i = 0; i < imageArray.length; i++) {
-        const formData = new FormData();
-        formData.append("image", imageArray[i]);
-        const response = await fetch(`http://localhost:4000/upload`, {
-          method: "POST",
-          body: formData,
-        });
-        const data = await response.json();
-        const iArray = [...uploadImage];
-        iArray.push(data.secure_url);
-        setUploadImage(iArray);
-        console.log({ iArray });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  // useEffect(() => {
-  //   handleUpload();
-  // }, [image]);
 
   return (
     <div className="bg-[#FFFFFF] p-6 rounded-[8px] ">
