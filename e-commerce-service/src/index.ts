@@ -15,6 +15,7 @@ import { saveRouter } from "./router/saveRouter";
 import { userRouter } from "./router/UserRouter";
 import { uploadRouter } from "./router/uploadRouter";
 import { cartRouter } from "./router/ShoppingCartRouter";
+import { reviewRouter } from "./router/reviewRouther";
 
 const app = express();
 const port = 4000;
@@ -36,3 +37,4 @@ app.listen(port, () => {
 });
 
 app.use(cartRouter);
+app.use(reviewRouter)

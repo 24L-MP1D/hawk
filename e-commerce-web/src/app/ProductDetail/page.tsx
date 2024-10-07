@@ -3,15 +3,19 @@
 import { HeartIconSvg } from "@/components/HeartIcon";
 import { Button } from "@/components/ui/button";
 import { Star, Type } from "lucide-react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import datas from "@/app/datas.json";
 
 import Link from "next/link";
-import Card from "@/components/Card";
+import Card, { ProductType } from "@/components/Card";
 import { stringify } from "querystring";
 import { headers } from "next/headers";
 import { useSearchParams } from "next/navigation";
-import { ProductType } from "../dashboard/product/page";
+import { text } from "stream/consumers";
+import { title } from "process";
+import { Input } from "@/components/ui/input";
+import { string } from "yup";
+
 
 export const ProductDetail = () => {
   const [selectPhoto, setSelectPhoto] = useState("item1");
@@ -34,7 +38,13 @@ export const ProductDetail = () => {
     { size: "XL", qty: 10},
     { size: "2XL", qty: 10 },
   ];
-
+  type reviewModel = {
+    productId: string,
+    userId: string,
+    rating: number,
+    comments: string,
+    _id: string
+  }
 
 
   const defaultSize = productSize.find((p) => p.qty > 0)?.size || "";
@@ -61,14 +71,6 @@ export const ProductDetail = () => {
     setNumber((oldNumber) => (oldNumber > 1 ? oldNumber - 1 : oldNumber));
   };
 
-  
-  const productComment = [
-    { name: "Nymbaa", value: "Ваав материал ёстой гоё  байна 😍" },
-    { name: "Tommy", value: "🔥🔥🔥" },
-    { name: "Badral", value: "Ваав материал ёстой гоё  байна" },
-    { name: "Galt", value: "Ваав гоё харагдаж байна. " },
-    { name: "OyunDari", value: "Ваав материал ёстой гоё  байна" },
-  ];
   const [ready, setReady] = useState(false);
   const filled = () => {
     if (ready) {
@@ -77,8 +79,6 @@ export const ProductDetail = () => {
       setReady(true);
     }
   };
-  // const [price, setPrice] = useState<number>(0);
-
   
   const [enable, setEnable] = useState<boolean>(true);
   
@@ -93,10 +93,11 @@ export const ProductDetail = () => {
     const response = await fetch(`http://localhost:4000/products/${search}`);
     const data = await response.json();
     setUploadShoppingCart(data);
-    console.log(setUploadShoppingCart)
+    // console.log(setUploadShoppingCart)
   }
   useEffect(() => {
     getShoppingCart();
+    getReview();
   }, [])
 
   const createShoppingCart = async () => {
@@ -111,15 +112,49 @@ export const ProductDetail = () => {
         "Content-type": "application/json; charset=UTF-8",
       }
     });
-    reseted(),
-    console.log(data)
+    reseted()
+    // console.log(data)
   }
 
   const reseted = () => {
     setSelectedSize(""),
     setNumber(0)
+    setCommentValue("")
   }
-  
+
+  type reviewData = {
+    productId: string,
+    userId: string,
+    rating: number,
+    comments: string,
+  };
+
+  const [commentValue, setCommentValue] = useState ("")
+
+  const createReview = async () => {
+    const data = await fetch(`http://localhost:4000/reviews` ,{
+      method: "POST",
+      body: JSON.stringify({
+        // orderNumber: ,
+        comments: commentValue,
+        productId: search
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      }
+    });
+    reseted()
+    // console.log(data)
+  }
+
+  const [uploadReview, setUploadReview] = useState <reviewModel []>([])
+  const getReview = async () => {
+    const response = await fetch(`http://localhost:4000/reviews/${search}`)
+    const data = await response.json();
+    setUploadReview(data)
+  }
+  console.log({uploadReview})
+
   
   return (
     <div className="max-w-[1040px] mx-auto gap-5 pt-[52px] pb-20">
@@ -245,27 +280,14 @@ export const ProductDetail = () => {
                 4.6 (24)
               </div>
             </div>
-
             {!enable
-              ? productComment.map((item, index) => (
-                  <div key={item.name}>
-                    <div
-                      className={`grid gap-1 text-sm font-normal border-t ${
-                        index === 0
-                          ? "border-none"
-                          : "border-dashed border-gray-300 pt-4"
-                      }`}
-                    >
-                      <div className="flex gap-1">
-                        {item.name}
-                        <div className="flex items-center">
-                          <Starr />
-                        </div>
-                      </div>
-                      <div className="text-[#71717A]">{item.value}</div>
+              ? <div className="flex flex-col gap-[21px] text-[#71717A]">
+                  { uploadReview.map((item, index) => (
+                    <div key={item._id} className={`grid gap-1 text-sm font-normal border-t ${index === 0 ? 'border-none' : 'border-dashed border-gray-300 pt-4'}`}>
+                      {item.comments}
                     </div>
-                  </div>
-                ))
+                  ))}
+              </div>
               : null}
             {!enable ? (
               <div className="bg-[#F4F4F5] p-6 rounded-2xl h-[294px] text-sm font-normal">
@@ -279,14 +301,18 @@ export const ProductDetail = () => {
                   <div className="grid gap-2">
                     <div className="leading-[14px]">Сэтгэгдэл үлдээх:</div>
                     <div className="h-[94px]">
-                      <textarea
+                      <Input
                         className="p-[8px_12px] border border-[#E4E4E7] rounded-md w-full h-[100px] outline-none resize-none"
                         placeholder="Энд бичнэ үү"
+                        value={commentValue}
+                        onChange={(e) => {
+                          setCommentValue(e.target.value)
+                        }}
                       />
                     </div>
                   </div>
                   <div>
-                    <Button className="px-9 font-medium">Үнэлэх</Button>
+                    <Button onClick={createReview} className="px-9 font-medium">Үнэлэх</Button>
                   </div>
                 </div>
               </div>
