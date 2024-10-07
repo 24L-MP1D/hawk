@@ -69,7 +69,10 @@ const AddProduct = () => {
   const [uploadImage, setUploadImage] = useState<string[]>([]);
 
   const [image, setImage] = useState<File | null>(null);
+
   const [files, setFiles] = useState<FileList | null>();
+  const [create, setCreate] = useState("");
+
   const imageURls: string[] = [];
 
   const initialValues = {
@@ -97,6 +100,7 @@ const AddProduct = () => {
       if (edit) {
         updateProduct(values);
       } else {
+        setCreate("ajil");
         AddItems(values);
         resetForm();
       }
@@ -131,6 +135,7 @@ const AddProduct = () => {
     setProductSize([]);
     setImage(null);
     setUploadImage([]);
+    setCreate("");
   };
 
   const getOneProduct = async () => {
@@ -178,6 +183,7 @@ const AddProduct = () => {
                 valueError={formik.errors}
               />
               <AddImage
+                create={create}
                 uploadImage={uploadImage}
                 setUploadImage={setUploadImage}
                 setImage={setImage}

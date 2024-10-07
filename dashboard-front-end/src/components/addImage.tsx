@@ -2,48 +2,64 @@ import { ImageIcon, Plus } from "lucide-react";
 import { Input } from "./ui/input";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
+import { Button } from "./ui/button";
 type Props = {
-  setImage: (value: File | null) => void;
+  setImage: (value: File) => void;
   image: File | null;
   uploadImage: string[];
   setUploadImage: (value: string[]) => void;
+  create: string;
 };
 export const AddImage = ({
   image,
+  create,
   setImage,
   uploadImage,
   setUploadImage,
 }: Props) => {
   const [files, setFiles] = useState<FileList | null>();
-  const [array, setArray] = useState<FileList[]>([]);
-  if (files) {
-    array.push(files);
-  }
-  const imageURLs: string[] = [];
-  array.forEach((file, index) => {
-    const imageURl = URL.createObjectURL(file[index]);
-    imageURLs.push(imageURl);
-  });
+  const [imageURLs, setImageURLs] = useState<string[]>([]);
+  const imageArray: File[] = [];
 
-  // const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const files = event.currentTarget.files;
-  //   if (files) {
-  //     setImage(files[0]);
-  //   }
-  // };
+  useEffect(() => {
+    const urls: string[] = [];
+
+    Array.from(files ?? []).forEach((file) => {
+      const imageURl = URL.createObjectURL(file);
+      urls.push(imageURl);
+    });
+
+    setImageURLs([...imageURLs, ...urls]);
+    setUploadImage(imageURLs);
+  }, [files]);
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFiles(event.currentTarget.files);
+    const files = event.currentTarget.files;
+    if (!files) return;
+    for (let i = 0; i < files?.length; i++) {
+      imageArray.push(files[i]);
+    }
+  };
+  useEffect(() => {
+    handleUpload();
+  }, [create]);
+
   const handleUpload = async () => {
-    if (!image) return;
-    const formDate = new FormData();
-    formDate.append("image", image);
     try {
-      const response = await fetch(`http://localhost:4000/upload`, {
-        method: "POST",
-        body: formDate,
-      });
-      const data = await response.json();
-      const imageArray = [...uploadImage];
-      imageArray.push(data.secure_url);
-      setUploadImage(imageArray);
+      for (let i = 0; i < imageArray.length; i++) {
+        const formData = new FormData();
+        formData.append("image", imageArray[i]);
+        const response = await fetch(`http://localhost:4000/upload`, {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        const iArray = [...uploadImage];
+        iArray.push(data.secure_url);
+        setUploadImage(iArray);
+        console.log({ iArray });
+      }
     } catch (err) {
       console.error(err);
     }
@@ -51,6 +67,7 @@ export const AddImage = ({
   // useEffect(() => {
   //   handleUpload();
   // }, [image]);
+
   return (
     <div className="bg-[#FFFFFF] p-6 rounded-[8px] ">
       <div className="mb-4 text-[#000000] text-lg">Бүтээгдэхүүний зураг</div>
@@ -117,7 +134,7 @@ export const AddImage = ({
               multiple
               type="file"
               className="opacity-0 absolute z-50 w-full"
-              onChange={(e) => setFiles(e.currentTarget.files)}
+              onChange={handleFileChange}
             />
             <Plus />
           </div>

@@ -72,8 +72,6 @@ const Product = () => {
 
   const [date, setDate] = useState<DateRange | undefined>();
 
-  const [showDate, setShowDate] = useState(false);
-
   const [deleteList, setDeleteList] = useState<string[]>([]);
 
   const loadProduct = async () => {
@@ -394,11 +392,11 @@ const Product = () => {
                           <div>{product.productName}</div>
                         </TableCell>
                         <TableCell className="px-6 py-4 max-w-[156px]">
-                          {product.price + " ₮"}
+                          {product.categoryType}
                         </TableCell>
                         <TableCell className="px-6 py-4 max-w-[156px]">
                           {" "}
-                          {product.productTag}
+                          {product.price + " ₮"}
                         </TableCell>
                         <TableCell className="px-6 py-4 max-w-[156px]">
                           {product.qty}

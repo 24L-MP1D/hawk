@@ -4,6 +4,7 @@ import { Product } from "../model/productModel";
 export const createProduct = async (req: Request, res: Response) => {
   const products = req.body;
   products.createAt = new Date();
+  console.log(req.body);
   try {
     const product = await Product.create(products);
     res.send(product);
