@@ -23,7 +23,7 @@ export default function Page() {
     hasSpecialCharacter &&
     validEmail;
 
-  console.log("here: ", { email, password });
+  console.log("h: ", { email, password });
 
   function Submit() {
     fetch("http://localhost:4000/SignUp", {
