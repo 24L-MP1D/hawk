@@ -9,7 +9,6 @@ import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BasketCard } from "@/components/BasketCard";
-import { cardItems } from "@/app/Category/page";
 
 export default function Home() {
   const [current, setCurrent] = React.useState(0);
@@ -22,9 +21,10 @@ export default function Home() {
     sum = sum + product.price;
   });
 
+  
+
   return (
     <div className="bg-[#F7F7F8]">
-
       <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px] bg-[#F7F7F8]">
         <div className="">
           <div className="w-[256px] h-[32px] mx-auto flex items-center justify-center mb-[66px] ">
@@ -65,6 +65,7 @@ export default function Home() {
             <div className="justify-between flex ">
               <div className=""></div>
               <Link
+                onClick={submit}
                 className="w-[175px] h-[36px] rounded-2xl bg-[#2563EB] text-center px-[36px] py-[8px] text-[14px] text-white  mt-[36px]"
                 rel="import"
                 href="/Basket/Address"

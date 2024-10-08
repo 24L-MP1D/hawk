@@ -15,7 +15,7 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 export const updateUser = async (req: Request, res: Response) => {
-  const { userName, email, phoneNumber } = req.body;
+  const { userName, email, phoneNumber,address } = req.body;
   const { _id } = req.params;
   console.log(req.body);
   try {
@@ -24,6 +24,7 @@ export const updateUser = async (req: Request, res: Response) => {
       userName,
       email,
       phoneNumber,
+      address
     });
     console.log(user);
     res.send(user);
