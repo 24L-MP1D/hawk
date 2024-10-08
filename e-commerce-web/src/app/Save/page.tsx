@@ -25,7 +25,7 @@ const save = [
   },
 ];
 
-type savedProduct = {
+export type savedProduct = {
   name: string;
   amount: number;
   ProductId: string;
@@ -56,7 +56,7 @@ export default function Save() {
   useEffect(() => {
     loadSavedProduct();
   }, []);
-  console.log({ heart });
+
   return (
     <div className="max-w-[622px] mx-auto">
       <div>

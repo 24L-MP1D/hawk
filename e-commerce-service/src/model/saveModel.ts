@@ -7,6 +7,7 @@ const schema = new Schema({
   amount: Number,
   ProductId: String,
   image: String,
+  heart: Boolean,
 });
 
 export const SavedModel = model("Save", schema);

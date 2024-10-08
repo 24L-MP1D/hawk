@@ -22,7 +22,6 @@ import { loginRouter } from "./router/loginRouter";
 import { categoryRouter } from "./router/categoryRouter";
 import { reviewRouter } from "./router/reviewRouther";
 
-
 const app = express();
 const port = 4000;
 const cors = require("cors");
@@ -40,14 +39,11 @@ app.use(saveRouter);
 app.use(paymentRouter);
 app.use(orderRouter);
 
-
 app.use(cartRouter);
 
 //login service
 
 app.use(loginRouter);
-
-
 
 app.use(categoryRouter);
 app.listen(port, () => {
@@ -55,5 +51,4 @@ app.listen(port, () => {
 });
 
 app.use(cartRouter);
-app.use(reviewRouter)
-
+app.use(reviewRouter);

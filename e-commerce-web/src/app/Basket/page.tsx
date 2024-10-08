@@ -21,8 +21,6 @@ export default function Home() {
     sum = sum + product.price;
   });
 
-  
-
   return (
     <div className="bg-[#F7F7F8]">
       <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px] bg-[#F7F7F8]">

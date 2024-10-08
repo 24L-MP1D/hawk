@@ -5,6 +5,7 @@ import { HeartIconSvg } from "./HeartIcon";
 import Image from "next/image";
 
 import Link from "next/link";
+import { savedProduct } from "@/app/Save/page";
 
 export type ProductType =
   | {
@@ -36,29 +37,57 @@ export const Card = ({
   index: number;
 }) => {
   const [ready, setReady] = useState(false);
+  const [savedProduct, setSavedProduct] = useState<savedProduct[]>([]);
+
+  if (!savedProduct) return;
 
   const SaveProduct = async () => {
-    await fetch("http://localhost:4000/Save", {
-      method: "POST",
-      body: JSON.stringify({
-        ProductId: cardItems?._id,
-        amount: cardItems?.price,
-        name: cardItems?.productName,
-        image: cardItems?.images[0],
-      }),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
-  };
-
-  const filled = () => {
-    if (ready) {
-      setReady(false);
-    } else {
-      setReady(true);
+    try {
+      await fetch("http://localhost:4000/Save", {
+        method: "POST",
+        body: JSON.stringify({
+          ProductId: cardItems?._id,
+          amount: cardItems?.price,
+          name: cardItems?.productName,
+          image: cardItems?.images[0],
+          heart: !ready,
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      setReady(!ready);
+    } catch (err) {
+      console.error(err);
     }
   };
+  const deleteProduct = async () => {
+    try {
+      await fetch(`http://localhost:4000/saved/${cardItems?._id}`, {
+        method: "DELETE",
+      });
+      setReady(!ready);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const SavedProduct = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/Save/${cardItems?._id}`
+      );
+      const data = await response.json();
+      if (data.heart) setReady(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    SavedProduct();
+  }, []);
+  console.log(ready);
   return (
     <div className="relative">
       <Link
@@ -81,8 +110,7 @@ export const Card = ({
       </Link>
       <div
         onClick={() => {
-          filled();
-          SaveProduct();
+          ready ? deleteProduct() : SaveProduct();
         }}
         className="absolute top-3 right-3 cursor-pointer"
       >
