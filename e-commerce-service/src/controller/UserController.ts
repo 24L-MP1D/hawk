@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { User } from "../model/UserModel";
-
+import bcrypt from "bcrypt";
 
 export const createUser = async (req: Request, res: Response) => {
   const users = req.body;
-  console.log(req.body);
+  const { password } = req.body;
+
   try {
     const user = await User.create(users);
     console.log(user);
