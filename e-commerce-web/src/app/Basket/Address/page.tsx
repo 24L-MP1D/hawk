@@ -4,7 +4,7 @@ import { Card } from "@/components/Card";
 import SidebarProducts from "@/app/datas.json";
 import Image from "next/image";
 import Link from "next/link";
-import { use, useEffect, useState } from "react";
+
 
 import {useEffect, useState }from "react";
 import { Input } from "@/components/ui/input";
@@ -41,7 +41,7 @@ export default function Home() {
     });
   }
 
-  const [address, setAddresses] = React.useState(0);
+
   const [deleteAddress, setDeleteAddresses] = useState(0);
   const [updateAddress, setUpdateAddresses] = useState(0);
   // const [Addresses, setDeleteAddresses] = useState(0);
@@ -50,7 +50,7 @@ export default function Home() {
   const getAddress = async () => {
     const response = await fetch(`http://localhost:4000/register`);
     const data = await response.json();
-    setAddresses(data);
+    setAddress(data);
   };
 
   useEffect(() => {

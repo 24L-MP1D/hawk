@@ -31,5 +31,17 @@ export const getShoppingCart = async (req: Request, res: Response) => {
   }
 }
 
+export const getBasketCarts = async (req: Request, res: Response) => {
+
+  try{
+    const shoppingCarts = await ShoppingCart.find();
+    console.log(shoppingCarts)
+    res.send(shoppingCarts)
+  }catch(error){
+    console.log(error)
+    res.send("find error")
+  }
+}
+
 
 

@@ -5,16 +5,16 @@ import basketProducts from "@/app/datas.json";
 import Image from "next/image";
 import Link from "next/link";
 
-import * as React from "react";
+import {useState, useEffect} from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { BasketCard } from "@/components/BasketCard";
+import { BasketCard, ShoppingCartType } from "@/components/BasketCard";
 
 export default function Home() {
-  const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
 
-  const [counting, setCounting] = React.useState(0);
+  const [counting, setCounting] = useState(0);
 
   let sum = 0;
   basketProducts.forEach((product) => {
@@ -22,7 +22,16 @@ export default function Home() {
   });
 
   
-
+  const [loadShoppingCart, setLoadShoppingCart] = useState <ShoppingCartType[]>();
+   const getShoppingCart = async() => {
+    const response = await fetch (`http://localhost:4000/getBasketCarts`);
+    const data = await response.json();
+    setLoadShoppingCart (data);
+    console.log (setLoadShoppingCart)
+   }
+   useEffect(()=> {
+    getShoppingCart();
+   },[])
   return (
     <div className="bg-[#F7F7F8]">
       <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px] bg-[#F7F7F8]">
@@ -43,13 +52,13 @@ export default function Home() {
           <div className="w-[638px] h-[664px] rounded-2xl mx-auto p-[32px]  bg-white">
             <div className="text-xl font-bold">1. Сагс </div>
             <div className="flex flex-col gap-[16px] mt-[16px]">
-              {basketProducts.map(
+              {loadShoppingCart?.map(
                 (cardItems, index) =>
-                  index < 3 && (
+                  (
                     <div>
                       <BasketCard
-                        cardItems={cardItems}
-                        key={index + cardItems.price}
+                      cardItems={cardItems}
+                      index={index}
                       />
                     </div>
                   )
@@ -64,14 +73,14 @@ export default function Home() {
             </div>
             <div className="justify-between flex ">
               <div className=""></div>
-              <Link
-                onClick={submit}
+              <Button
+                // onClick={submit}
                 className="w-[175px] h-[36px] rounded-2xl bg-[#2563EB] text-center px-[36px] py-[8px] text-[14px] text-white  mt-[36px]"
                 rel="import"
-                href="/Basket/Address"
+                
               >
                 Худалдан авах
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
