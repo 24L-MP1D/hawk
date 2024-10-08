@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 
-import * as React from "react";
+import {useEffect, useState }from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BasketCard } from "@/components/BasketCard";
@@ -15,9 +15,31 @@ import { SidebarCard } from "@/components/SidebarCard";
 import { string } from "yup";
 
 export default function Home() {
-  const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
-  const [counting, setCounting] = React.useState(0);
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+  const [counting, setCounting] = useState(0);
+  const [address, setAddress] = useState(0);
+  
+
+  const id = "66f144db08ecc2e63fbb86af"
+
+  function submit() {
+    fetch(`https://localhost:4000/updateUser/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        address,
+      }),
+      headers: {
+        "Content-type": "application/json",
+      },
+    }).then((res) => {
+      if (res.ok) {
+        console.log("success");
+      } else {
+        console.log("error");
+      }
+    });
+  }
 
   const [address, setAddresses] = React.useState(0);
   const [deleteAddress, setDeleteAddresses] = useState(0);
@@ -97,7 +119,7 @@ export default function Home() {
                 <div>
                   <Input
                     className="h-[28px] rounded-[18px]"
-                    type="Овог:"
+                    type="text"
                     placeholder=""
                   />
                 </div>
@@ -107,7 +129,7 @@ export default function Home() {
                 <div>
                   <Input
                     className="h-[28px] rounded-[18px]"
-                    type="Овог:"
+                    type="text"
                     placeholder=""
                   />
                 </div>
@@ -117,7 +139,7 @@ export default function Home() {
                 <div>
                   <Input
                     className="h-[28px] rounded-[18px]"
-                    type="Овог:"
+                    type="numbers"
                     placeholder=""
                   />
                 </div>
@@ -127,7 +149,7 @@ export default function Home() {
                 <div>
                   <Input
                     className="h-[94px] rounded-[18px]"
-                    type="Овог:"
+                    type="text"
                     placeholder=""
                   />
                 </div>
@@ -137,7 +159,7 @@ export default function Home() {
                 <div>
                   <Input
                     className="h-[94px] rounded-[18px]"
-                    type="Овог:"
+                    type="text"
                     placeholder=""
                   />
                   <div className="text-[#71717A]">
@@ -151,7 +173,10 @@ export default function Home() {
                     >
                       Буцах
                     </Link>
+
+
                     <Button>Хүргэлтийн мэдээллийг хадгалах</Button>
+
                     <Link
                       className="bg-[#2563EB] rounded-[18px] w-[166px] h-[36px] text-white px-[29px] py-[5px] text-[14px]"
                       rel="address"

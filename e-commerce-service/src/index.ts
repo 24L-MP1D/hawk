@@ -14,6 +14,8 @@ import { saveRouter } from "./router/saveRouter";
 import { userRouter } from "./router/UserRouter";
 import { uploadRouter } from "./router/uploadRouter";
 import { cartRouter } from "./router/ShoppingCartRouter";
+import { paymentRouter } from "./router/PaymentRouter";
+import { orderRouter } from "./router/orderRouter";
 
 import { loginRouter } from "./router/loginRouter";
 
@@ -35,6 +37,8 @@ app.use(uploadRouter);
 
 app.use(userRouter);
 app.use(saveRouter);
+app.use(paymentRouter);
+app.use(orderRouter);
 
 
 app.use(cartRouter);
