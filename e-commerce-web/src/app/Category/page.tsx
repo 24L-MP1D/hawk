@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "@/components/Card";
+import { Card, ProductType } from "@/components/Card";
 import datas from "../datas.json";
 
 import { Checkbox } from "@/components/ui/checkbox";
@@ -18,21 +18,70 @@ export const filters: filtType[] = [
   { filt: "Тее", value: "Тее" },
   { filt: "Цүнх", value: "Цүнх" },
 ];
+export const filtersArray = [
+  "Малгай",
+  "Усны сав",
+  "T-shirt",
+  "Hoodie",
+  "Тее",
+  "Цүнх",
+];
 export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
 const Category = () => {
-  const [cardList, setCardList] = useState([]);
+  const [cardList, setCardList] = useState<ProductType[]>([]);
+  const [categoryType, setCategoryType] = useState("");
+  const [sizee, setSizee] = useState("");
+  const [categoryTypeArray, setCategoryTypeArray] = useState<string[]>([]);
+  const [sizeeArray, setSizeeArray] = useState<string[]>([]);
   const productList = async () => {
+    const response = await fetch(
+      "http://localhost:4000/products?fromDate=undefined&toDate=undefined"
+    );
 
-  
+    const data = await response.json();
+    setCardList(data);
+  };
 
-    const response = await fetch("http://localhost:4000/products?fromDate=undefined&toDate=undefined");
-
+  const filtproduct = async () => {
+    const response = await fetch(
+      `http://localhost:4000/category?categoryType=${categoryType}&size=${sizee}`
+    );
     const data = await response.json();
     setCardList(data);
   };
   useEffect(() => {
     productList();
   }, []);
+
+  const typeFilter = (value: string) => {
+    if (categoryTypeArray.includes(value)) {
+      const array = categoryTypeArray.filter((filt) => filt !== value);
+      setCategoryTypeArray(array);
+      setCategoryType("");
+    } else {
+      const array = [...categoryTypeArray];
+      array.push(value);
+      setCategoryTypeArray(array);
+      setCategoryType(value);
+    }
+  };
+
+  useEffect(() => {
+    filtproduct();
+  }, [categoryType, sizee]);
+
+  const sizeFilter = (value: string) => {
+    if (sizeeArray.includes(value)) {
+      const array = sizeeArray.filter((filt) => filt !== value);
+      setSizeeArray(array);
+      setSizee("");
+    } else {
+      const array = [...sizeeArray];
+      array.push(value);
+      setSizeeArray(array);
+      setSizee(value);
+    }
+  };
   return (
     <div className="max-w-[1039px] mx-auto flex gap-[20px] pb-[100px] pt-[52px]">
       <div className="max-w-[245px] w-full flex flex-col gap-12">
@@ -40,7 +89,12 @@ const Category = () => {
           <div className="font-bold">Ангилал</div>
           {filters.map((filter) => (
             <div key={filter.filt} className="flex gap-2 items-center">
-              <Checkbox />
+              <Checkbox
+                checked={filter.value === categoryType}
+                onClick={() => {
+                  typeFilter(filter.value);
+                }}
+              />
               <div>{filter.filt}</div>
             </div>
           ))}
@@ -49,7 +103,12 @@ const Category = () => {
           <div className="font-bold">Хэмжээ</div>
           {sizes.map((size) => (
             <div key={size} className="flex gap-2 items-center">
-              <Checkbox />
+              <Checkbox
+                onClick={() => {
+                  sizeFilter(size);
+                }}
+                checked={size === sizee}
+              />
               <div>{size}</div>
             </div>
           ))}
