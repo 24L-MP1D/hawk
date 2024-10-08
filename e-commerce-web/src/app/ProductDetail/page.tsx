@@ -3,39 +3,41 @@
 import { HeartIconSvg } from "@/components/HeartIcon";
 import { Button } from "@/components/ui/button";
 import { Star, Type } from "lucide-react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import datas from "@/app/datas.json";
 
 import Link from "next/link";
-import Card from "@/components/Card";
+import { ProductType } from "@/components/Card";
 import { stringify } from "querystring";
 import { headers } from "next/headers";
 import { useSearchParams } from "next/navigation";
-import { ProductType } from "../dashboard/product/page";
+import { text } from "stream/consumers";
+import { title } from "process";
+import { Input } from "@/components/ui/input";
+import { string } from "yup";
+import Image from "next/image";
 
 export const ProductDetail = () => {
-  const [selectPhoto, setSelectPhoto] = useState("item1");
-
-  const productPhotos = [
-    { photo: "item1" },
-    { photo: "item2" },
-    { photo: "item3" },
-    { photo: "item4" },
-  ];
-
+  const [selectPhoto, setSelectPhoto] = useState("");
   const reset = () => {
     setNumber(1);
   };
 
   const productSize = [
-    { size: "S", qty: 10},
-    { size: "M", qty: 10},
-    { size: "L", qty: 10},
-    { size: "XL", qty: 10},
+    { size: "S", qty: 10 },
+    { size: "M", qty: 10 },
+    { size: "L", qty: 10 },
+    { size: "XL", qty: 10 },
     { size: "2XL", qty: 10 },
   ];
 
-
+  type reviewData = {
+    productId: string;
+    userId: string;
+    rating: number;
+    comments: string;
+    _id: string;
+  };
 
   const defaultSize = productSize.find((p) => p.qty > 0)?.size || "";
   const [selectedSize, setSelectedSize] = useState<string>(defaultSize);
@@ -46,7 +48,8 @@ export const ProductDetail = () => {
 
   useEffect(() => {
     if (currentQty === 0) {
-      const availableSize = productSize.find((item) => item.qty > 0)?.size || "";
+      const availableSize =
+        productSize.find((item) => item.qty > 0)?.size || "";
       setSelectedSize(availableSize);
       setNumber(0);
     }
@@ -61,14 +64,6 @@ export const ProductDetail = () => {
     setNumber((oldNumber) => (oldNumber > 1 ? oldNumber - 1 : oldNumber));
   };
 
-  
-  const productComment = [
-    { name: "Nymbaa", value: "Ваав материал ёстой гоё  байна 😍" },
-    { name: "Tommy", value: "🔥🔥🔥" },
-    { name: "Badral", value: "Ваав материал ёстой гоё  байна" },
-    { name: "Galt", value: "Ваав гоё харагдаж байна. " },
-    { name: "OyunDari", value: "Ваав материал ёстой гоё  байна" },
-  ];
   const [ready, setReady] = useState(false);
   const filled = () => {
     if (ready) {
@@ -77,70 +72,112 @@ export const ProductDetail = () => {
       setReady(true);
     }
   };
-  // const [price, setPrice] = useState<number>(0);
 
-  
   const [enable, setEnable] = useState<boolean>(true);
-  
 
-  
   const searchParams = useSearchParams();
-  const search = searchParams.get("id")
-  
-  const [uploadShoppingCart , setUploadShoppingCart] = useState <ProductType>();
-  
+  const search = searchParams.get("id");
+
+  const [uploadShoppingCart, setUploadShoppingCart] = useState<ProductType>();
+
   const getShoppingCart = async () => {
     const response = await fetch(`http://localhost:4000/products/${search}`);
     const data = await response.json();
     setUploadShoppingCart(data);
-    console.log(setUploadShoppingCart)
-  }
+    // console.log(setUploadShoppingCart)
+    setSelectPhoto(data.images[0]);
+  };
   useEffect(() => {
     getShoppingCart();
-  }, [])
+    getReview();
+  }, []);
 
+  const render = () => {
+    getReview();
+  };
+
+  const [productImage, setProductImage] = useState<ProductType[]>([]);
   const createShoppingCart = async () => {
-    const data = await fetch("http://localhost:4000/ShoppingCart" ,{
+    const data = await fetch("http://localhost:4000/ShoppingCart", {
       method: "POST",
       body: JSON.stringify({
         // orderNumber: ,
         productCount: number,
         size: selectedSize,
+        images: productImage,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
-      }
+      },
     });
-    reseted(),
-    console.log(data)
-  }
+    reseted();
+    // console.log(data)
+  };
 
   const reseted = () => {
-    setSelectedSize(""),
-    setNumber(0)
-  }
-  
-  
+    setSelectedSize(""), setNumber(0);
+    setCommentValue("");
+  };
+
+  const [commentValue, setCommentValue] = useState("");
+
+  const createReview = async () => {
+    const data = await fetch(`http://localhost:4000/reviews`, {
+      method: "POST",
+      body: JSON.stringify({
+        // orderNumber: ,
+        comments: commentValue,
+        productId: search,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    reseted();
+    render();
+    // console.log(data)
+  };
+
+  const [uploadReview, setUploadReview] = useState<reviewData[]>([]);
+  const getReview = async () => {
+    const response = await fetch(`http://localhost:4000/reviews/${search}`);
+    const data = await response.json();
+    setUploadReview(data);
+  };
+  console.log({ uploadReview });
+
   return (
     <div className="max-w-[1040px] mx-auto gap-5 pt-[52px] pb-20">
       <div className="flex justify-center gap-5 mb-20 ">
         <div className=" w-[509px] ">
           <div className=" flex gap-5 sticky top-10">
             <div className="mt-[100px] flex flex-col gap-3">
-              {productPhotos.map((item, index) => (
+              {uploadShoppingCart?.images.map((item) => (
                 <div
                   className={`w-[67px] h-[67px] rounded-[4px] bg-slate-400 ${
-                    selectPhoto === item.photo ? "border border-black" : " "
+                    selectPhoto === item ? "border border-black" : " "
                   }`}
-                  onClick={() => setSelectPhoto(item.photo)}
-                  key={index}
+                  onClick={() => setSelectPhoto(item)}
+                  key={item}
                 >
-                  {item.photo}
+                  <Image
+                    className=" rounded-lg object-cover w-[67px] h-[67px]"
+                    width={50}
+                    height={50}
+                    src={item}
+                    alt="all side"
+                  />
                 </div>
               ))}
             </div>
             <div className="w-[422px] h-[521px] bg-slate-400 rounded-[16px] flex flex-col">
-              {selectPhoto}
+              <Image
+                className=" rounded-lg object-cover w-[1040px] h-[446px]"
+                width={426}
+                height={641}
+                src={selectPhoto}
+                alt="choose photo"
+              />
             </div>
           </div>
         </div>
@@ -155,7 +192,9 @@ export const ProductDetail = () => {
                     New
                   </div>
                   <div className="flex gap-2 items-center">
-                    <p className="text-2xl font-bold ">{uploadShoppingCart?.productName}</p>
+                    <p className="text-2xl font-bold ">
+                      {uploadShoppingCart?.productName}
+                    </p>
                     <div onClick={filled} className="cursor-pointer">
                       <HeartIconSvg fill={ready} />
                     </div>
@@ -173,7 +212,7 @@ export const ProductDetail = () => {
                           item.qty > 0 && setSelectedSize(item.size);
                           item.qty > 0 && reset();
                         }}
-                        className={`size-8 rounded-full border border-black cursor-pointer font-normal text-xs text-center content-center ${ 
+                        className={`size-8 rounded-full border border-black cursor-pointer font-normal text-xs text-center content-center ${
                           selectedSize === item.size
                             ? "bg-black text-white duration-500"
                             : "duration-300"
@@ -208,9 +247,14 @@ export const ProductDetail = () => {
                 </div>
               </div>
               <div>
-                <div className="pb-2 font-bold text-xl">{uploadShoppingCart && uploadShoppingCart.price * number}₮</div>
+                <div className="pb-2 font-bold text-xl">
+                  {uploadShoppingCart && uploadShoppingCart.price * number}₮
+                </div>
                 <div>
-                  <Button onClick={createShoppingCart} className="py-2 px-9 bg-[#2563EB] rounded-[20px]">
+                  <Button
+                    onClick={createShoppingCart}
+                    className="py-2 px-9 bg-[#2563EB] rounded-[20px]"
+                  >
                     Сагсанд нэмэх
                   </Button>
                 </div>
@@ -245,28 +289,22 @@ export const ProductDetail = () => {
                 4.6 (24)
               </div>
             </div>
-
-            {!enable
-              ? productComment.map((item, index) => (
-                  <div key={item.name}>
-                    <div
-                      className={`grid gap-1 text-sm font-normal border-t ${
-                        index === 0
-                          ? "border-none"
-                          : "border-dashed border-gray-300 pt-4"
-                      }`}
-                    >
-                      <div className="flex gap-1">
-                        {item.name}
-                        <div className="flex items-center">
-                          <Starr />
-                        </div>
-                      </div>
-                      <div className="text-[#71717A]">{item.value}</div>
-                    </div>
+            {!enable ? (
+              <div className="flex flex-col gap-[21px] text-[#71717A]">
+                {uploadReview.map((item, index) => (
+                  <div
+                    key={item._id}
+                    className={`grid gap-1 text-sm font-normal border-t ${
+                      index === 0
+                        ? "border-none"
+                        : "border-dashed border-gray-300 pt-4"
+                    }`}
+                  >
+                    {item.comments}
                   </div>
-                ))
-              : null}
+                ))}
+              </div>
+            ) : null}
             {!enable ? (
               <div className="bg-[#F4F4F5] p-6 rounded-2xl h-[294px] text-sm font-normal">
                 <div className="grid gap-6">
@@ -282,11 +320,17 @@ export const ProductDetail = () => {
                       <textarea
                         className="p-[8px_12px] border border-[#E4E4E7] rounded-md w-full h-[100px] outline-none resize-none"
                         placeholder="Энд бичнэ үү"
+                        value={commentValue}
+                        onChange={(e) => {
+                          setCommentValue(e.target.value);
+                        }}
                       />
                     </div>
                   </div>
                   <div>
-                    <Button className="px-9 font-medium">Үнэлэх</Button>
+                    <Button onClick={createReview} className="px-9 font-medium">
+                      Үнэлэх
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -301,9 +345,7 @@ export const ProductDetail = () => {
           {datas.map(
             (cardItems, index) =>
               index < 8 && (
-                <div key={index}>
-                  {/* <Card cardItems={cardItems} /> */}
-                </div>
+                <div key={index}>{/* <Card cardItems={cardItems} /> */}</div>
               )
           )}
         </div>
