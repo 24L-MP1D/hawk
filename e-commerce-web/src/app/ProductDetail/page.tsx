@@ -38,13 +38,14 @@ export const ProductDetail = () => {
     { size: "XL", qty: 10},
     { size: "2XL", qty: 10 },
   ];
-  type reviewModel = {
+
+  type reviewData = {
     productId: string,
     userId: string,
     rating: number,
     comments: string,
-    _id: string
-  }
+    _id: string,
+  };
 
 
   const defaultSize = productSize.find((p) => p.qty > 0)?.size || "";
@@ -97,8 +98,15 @@ export const ProductDetail = () => {
   }
   useEffect(() => {
     getShoppingCart();
-    getReview();
+    getReview()
   }, [])
+
+  const render = () => {
+    getReview()
+  }
+
+  
+
 
   const createShoppingCart = async () => {
     const data = await fetch("http://localhost:4000/ShoppingCart" ,{
@@ -122,13 +130,6 @@ export const ProductDetail = () => {
     setCommentValue("")
   }
 
-  type reviewData = {
-    productId: string,
-    userId: string,
-    rating: number,
-    comments: string,
-  };
-
   const [commentValue, setCommentValue] = useState ("")
 
   const createReview = async () => {
@@ -144,10 +145,11 @@ export const ProductDetail = () => {
       }
     });
     reseted()
+    render()
     // console.log(data)
   }
 
-  const [uploadReview, setUploadReview] = useState <reviewModel []>([])
+  const [uploadReview, setUploadReview] = useState <reviewData []>([])
   const getReview = async () => {
     const response = await fetch(`http://localhost:4000/reviews/${search}`)
     const data = await response.json();
@@ -201,7 +203,7 @@ export const ProductDetail = () => {
                 </div>
                 <div>
                   <div className="mb-2">Хэмжээний заавар</div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-[0.5px]">
                     {productSize.map((item) => (
                       <div
                         onClick={() => {
@@ -301,7 +303,7 @@ export const ProductDetail = () => {
                   <div className="grid gap-2">
                     <div className="leading-[14px]">Сэтгэгдэл үлдээх:</div>
                     <div className="h-[94px]">
-                      <Input
+                      <textarea
                         className="p-[8px_12px] border border-[#E4E4E7] rounded-md w-full h-[100px] outline-none resize-none"
                         placeholder="Энд бичнэ үү"
                         value={commentValue}
