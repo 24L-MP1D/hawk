@@ -1,7 +1,7 @@
 "use client"; // usestate ashiglaj bolohgui bsn
-import { Calendar, ChevronDown, Download } from "lucide-react";
+import { Calendar, ChevronDown, Download, Slice } from "lucide-react";
 import { useState } from "react";
-import { DatePickerWithRange } from "@/components/DatePickerWithRange.tsx";
+
 import { DashboardAside } from "@/components/Dashboard";
 import { DateRange } from "react-day-picker";
 
@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 
 export type ProductType =
   | {
@@ -26,7 +27,7 @@ export type ProductType =
       categoryId: string;
       qty: number;
       thumbnails: string;
-      images: string;
+      images: string[];
       coupon: string;
       salePercent: number;
       description: string;
@@ -43,43 +44,54 @@ export type ProductType =
 
 
 const Income = () => {
-  const [incomeToday, setIncomeToday] = useState("");
-  const [incomeByWeek, setIncomeByWeek] = useState("");
-  const [incomeMonthly, setIncomeMonthly] = useState("");
-  const [date, setDate] = useState<DateRange | undefined>();
+  const [incomeFilter, setIncomeFilter] = useState("");
+
   const [takeIncome, setTakeIncome] = useState([]);
   const [incomeAmount, setIncomeAmount] = useState("");
   const [incomeList, setIncomeList] = useState([]);
+  const [date, setDate] = useState<DateRange | undefined>()
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
-  const loadIncome = async () => {
-    if (incomeToday) {
-      const response = await fetch(
-        `http://localhost:4000/order=${date?.from}&toDate=${date?.to}`
-      );
-      const data = await response.json();
-      setTakeIncome(data);
-    } else {
-      const response = await fetch(`link `);
-      const data = await response.json();
-      setTakeIncome(data);
-    }
-  };
 
   const loadFiltIncome = async () => {
-    if (incomeAmount === "Өнөөдөр" || incomeToday) {
+    if (incomeFilter === "Өнөөдөр") {
+      const endTime = new Date()
+      const startTime = new Date()
+        startTime.setDate(endTime.getDate() - 1)
       const response = await fetch(
-        `http://localhost:4000/order?${date?.from}&toDate=${date?.to}`
+        `http://localhost:4000/order?startTime=${startTime}&endTime=${endTime}`
       );
       const data = await response.json();
       setTakeIncome(data);
     }
-  };
+  
+   if (incomeFilter === "7хоног") {
+      const endTime = new Date()
+      const startTime = new Date()
+        startTime.setDate(endTime.getDate() - 7)
+      const response = await fetch(
+        `http://localhost:4000/order?startTime=${startTime}&endTime=${endTime}`
+      );
+      const data = await response.json();
+      setTakeIncome(data);
+    }
+    if (incomeFilter === "1сар") {
+      const endTime = new Date()
+      const startTime = new Date()
+        startTime.setDate(endTime.getDate() - 30)
+      const response = await fetch(
+        `http://localhost:4000/order?startTime=${startTime}&endTime=${endTime}`
+      );
+      const data = await response.json();
+      setTakeIncome(data);
+    }
+  } 
 
   const handlePopOver = () => {
     setIsDatePickerOpen(!isDatePickerOpen);
   };
+  console.log(date?.from,date?.to)
   return (
     <div className="flex ">
       <DashboardAside />
@@ -101,38 +113,35 @@ const Income = () => {
             <div className="flex gap-2">
               <Button
                 onClick={() => {
-                  setIncomeAmount("Өнөөдөр");
+                  setIncomeFilter("Өнөөдөр");
                   loadFiltIncome();
                 }}
                 className={` ${
-                  incomeAmount === "Өнөөдөр" ? "bg-[#18BA51]" : ""
-                }  w-[94px] border-[#ECEDF0] bg-white hover:bg-[#18BA51] hover:font-bold hover:text-white border-[1px] text-black h-[36px] py-1.5 px-3 rounded-md text-[14px] `}
+                  incomeFilter === "Өнөөдөр" ? "bg-[#18BA51] text-white" : "bg-white text-black"
+                }  w-[94px] border-[#ECEDF0] hover:bg-[#18BA51] hover:font-bold hover:text-white border-[1px]  h-[36px] py-1.5 px-3 rounded-md text-[14px] `}
               >
                 Өнөөдөр
               </Button>
               <Button
                 onClick={() => {
-                  setIncomeAmount("7 хоног");
+                  setIncomeFilter("7хоног");
                   loadFiltIncome();
                 }}
                 className={` ${
-                  incomeAmount === "Өнөөдөр" ? "bg-[#18BA51]" : ""
-                }  w-[94px] border-[#ECEDF0] bg-white hover:bg-[#18BA51] hover:font-bold hover:text-white border-[1px] text-black h-[36px] py-1.5 px-3 rounded-md text-[14px] `}
+                  incomeAmount === "7 хоног" ? "bg-[#18BA51] text-white" : "bg-white text-black"
+                }  w-[94px] border-[#ECEDF0] hover:bg-[#18BA51] hover:font-bold hover:text-white border-[1px] h-[36px] py-1.5 px-3 rounded-md text-[14px] `}
               >
                 7 хоног
               </Button>
-              {/* <div className=" w-[132px] h-[36px] py-1.5 px-3 rounded-md  justify-center border-[#ECEDF0] border-[1px] flex gap-3"> */}
-                <div className="">
-                  {/* <Calendar onClick={handlePopOver}/> */}
-                </div>
+             
                 <Button
                 onClick={handlePopOver}
                   onChange={() => {
-                    setIncomeAmount("Өнөөдөр");
+                    setIncomeFilter("1сар");
                     loadFiltIncome();
                   }}
                   className={` ${
-                    incomeAmount === "Өнөөдөр" ? "bg-[#18BA51]" : ""
+                    incomeAmount === "Өнөөдөр" ? "bg-[#18BA51]" : "bg-white"
                   }  w-[94px] border-[#ECEDF0] bg-white hover:bg-[#18BA51] hover:font-bold hover:text-white border-[1px] text-black h-[36px] py-1.5 px-3 rounded-md text-[14px] `}
                 >
                   1 сар
@@ -146,7 +155,7 @@ const Income = () => {
         </div>
         <div className="text-white ml-[420px] ">
           {" "}
-          <DatePickerWithRange isDatePickerOpen={isDatePickerOpen} />
+          <DatePickerWithRange date={date} setDate={setDate} isDatePickerOpen={isDatePickerOpen} />
         </div>
       </div>
       <div>

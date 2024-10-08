@@ -13,12 +13,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
- 
+ type Props = {
+  isDatePickerOpen: boolean,
+  date: DateRange | undefined,
+  setDate:(value:DateRange | undefined)=>void
+
+ }
 export function DatePickerWithRange ({
   className,
-  isDatePickerOpen
-}: React.HTMLAttributes<HTMLDivElement > & {isDatePickerOpen: boolean}) {
-  const [date, setDate] = React.useState<DateRange | undefined>()
+  isDatePickerOpen,
+  date,
+  setDate
+}: React.HTMLAttributes<HTMLDivElement > & Props) {
  
   return (
 <div className={cn("grid gap-2", className)}>
