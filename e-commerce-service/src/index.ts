@@ -10,13 +10,16 @@ import {
   updateProducts,
 } from "./controller/CategoryController";
 import { productsRouter } from "./router/productsRouter";
-
 import { saveRouter } from "./router/saveRouter";
 import { userRouter } from "./router/UserRouter";
 import { uploadRouter } from "./router/uploadRouter";
 import { cartRouter } from "./router/ShoppingCartRouter";
+
+import { loginRouter } from "./router/loginRouter";
+
 import { categoryRouter } from "./router/categoryRouter";
 import { reviewRouter } from "./router/reviewRouther";
+
 
 const app = express();
 const port = 4000;
@@ -32,6 +35,16 @@ app.use(uploadRouter);
 
 app.use(userRouter);
 app.use(saveRouter);
+
+
+app.use(cartRouter);
+
+//login service
+
+app.use(loginRouter);
+
+
+
 app.use(categoryRouter);
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
@@ -39,3 +52,4 @@ app.listen(port, () => {
 
 app.use(cartRouter);
 app.use(reviewRouter)
+
