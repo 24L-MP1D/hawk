@@ -64,8 +64,8 @@ export default function Home() {
                           <div className="relative">
                             <Image
                               className=" rounded-lg object-cover w-[1040px] h-[446px]"
-                              width={1040}
-                              height={446}
+                              width={2000}
+                              height={2000}
                               src={product.images[0]}
                               alt="item"
                             />
