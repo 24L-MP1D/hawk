@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createProduct,
+  deleteAll,
   deleteProducts,
   getFiltProducts,
   getOneProduct,
@@ -19,4 +20,5 @@ productsRouter
   .delete("/products/:id", deleteProducts)
 
   .put("/products/:id", updateProducts)
-  .get("/filtproduct", getFiltProducts);
+  .get("/filtproduct", getFiltProducts)
+  .delete("/products", deleteAll);
