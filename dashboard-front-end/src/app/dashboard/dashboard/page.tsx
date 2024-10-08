@@ -41,7 +41,7 @@ const Dashboard = () => {
               <DashboardTable />
             </div>
           </div>
-          <div className="py-4 px-6 bg-[#FFFFFF] flex-1 max-w-[581px] rounded-xl">
+          <div className="py-4 px-6 bg-[#FFFFFF] flex-1 max-w-[581px] max-h-[400px] rounded-xl">
             <DashboardChart />
           </div>
         </div>

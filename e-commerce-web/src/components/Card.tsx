@@ -28,7 +28,13 @@ export type ProductType =
       color: string[];
     }
   | undefined;
-export const Card = ({ cardItems }: { cardItems: ProductType }) => {
+export const Card = ({
+  cardItems,
+  index,
+}: {
+  cardItems: ProductType;
+  index: number;
+}) => {
   const [ready, setReady] = useState(false);
 
   const filled = () => {
@@ -45,8 +51,8 @@ export const Card = ({ cardItems }: { cardItems: ProductType }) => {
     >
       <div className="rounded-2xl bg-slate-400 aspect-[3/4] overflow-hidden relative hover:border-black border-[1px]">
         <Image
-          alt="bunny"
-          src={"/Tuulai.png"}
+          alt="product_image"
+          src={cardItems?.images[0] || ""}
           width={500}
           height={500}
           className="bg-slate-50 absolute w-full object-cover h-full inset-0 group-hover:scale-150"
@@ -57,7 +63,7 @@ export const Card = ({ cardItems }: { cardItems: ProductType }) => {
         <div className="font-bold">{cardItems?.price}</div>
       </div>
       <div onClick={filled} className="absolute top-3 right-3 cursor-pointer">
-        <HeartIconSvg fill={ready} />
+        {index != 6 && index != 7 && <HeartIconSvg fill={ready} />}
       </div>
     </Link>
   );
