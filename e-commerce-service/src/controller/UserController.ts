@@ -1,17 +1,28 @@
-import { Request, Response } from "express";
+import { Request, Response, json, request } from "express";
+import "dotenv/config";
 import { User } from "../model/UserModel";
+
 import bcrypt from "bcrypt";
 
+const SALT_SECRET = process.env.SALT_SECRET || "";
+
 export const createUser = async (req: Request, res: Response) => {
-  const users = req.body;
-  const { password } = req.body;
+  let user = req.body;
+  let { email, password, userName } = req.body;
+  console.log(SALT_SECRET);
+  const hashedPassword = await bcrypt.hash(
+    String(password),
+    Number(SALT_SECRET)
+  );
 
   try {
-    const user = await User.create(users);
-    console.log(user);
+    const users = await User.create({
+      email,
+      password: hashedPassword,
+      userName,
+    });
     res.send(user);
   } catch (error) {
-    console.error(error);
     res.send("find error");
   }
 };
