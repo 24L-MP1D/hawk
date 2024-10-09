@@ -2,7 +2,7 @@
 
 import express from "express";
 import connectDB from "./configs/database";
-import cors from "cors";
+import cors from "cors"
 import {
   createProduct,
   deleteProducts,
@@ -17,7 +17,7 @@ import { cartRouter } from "./router/ShoppingCartRouter";
 
 import { createUserSignUp } from "./controller/SignUpController";
 import { createUserSignIn } from "./controller/SignInController";
-import { login } from "./controller/loginController";
+
 
 import { paymentRouter } from "./router/PaymentRouter";
 import { orderRouter } from "./router/orderRouter";
@@ -26,6 +26,7 @@ import { loginRouter } from "./router/loginRouter";
 
 import { categoryRouter } from "./router/categoryRouter";
 import { reviewRouter } from "./router/reviewRouther";
+import { login } from "./controller/dashboardLoginController";
 
 const app = express();
 const port = 4000;
