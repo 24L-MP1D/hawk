@@ -11,42 +11,41 @@ const getSavedProducts = async (req: Request, res: Response) => {
 };
 
 const createSavedProducts = async (req: Request, res: Response) => {
-  const { name, amount } = req.body;
+  const save = req.body;
+  console.log(save);
   try {
-    const savedProduct = await SavedModel.create({
-      name,
-      amount,
-    });
-    res.send({ message: "amjilttai uusgelee" });
+    const savedProduct = await SavedModel.create(save);
+
+    res.send(savedProduct);
   } catch (error) {
     res.status(400).json({ errorMessage: "Aldaa garlaa" });
   }
 };
 
 const updateSavedProducts = async (req: Request, res: Response) => {
-    const { name, amount } = req.body;
-    const { id } = req.params;
-    try {
-      const savedProduct = await SavedModel.findByIdAndUpdate(id, {
-        name,
-        amount,
-      });
-      res.send({ mesage: "amjilttai update hiilee" });
-    } catch (error) {
-      res.status(400).json({ errorMessage: "Aldaa garlaa" });
-    }
-  };
-
+  const { name, amount } = req.body;
+  const { id } = req.params;
+  try {
+    const savedProduct = await SavedModel.findByIdAndUpdate(id, {
+      name,
+      amount,
+    });
+    res.send({ mesage: "amjilttai update hiilee" });
+  } catch (error) {
+    res.status(400).json({ errorMessage: "Aldaa garlaa" });
+  }
+};
 
 const deleteSavedProducts = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    try {
-      const savedProduct = await SavedModel.deleteOne({ _id: id });
-      res.send({ message: "deleted successfully" });
-    } catch (error) {
-      res.status(400).json({ errorMessage: "Cannot create user!" });
-    }
-  };
+  const { id } = req.params;
+
+  try {
+    await SavedModel.deleteOne({ _id: id });
+    res.send({ message: "deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ errorMessage: "Cannot create user!" });
+  }
+};
 
 export {
   getSavedProducts,

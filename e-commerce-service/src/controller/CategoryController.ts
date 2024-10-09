@@ -4,7 +4,7 @@ import { Product } from "../model/productModel";
 export const createProduct = async (req: Request, res: Response) => {
   const products = req.body;
   products.createAt = new Date();
-  console.log({ products });
+  console.log(req.body);
   try {
     const product = await Product.create(products);
     res.send(product);
@@ -15,18 +15,16 @@ export const createProduct = async (req: Request, res: Response) => {
 };
 export const getOneProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log({ id });
   try {
     const product = await Product.findOne({ _id: id });
-    console.log(product);
     res.send(product);
   } catch (error) {
     res.send("find error");
   }
 };
+
 export const getProducts = async (req: Request, res: Response) => {
   const { lowprice, highprice, toDate, fromDate } = req.query;
-  console.log(req.query);
   const filt: {
     price?: { $gt: number; $lt: number };
     createAt?: { $gt: Date; $lt: Date };
@@ -37,6 +35,7 @@ export const getProducts = async (req: Request, res: Response) => {
       $lt: new Date(String(toDate)),
     };
   }
+
   if (lowprice && highprice) {
     filt.price = { $gt: Number(lowprice), $lt: Number(highprice) };
   }
@@ -50,7 +49,6 @@ export const getProducts = async (req: Request, res: Response) => {
   }
   try {
     const product = await Product.find();
-    console.log({ product });
     res.send(product);
   } catch (error) {
     res.send("find error");
@@ -107,5 +105,19 @@ export const updateProducts = async (req: Request, res: Response) => {
     res.send(product);
   } catch (error) {
     res.send("find error");
+  }
+};
+
+export const deleteAll = async (req: Request, res: Response) => {
+  const deleteItemsId = req.body.deleteList;
+  console.log({ deleteItemsId });
+  try {
+    for (let i = 0; i < deleteItemsId.length; i++) {
+      await Product.findByIdAndDelete({ _id: deleteItemsId[i] });
+    }
+
+    res.send("successfully delete");
+  } catch (err) {
+    res.send(404);
   }
 };
