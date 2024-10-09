@@ -27,7 +27,6 @@ import { loginRouter } from "./router/loginRouter";
 import { categoryRouter } from "./router/categoryRouter";
 import { reviewRouter } from "./router/reviewRouther";
 
-
 const app = express();
 const port = 4000;
 connectDB();
@@ -69,4 +68,3 @@ app.listen(port, () => {
 
 app.use(cartRouter);
 app.use(reviewRouter)
-
