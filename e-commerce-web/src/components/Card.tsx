@@ -1,11 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { HeartIconSvg } from "./HeartIcon";
 import Image from "next/image";
 
 import Link from "next/link";
 import { savedProduct } from "@/app/Save/page";
+type Props = {
+  like: boolean;
+  setLike: (value: boolean) => void;
+};
+export const Context = createContext<Props | null>(null);
 
 export type ProductType =
   | {
@@ -38,25 +43,27 @@ export const Card = ({
 }) => {
   const [ready, setReady] = useState(false);
   const [savedProduct, setSavedProduct] = useState<savedProduct[]>([]);
-
+  const value = useContext(Context);
   if (!savedProduct) return;
 
   const SaveProduct = async () => {
     try {
-      await fetch("http://localhost:4000/Save", {
+      const response = await fetch("http://localhost:4000/Save", {
         method: "POST",
         body: JSON.stringify({
           ProductId: cardItems?._id,
           amount: cardItems?.price,
           name: cardItems?.productName,
           image: cardItems?.images[0],
-          heart: !ready,
+          heart: true,
         }),
         headers: {
           "Content-type": "application/json",
         },
       });
-      setReady(!ready);
+      value?.setLike(!value.like);
+      const data = await response.json();
+      setReady(true);
     } catch (err) {
       console.error(err);
     }
@@ -66,7 +73,8 @@ export const Card = ({
       await fetch(`http://localhost:4000/saved/${cardItems?._id}`, {
         method: "DELETE",
       });
-      setReady(!ready);
+      setReady(false);
+      value?.setLike(!value.like);
     } catch (err) {
       console.error(err);
     }
@@ -74,11 +82,14 @@ export const Card = ({
 
   const SavedProduct = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/Save/${cardItems?._id}`
-      );
+      const response = await fetch(`http://localhost:4000/Save`);
       const data = await response.json();
-      if (data.heart) setReady(true);
+      const has = data.findIndex(
+        (item: savedProduct) => item.ProductId == cardItems?._id
+      );
+      if (has !== -1) {
+        setReady(true);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -87,7 +98,7 @@ export const Card = ({
   useEffect(() => {
     SavedProduct();
   }, []);
-  console.log(ready);
+
   return (
     <div className="relative">
       <Link
@@ -114,7 +125,7 @@ export const Card = ({
         }}
         className="absolute top-3 right-3 cursor-pointer"
       >
-        {index != 6 && index != 7 && <HeartIconSvg fill={ready} />}
+        <HeartIconSvg fill={ready} />
       </div>
     </div>
   );

@@ -6,17 +6,22 @@ import Link from "next/link";
 import { Heart, Search, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { Context } from "../Card";
 export const Navigation = () => {
   const [savedProduct, setSavedProduct] = useState([]);
+  const value = useContext(Context);
+
   const loadSavedProduct = async () => {
     const response = await fetch("http://localhost:4000/Save");
     const data = await response.json();
     setSavedProduct(data);
   };
+
   useEffect(() => {
     loadSavedProduct();
-  }, []);
+  }, [value?.like]);
+
   return (
     <div className="bg-black">
       <div className="max-w-[1440px] mx-auto py-4 px-6  bg-[#000000] text-white">
