@@ -7,8 +7,7 @@ import { use, useEffect, useState } from "react";
 import datas from "@/app/datas.json";
 
 import Link from "next/link";
-import { ProductType } from "@/components/Card";
-
+import Card, { ProductType } from "@/components/Card";
 import { stringify } from "querystring";
 import { headers } from "next/headers";
 import { useSearchParams } from "next/navigation";
@@ -94,13 +93,12 @@ export const ProductDetail = () => {
   useEffect(() => {
     getShoppingCart();
     getReview();
-  }, []);
+    loadProduct();
+  }, [search]);
 
   const render = () => {
     getReview();
   };
-
-  const [productImage, setProductImage] = useState<ProductType[]>([]);
 
   const createShoppingCart = async () => {
     const data = await fetch("http://localhost:4000/ShoppingCart", {
@@ -109,7 +107,9 @@ export const ProductDetail = () => {
         // orderNumber: ,
         productCount: number,
         size: selectedSize,
-        images: productImage,
+        images: uploadShoppingCart?.images,
+        price: uploadShoppingCart?.price,
+        productName: uploadShoppingCart?.productName,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -117,7 +117,7 @@ export const ProductDetail = () => {
     });
 
     reseted();
-    // console.log(data)
+    console.log(data);
   };
 
   const reseted = () => {
@@ -153,6 +153,16 @@ export const ProductDetail = () => {
     setUploadReview(data);
   };
   console.log({ uploadReview });
+
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const loadProduct = async () => {
+    const response = await fetch(
+      `http://localhost:4000/products?fromDate=undefined&toDate=undefined`
+    );
+    const data = await response.json();
+    setProducts(data);
+  };
+
 
 
   return (
@@ -357,10 +367,15 @@ export const ProductDetail = () => {
       <div className="grid ">
         <div className="text-3xl font-bold mb-6">Холбоотой бараа</div>
         <div className="flex-1 grid grid-cols-4 gap-x-[21px] gap-y-12">
-          {datas.map(
-            (cardItems, index) =>
-              index < 8 && (
-                <div key={index}>{/* <Card cardItems={cardItems} /> */}</div>
+          {products.map(
+            (cardItems: ProductType, index) =>
+              cardItems &&
+              index < 6 && (
+                <div
+                  key={index + cardItems.price}
+                >
+                  <Card index={index} cardItems={cardItems} />
+                </div>
               )
           )}
         </div>
