@@ -17,7 +17,7 @@ export default function Home() {
   const [count, setCount] = useState(0);
 
   const [counting, setCounting] = useState(0);
-
+  const [quantity, setQuantity] = useState(1);
 
   const [uploadShoppingCart, setUploadShoppingCart] = useState<shoppingCart[]>(
     []
@@ -62,6 +62,8 @@ export default function Home() {
                   <BasketCard
                     getShoppingCart={getShoppingCart}
                     cardItems={cardItems}
+                    quantity={quantity}
+                    setQuantity={setQuantity}
                   />
                 </div>
               ))}

@@ -20,7 +20,7 @@ export type shoppingCart = {
 
 
 
-export const BasketCard = ({ cardItems,getShoppingCart }: { cardItems: shoppingCart,getShoppingCart:()=>void }) => {
+export const BasketCard = ({ cardItems,getShoppingCart ,quantity,setQuantity}: { cardItems: shoppingCart,getShoppingCart:()=>void,quantity:number,setQuantity:(values:number)=>void }) => {
   const [uploadShoppingCart, setUploadShoppingCart] = useState<shoppingCart[]>(
     []
   );
@@ -32,7 +32,7 @@ export const BasketCard = ({ cardItems,getShoppingCart }: { cardItems: shoppingC
     getShoppingCart()  // dahin render hiij uldsen baraag harah
   };
 
-  const [quantity, setQuantity] = useState(1);
+
 
   return (
     <div className="w-[574px] h-[132px] flex relative group border-[1px] rounded-2xl py-[16px] pl-[16] gap-[24px]">
