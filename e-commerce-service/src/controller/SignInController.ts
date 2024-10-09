@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { UserSignInModel } from "../model/signinModel";
+
 import jwt from "jsonwebtoken";
+import { UserSignInModel } from "../model/SignInModel";
 
 export const createUserSignIn = async (req: Request, res: Response) => {
   const userSignIn = req.body;
