@@ -17,7 +17,7 @@ export const loginUser = async (req: Request, res: Response) => {
         { userId: user._id, email },
         ACCESS_TOKEN_SECRET,
         {
-          expiresIn: "2h",
+          expiresIn: "3h",
         }
       );
       return res.send({
