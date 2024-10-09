@@ -8,6 +8,7 @@ import datas from "@/app/datas.json";
 
 import Link from "next/link";
 import { ProductType } from "@/components/Card";
+
 import { stringify } from "querystring";
 import { headers } from "next/headers";
 import { useSearchParams } from "next/navigation";
@@ -16,6 +17,7 @@ import { title } from "process";
 import { Input } from "@/components/ui/input";
 import { string } from "yup";
 import Image from "next/image";
+
 
 export const ProductDetail = () => {
   const [selectPhoto, setSelectPhoto] = useState("");
@@ -38,6 +40,7 @@ export const ProductDetail = () => {
     comments: string;
     _id: string;
   };
+
 
   const defaultSize = productSize.find((p) => p.qty > 0)?.size || "";
   const [selectedSize, setSelectedSize] = useState<string>(defaultSize);
@@ -85,6 +88,7 @@ export const ProductDetail = () => {
     const data = await response.json();
     setUploadShoppingCart(data);
     // console.log(setUploadShoppingCart)
+
     setSelectPhoto(data.images[0]);
   };
   useEffect(() => {
@@ -97,6 +101,7 @@ export const ProductDetail = () => {
   };
 
   const [productImage, setProductImage] = useState<ProductType[]>([]);
+
   const createShoppingCart = async () => {
     const data = await fetch("http://localhost:4000/ShoppingCart", {
       method: "POST",
@@ -110,6 +115,7 @@ export const ProductDetail = () => {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
+
     reseted();
     // console.log(data)
   };
@@ -123,10 +129,12 @@ export const ProductDetail = () => {
 
   const createReview = async () => {
     const data = await fetch(`http://localhost:4000/reviews`, {
+
       method: "POST",
       body: JSON.stringify({
         // orderNumber: ,
         comments: commentValue,
+
         productId: search,
       }),
       headers: {
@@ -145,6 +153,7 @@ export const ProductDetail = () => {
     setUploadReview(data);
   };
   console.log({ uploadReview });
+
 
   return (
     <div className="max-w-[1040px] mx-auto gap-5 pt-[52px] pb-20">
@@ -205,7 +214,7 @@ export const ProductDetail = () => {
                 </div>
                 <div>
                   <div className="mb-2">Хэмжээний заавар</div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-[0.5px]">
                     {productSize.map((item) => (
                       <div
                         onClick={() => {
@@ -289,6 +298,7 @@ export const ProductDetail = () => {
                 4.6 (24)
               </div>
             </div>
+
             {!enable ? (
               <div className="flex flex-col gap-[21px] text-[#71717A]">
                 {uploadReview.map((item, index) => (
@@ -305,6 +315,7 @@ export const ProductDetail = () => {
                 ))}
               </div>
             ) : null}
+
             {!enable ? (
               <div className="bg-[#F4F4F5] p-6 rounded-2xl h-[294px] text-sm font-normal">
                 <div className="grid gap-6">
@@ -322,15 +333,19 @@ export const ProductDetail = () => {
                         placeholder="Энд бичнэ үү"
                         value={commentValue}
                         onChange={(e) => {
+
                           setCommentValue(e.target.value);
+
                         }}
                       />
                     </div>
                   </div>
                   <div>
+
                     <Button onClick={createReview} className="px-9 font-medium">
                       Үнэлэх
                     </Button>
+
                   </div>
                 </div>
               </div>

@@ -23,15 +23,6 @@ export const getOneProduct = async (req: Request, res: Response) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
 export const getProducts = async (req: Request, res: Response) => {
   const { lowprice, highprice, toDate, fromDate } = req.query;
   const filt: {
@@ -44,19 +35,6 @@ export const getProducts = async (req: Request, res: Response) => {
       $lt: new Date(String(toDate)),
     };
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   if (lowprice && highprice) {
     filt.price = { $gt: Number(lowprice), $lt: Number(highprice) };
