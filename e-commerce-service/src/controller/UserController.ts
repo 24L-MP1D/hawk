@@ -1,21 +1,22 @@
 import { Request, Response } from "express";
 import { User } from "../model/UserModel";
-
-
+import bcrypt from "bcrypt";
+const salt = Number(process.env.SALT);
 export const createUser = async (req: Request, res: Response) => {
   const users = req.body;
-  console.log(req.body);
+
   try {
+    const hashedPassword = await bcrypt.hash(users.password, salt);
+    users.password = hashedPassword;
     const user = await User.create(users);
-    console.log(user);
+
     res.send(user);
   } catch (error) {
-    console.error(error);
     res.send("find error");
   }
 };
 export const updateUser = async (req: Request, res: Response) => {
-  const { userName, email, phoneNumber,address } = req.body;
+  const { userName, email, phoneNumber, address } = req.body;
   const { _id } = req.params;
   console.log(req.body);
   try {
@@ -24,7 +25,7 @@ export const updateUser = async (req: Request, res: Response) => {
       userName,
       email,
       phoneNumber,
-      address
+      address,
     });
     console.log(user);
     res.send(user);

@@ -1,18 +1,31 @@
 import { Request, Response } from "express";
 import { User } from "../model/UserModel";
-
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+const salt = Number(process.env.SALT);
+const ACCESSTOKEN_SECRET = process.env.ACCESSTOKEN_SECRET || "";
 export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).send("user does not exist");
-    if (user.password !== password)
-      return res.status(401).send("password incorrect");
-    else {
-      return res.status(201).send(user);
-    }
 
+    if (!user) return res.status(401).send("user does not exist");
+
+    const matchedPass = await bcrypt.compare(password, user.password);
+
+    if (!matchedPass) return res.send("error pass");
+
+    const accesstoken = jwt.sign(
+      { userId: user._id, email },
+      ACCESSTOKEN_SECRET,
+
+      {
+        expiresIn: "5h",
+      }
+    );
+
+    res.status(201).send(accesstoken);
     // if (password === password) return res.status(201).send(user);
     // else return res.status(401).send("password incorrect");
 
