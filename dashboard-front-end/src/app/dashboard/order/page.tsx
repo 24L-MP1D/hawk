@@ -16,23 +16,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import dayjs from "dayjs";
-
-export type paymentType =
-  | {
-      _id: string;
-      orderNumber: number;
-      paymentStatus: boolean; 
-      paymentType: string; 
-      userId: {
-        _id:string,
-        userName:string,
-        email:string,
-        phoneNumber:number
-      }
-      paymentAmount: number;
-      createAt:Date
-    }
-| undefined;
+import { paymentType } from "../income/page";
 
 const Order = () => {
   const orderStatus = [
@@ -89,15 +73,15 @@ const Order = () => {
     <div className="flex max-w-[1440px] mx-auto">
       <DashboardAside />
       <div className="flex flex-col w-full">
-        <div className="flex mb-[34px] font-normal text-sm text-[#3F4145]">
+        <div className="flex font-normal text-sm text-[#3F4145]">
           {orderStatus.map((item) => (
             <div key={item.name} className="p-4 cursor-pointer">
               {item.name}
             </div>
           ))}
         </div>
-        <div className="p-[24px] flex justify-between ">
-          <div className="flex gap-2">
+        <div className="mx-[23.5px] mt-[34px] mb-6 flex justify-between ">
+          <div className="flex  gap-2">
             <Button
               onClick={() => {
                 setIncomeFilter("Өнөөдөр");
@@ -148,7 +132,7 @@ const Order = () => {
             />
           </div>
         </div>
-        <div className="rounded-[12px] shadow-xl border border-[#ECEDF0] px-6 pb-4">
+        <div className="rounded-[12px] shadow-xl border border-[#ECEDF0] ml-[23.5px] mr-6 pb-4">
           <div className="py-[20px] px-6 font-bold text-xl">Захиалга</div>
           <div className="">
             <Table className="bg-[##F7F7F8] border-b-[1px] w-[1218px] rounded-none">
