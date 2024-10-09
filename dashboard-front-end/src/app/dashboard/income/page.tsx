@@ -1,6 +1,6 @@
 "use client"; // usestate ashiglaj bolohgui bsn
 import { Calendar, ChevronDown, Download, Slice } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { DashboardAside } from "@/components/Dashboard";
 import { DateRange } from "react-day-picker";
@@ -17,34 +17,29 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
+import dayjs from "dayjs";
 
-export type ProductType =
+export type paymentType =
   | {
-      productName: string;
-      price: number;
-      size: string[];
-      productId: number;
-      categoryId: string;
-      qty: number;
-      thumbnails: string;
-      images: string[];
-      coupon: string;
-      salePercent: number;
-      description: string;
-      viewCount: number;
-      createAt: Date;
-      updateAt: Date;
-      categoryType: string;
-      productTag: string;
       _id: string;
-      color: string[];
+      orderNumber: number;
+      paymentStatus: boolean; 
+      paymentType: string; 
+      userId: {
+        _id:string,
+        userName:string,
+        email:string,
+        phoneNumber:number
+      }
+      paymentAmount: number;
+      createAt:Date
     }
   | undefined;
 
 const Income = () => {
-  const [incomeFilter, setIncomeFilter] = useState("");
+  const [incomeFilter, setIncomeFilter] = useState("Өнөөдөр");
 
-  const [takeIncome, setTakeIncome] = useState([]);
+  const [takeIncome, setTakeIncome] = useState<paymentType[]>([]);
   const [incomeAmount, setIncomeAmount] = useState("");
   const [incomeList, setIncomeList] = useState([]);
   const [date, setDate] = useState<DateRange | undefined>();
@@ -84,7 +79,9 @@ const Income = () => {
       setTakeIncome(data);
     }
   };
-
+    useEffect(()=>{
+      loadFiltIncome()
+    },[incomeFilter])
   const handlePopOver = () => {
     setIsDatePickerOpen(!isDatePickerOpen);
   };
@@ -172,11 +169,14 @@ const Income = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
                 {takeIncome.map((income) => (
-                  <TableCell>{income}</TableCell>
-                ))}
+              <TableRow key={income?._id} >
+                  <TableCell>{income?.orderNumber}</TableCell>
+                  <TableCell>{income?.userId.email}</TableCell>
+                  <TableCell>{income?.paymentAmount}</TableCell>
+                  <TableCell>{dayjs(income?.createAt).format("YYYY-MM-DD")}</TableCell>
               </TableRow>
+                ))}
             </TableBody>
             <TableFooter>
               <TableRow>

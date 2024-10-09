@@ -1,10 +1,12 @@
 import { Request, Response } from "express-serve-static-core";
-import { Payment } from "../model/PaymentModel";
+import { Payment } from "../model/paymentModel";
+
 
 const getOrder = async (req: Request, res: Response) => {
   try {
+
     const { startTime, endTime } = req.query;
-    console.log(startTime, endTime);
+
 
     const filtIncome: {
       createAt?: { $gt: Date; $lt: Date };
@@ -15,7 +17,7 @@ const getOrder = async (req: Request, res: Response) => {
       $lt: new Date(String(endTime)),
     };
 
-    const order = await Payment.find({ filtIncome });
+    const order = await Payment.find( filtIncome ).populate("userId");
 
     res.json(order);
   } catch (err) {
@@ -41,4 +43,6 @@ const getOrder = async (req: Request, res: Response) => {
 //     }
 // }
 
-export { getOrder }; // orderRouter dotor import hiine
+export { getOrder };
+
+// orderRouter dotor import hiine

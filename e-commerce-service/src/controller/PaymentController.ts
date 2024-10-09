@@ -1,13 +1,21 @@
 import { Request, Response } from "express";
-import { Payment,  } from "../model/PaymentModel";
+import { Payment } from "../model/paymentModel";
+import { User } from "../model/UserModel";
+
+
+
+
 
 
 export const createPayment = async (req: Request, res: Response) => {
   const data = req.body;
-  
+  data.createAt = new Date()
+    console.log({data})
   try {
     const payments = await Payment.create(data);
 
+
+    
     res.send(payments);
   } catch (error) {
     console.error(error);
