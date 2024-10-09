@@ -9,8 +9,8 @@ import {useState, useEffect} from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BasketCard } from "@/components/BasketCard";
-type paymentStatus = 'Paid' | 'Not paid'
-type paymentType = 'Card' | 'Qpay' | 'SocialPay'
+let paymentStatus = 'Paid' | 'Not paid'
+let paymentType = 'Card' | 'Qpay' | 'SocialPay'
 type PaymentType = {
   _id: string, 
   orderNumber: string,
