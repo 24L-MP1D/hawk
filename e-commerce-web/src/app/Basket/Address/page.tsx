@@ -6,22 +6,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 
-import {useEffect, useState }from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { BasketCard } from "@/components/BasketCard";
+import { BasketCard, shoppingCart } from "@/components/BasketCard";
 
 import { SidebarCard } from "@/components/SidebarCard";
-import { string } from "yup";
 
 export default function Home() {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const [counting, setCounting] = useState(0);
   const [address, setAddress] = useState(0);
-  
 
-  const id = "66f144db08ecc2e63fbb86af"
+  const id = "66f144db08ecc2e63fbb86af";
 
   function submit() {
     fetch(`https://localhost:4000/updateUser/${id}`, {
@@ -41,16 +38,15 @@ export default function Home() {
     });
   }
 
-  const [address, setAddresses] = React.useState(0);
   const [deleteAddress, setDeleteAddresses] = useState(0);
   const [updateAddress, setUpdateAddresses] = useState(0);
-  // const [Addresses, setDeleteAddresses] = useState(0);
 
-  //get huselt gantsaaraa browseroor damjij bolno busad ni ylgaatai 
+
+  //get huselt gantsaaraa browseroor damjij bolno busad ni ylgaatai
   const getAddress = async () => {
     const response = await fetch(`http://localhost:4000/register`);
     const data = await response.json();
-    setAddresses(data);
+    setAddress(data);
   };
 
   useEffect(() => {
@@ -64,7 +60,7 @@ export default function Home() {
     const response = await fetch(`http://localhost:4000/updateUser/:id`, {
       method: "PUT",
       body: JSON.stringify({
-        address: string,
+        address,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -75,6 +71,20 @@ export default function Home() {
   };
 
 
+  const [uploadShoppingCart, setUploadShoppingCart] = useState<shoppingCart[] >(
+    []
+
+    
+  );
+  const getShoppingCart = async () => {
+    const response = await fetch(`http://localhost:4000/ShoppingCart`);
+    const data = await response.json();
+    setUploadShoppingCart(data);
+    console.log({ data });
+  };
+  useEffect(() => {
+    getShoppingCart();
+  }, []);
 
   return (
     <div className="bg-[#F7F7F8]">
@@ -93,16 +103,16 @@ export default function Home() {
           </div>
         </div>
         <div className="max-w-full h-[678px] flex gap-[20px]  mx-auto ">
-          <div className="w-[333px] h-[448px] rounded-2xl bg-white px-[24px] py-[32px] ">
+          <div className="w-[333px] rounded-2xl bg-white px-[24px] py-[32px] ">
             <div className="font-bold">Сагс</div>
             <div className="flex flex-col gap-[16px] mt-[16px] items-center">
-              {SidebarProducts.map(
+              {uploadShoppingCart.map(
                 (cardItems, index) =>
-                  index < 3 && (
-                    <div>
+                   (
+                    <div key={cardItems._id}>
                       <SidebarCard
+                        // getShoppingCart={getShoppingCart}
                         cardItems={cardItems}
-                        key={index + cardItems.price}
                       />
                     </div>
                   )
@@ -174,11 +184,10 @@ export default function Home() {
                       Буцах
                     </Link>
 
-
-                    <Button>Хүргэлтийн мэдээллийг хадгалах</Button>
+                    {/* <Button className="bg-white rounded-[18px] text-slate-300 hover:bg-slate-500" onClick={submit}>Хүргэлтийн мэдээллийг шинэчлэх</Button> */}
 
                     <Link
-                      className="bg-[#2563EB] rounded-[18px] w-[166px] h-[36px] text-white px-[29px] py-[5px] text-[14px]"
+                      className="bg-[#2563EB] rounded-[18px] w-[166px] hover:bg-slate-200 hover:text-black h-[36px] text-white px-[29px] py-[5px] text-[14px]"
                       rel="address"
                       href="/Basket/Pay"
                     >
