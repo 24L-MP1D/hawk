@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Heart, Search, ShoppingCart } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import { Input } from "../ui/input";
 
 export const Navigation = () => {
@@ -26,7 +26,12 @@ export const Navigation = () => {
               <p>ECOMMERCEE</p>
             </a>
             <div>
-              <Link href={"/Category"} className="font-normal text-sm text-[#FFFFFF]">Ангилал</Link>
+              <Link
+                href={"/Category"}
+                className="font-normal text-sm text-[#FFFFFF]"
+              >
+                Ангилал
+              </Link>
             </div>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-[20px] bg-[#18181B]">

@@ -5,7 +5,6 @@ import Image from "next/image";
 import { CircleMinus, CirclePlus, Trash2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
-
 export type shoppingCart = {
   orderNumber: string;
   productCount: number;
@@ -16,23 +15,37 @@ export type shoppingCart = {
   _id: string;
   price: number;
   images: [string];
+  qty: number;
 };
 
-
-
-export const BasketCard = ({ cardItems,getShoppingCart ,quantity,setQuantity}: { cardItems: shoppingCart,getShoppingCart:()=>void,quantity:number,setQuantity:(values:number)=>void }) => {
-  const [uploadShoppingCart, setUploadShoppingCart] = useState<shoppingCart[]>(
-    []
-  );
-
+export const BasketCard = ({
+  cardItems,
+  getShoppingCart,
+  quantity,
+  setQuantity,
+  uploadShoppingCart,
+  setUploadShoppingCart,
+  index,
+}: {
+  cardItems: shoppingCart;
+  getShoppingCart: () => void;
+  quantity: number;
+  setQuantity: (value: number) => void;
+  uploadShoppingCart: shoppingCart[];
+  setUploadShoppingCart: (value: shoppingCart[]) => void;
+  index: number;
+}) => {
+  const addQuintity = () => {
+    const newUploadShoppingCart = [...uploadShoppingCart];
+    newUploadShoppingCart[index].qty++;
+    setUploadShoppingCart(newUploadShoppingCart);
+  };
   const deleteShoppingCart = async () => {
     await fetch(`http://localhost:4000/deleteOneCart/${cardItems._id}`, {
       method: "DELETE",
     });
-    getShoppingCart()  // dahin render hiij uldsen baraag harah
+    getShoppingCart(); // dahin render hiij uldsen baraag harah
   };
-
-
 
   return (
     <div className="w-[574px] h-[132px] flex relative group border-[1px] rounded-2xl py-[16px] pl-[16] gap-[24px]">
@@ -42,23 +55,24 @@ export const BasketCard = ({ cardItems,getShoppingCart ,quantity,setQuantity}: {
           src={cardItems?.images[0] || ""}
           width={100}
           height={100}
-          className="bg-slate-50 absolute "
+          className="bg-slate-50 absolute"
         />
       </div>
       <div className="flex flex-col gap-[8px] w-[354px]">
         <div></div>
         <div>{cardItems.productName}</div>
         <div className="flex gap-3">
-          <div onClick={() => quantity != 1 && setQuantity(quantity - 1)}>
+          <div onClick={() => quantity != 1 && addQuintity()}>
             <CircleMinus />
           </div>
-          <div>{quantity}</div>
-          <div onClick={() => setQuantity(quantity + 1)}>
+          <div>{cardItems.qty}</div>
+          <div onClick={() => addQuintity()}>
             <CirclePlus />
           </div>
         </div>
-        <div className="font-bold">{cardItems && cardItems.price * quantity}</div>
-
+        <div className="font-bold">
+          {cardItems && cardItems.price * cardItems.qty}
+        </div>
       </div>
       <div className="left-[24px]">
         <Trash2
@@ -69,4 +83,3 @@ export const BasketCard = ({ cardItems,getShoppingCart ,quantity,setQuantity}: {
     </div>
   );
 };
-
