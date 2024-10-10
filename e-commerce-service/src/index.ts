@@ -17,7 +17,6 @@ import { cartRouter } from "./router/ShoppingCartRouter";
 
 import { createUserSignUp } from "./controller/SignUpController";
 import { createUserSignIn } from "./controller/SignInController";
-import { login } from "./controller/loginController";
 
 import { paymentRouter } from "./router/PaymentRouter";
 import { orderRouter } from "./router/orderRouter";
@@ -26,7 +25,7 @@ import { loginRouter } from "./router/loginRouter";
 
 import { categoryRouter } from "./router/categoryRouter";
 import { reviewRouter } from "./router/reviewRouther";
-
+import { login } from "./controller/dashboardLoginController";
 
 const app = express();
 const port = 4000;
@@ -44,22 +43,17 @@ app.use(saveRouter);
 app.use(paymentRouter);
 app.use(orderRouter);
 
-
 app.use(cartRouter);
 
 //login service
 
 app.use(loginRouter);
 
-
 app.post("/SignUp", createUserSignUp);
 
 app.post("/signin", createUserSignIn);
 
 app.post("/login", login);
-
-
-
 
 app.use(categoryRouter);
 
@@ -68,5 +62,4 @@ app.listen(port, () => {
 });
 
 app.use(cartRouter);
-app.use(reviewRouter)
-
+app.use(reviewRouter);
