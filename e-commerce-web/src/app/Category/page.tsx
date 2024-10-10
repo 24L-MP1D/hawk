@@ -1,8 +1,6 @@
 "use client";
 
 import { Card, ProductType } from "@/components/Card";
-import datas from "../datas.json";
-
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 
@@ -31,13 +29,11 @@ const Category = () => {
   const [cardList, setCardList] = useState<ProductType[]>([]);
   const [categoryType, setCategoryType] = useState("");
   const [sizee, setSizee] = useState("");
-  // const [categoryTypeArray, setCategoryTypeArray] = useState<string[]>([]);
-  const [sizeeArray, setSizeeArray] = useState<string[]>([]);
+
   const productList = async () => {
     const response = await fetch(
       "http://localhost:4000/products?fromDate=undefined&toDate=undefined"
     );
-
     const data = await response.json();
     setCardList(data);
   };
