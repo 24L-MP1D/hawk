@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+
 import { cookies } from "next/headers";
 
 export default function Login() {
@@ -26,6 +27,7 @@ export default function Login() {
   };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   return (
     <div className="pt-[96px] pb-[374px]">
       <div className="mx-auto flex gap-[16px] flex-col w-[334px] text-center">
@@ -45,9 +47,12 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button onClick={login} className="h-[36] rounded-[18px] bg-blue-700">
+
+        <Button onClick={submit} className="h-[36] rounded-[18px] bg-blue-700">
+
           Нэвтрэх
         </Button>
+        
         <Button variant="link" className="text-xs underline text-gray-600">
           Нууц үгээ мартсан
         </Button>

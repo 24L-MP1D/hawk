@@ -2,7 +2,7 @@
 
 import express from "express";
 import connectDB from "./configs/database";
-
+import cors from "cors"
 import {
   createProduct,
   deleteProducts,
@@ -14,6 +14,11 @@ import { saveRouter } from "./router/saveRouter";
 import { userRouter } from "./router/UserRouter";
 import { uploadRouter } from "./router/uploadRouter";
 import { cartRouter } from "./router/ShoppingCartRouter";
+
+import { createUserSignUp } from "./controller/SignUpController";
+import { createUserSignIn } from "./controller/SignInController";
+
+
 import { paymentRouter } from "./router/PaymentRouter";
 import { orderRouter } from "./router/orderRouter";
 
@@ -22,9 +27,11 @@ import { loginRouter } from "./router/loginRouter";
 import { categoryRouter } from "./router/categoryRouter";
 import { reviewRouter } from "./router/reviewRouther";
 
+import { login } from "./controller/dashboardLoginController";
+
+
 const app = express();
 const port = 4000;
-const cors = require("cors");
 connectDB();
 app.use(cors());
 app.use(express.json());
@@ -45,10 +52,19 @@ app.use(cartRouter);
 
 app.use(loginRouter);
 
+app.post("/SignUp", createUserSignUp);
+
+app.post("/signin", createUserSignIn);
+
+app.post("/login", login);
+
 app.use(categoryRouter);
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
 app.use(cartRouter);
-app.use(reviewRouter);
+
+app.use(reviewRouter)
+

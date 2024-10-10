@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BasketCard } from "@/components/BasketCard";
+
 type paymentStatus = "Paid" | "Not paid";
 type paymentType = "Card" | "Qpay" | "SocialPay";
 type PaymentType = {
@@ -20,11 +21,12 @@ type PaymentType = {
   updateAt: Date;
   paymentAmount: number;
 };
+
 export default function Home() {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
-
   const [counting, setCounting] = useState(0);
+
 
   let sum = 0;
   basketProducts.forEach((product) => {
@@ -73,6 +75,8 @@ export default function Home() {
     });
   };
 
+
+
   return (
     <div className="bg-[#F7F7F8]">
       <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px]">
@@ -103,7 +107,9 @@ export default function Home() {
             />
           </div>
           <div>
-            <Link
+
+            <Link 
+
               className="w-[114px] h-[36px] rounded-2xl border-[1px] border-[#E4E4E7] text-center px-[36px] py-[8px] text-[14px]"
               rel="address"
               href="/Basket/Address"
