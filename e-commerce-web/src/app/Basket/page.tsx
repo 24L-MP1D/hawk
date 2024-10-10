@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
-
 import { useContext, useEffect, useState } from "react";
 
-import { BasketCard, shoppingCart } from "@/components/BasketCard";
+import { BasketCard } from "@/components/BasketCard";
 import { Context } from "@/components/Card";
 
 import { useRouter } from "next/navigation";
@@ -36,6 +34,7 @@ export default function Home() {
   const setUpdateShoppingCart = async () => {
     await fetch(`http://localhost:4000/ShoppingCart`);
   };
+
   useEffect(() => {
     getShoppingCart();
   }, []);

@@ -48,11 +48,10 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Button onClick={submit} className="h-[36] rounded-[18px] bg-blue-700">
-
+        <Button onClick={login} className="h-[36] rounded-[18px] bg-blue-700">
           Нэвтрэх
         </Button>
-        
+
         <Button variant="link" className="text-xs underline text-gray-600">
           Нууц үгээ мартсан
         </Button>

@@ -114,6 +114,7 @@ export const ProductDetail = () => {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
+    alert("amjilttai sagsand nemlee");
 
     reseted();
     console.log(data);
