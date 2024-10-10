@@ -56,6 +56,7 @@ export const ProductDetail = () => {
       setNumber(0);
     }
   }, [currentQty, productSize]);
+  
   const nemeh = () => {
     setNumber((oldNumber) =>
       oldNumber < currentQty ? oldNumber + 1 : oldNumber
