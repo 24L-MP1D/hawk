@@ -26,6 +26,7 @@ export const loginUser = async (req: Request, res: Response) => {
     );
 
     res.status(201).send(accesstoken);
+
     // if (password === password) return res.status(201).send(user);
     // else return res.status(401).send("password incorrect");
 
