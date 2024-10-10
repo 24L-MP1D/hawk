@@ -1,30 +1,10 @@
 "use client";
 
+import { filters, sizes } from "@/components/BasketCard";
 import { Card, ProductType } from "@/components/Card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 
-export type filtType = {
-  filt: string;
-  value: string;
-};
-export const filters: filtType[] = [
-  { filt: "Малгай", value: "Малгай" },
-  { filt: "Усны сав", value: "Усны сав" },
-  { filt: "T-shirt", value: "T-shirt" },
-  { filt: "Hoodie", value: "Hoodie" },
-  { filt: "Тее", value: "Тее" },
-  { filt: "Цүнх", value: "Цүнх" },
-];
-export const filtersArray = [
-  "Малгай",
-  "Усны сав",
-  "T-shirt",
-  "Hoodie",
-  "Тее",
-  "Цүнх",
-];
-export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
 export default function Home() {
   const [cardList, setCardList] = useState<ProductType[]>([]);
   const [categoryType, setCategoryType] = useState("");

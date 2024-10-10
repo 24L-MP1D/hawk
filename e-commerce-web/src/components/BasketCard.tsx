@@ -15,7 +15,27 @@ export type shoppingCart = {
   images: [string];
   qty: number;
 };
-
+export type filtType = {
+  filt: string;
+  value: string;
+};
+export const filters: filtType[] = [
+  { filt: "Малгай", value: "Малгай" },
+  { filt: "Усны сав", value: "Усны сав" },
+  { filt: "T-shirt", value: "T-shirt" },
+  { filt: "Hoodie", value: "Hoodie" },
+  { filt: "Тее", value: "Тее" },
+  { filt: "Цүнх", value: "Цүнх" },
+];
+export const filtersArray = [
+  "Малгай",
+  "Усны сав",
+  "T-shirt",
+  "Hoodie",
+  "Тее",
+  "Цүнх",
+];
+export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
 export const BasketCard = ({
   cardItems,
   getShoppingCart,
