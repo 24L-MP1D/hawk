@@ -70,7 +70,7 @@ const Category = () => {
   };
   return (
     <div className="max-w-[1039px] mx-auto flex gap-[20px] pb-[100px] pt-[52px]">
-      <div className="max-w-[245px] w-full flex flex-col gap-12">
+      {/* <div className="max-w-[245px] w-full flex flex-col gap-12">
         <div className="flex flex-col gap-4">
           <div className="font-bold">Ангилал</div>
           {filters.map((filter) => (
@@ -107,7 +107,7 @@ const Category = () => {
         {cardList.map((cardItems, index) => (
           <Card key={cardItems?._id} cardItems={cardItems} index={index} />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
