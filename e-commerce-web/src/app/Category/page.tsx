@@ -25,7 +25,7 @@ export const filtersArray = [
   "Цүнх",
 ];
 export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
-const Category = () => {
+export default function Home() {
   const [cardList, setCardList] = useState<ProductType[]>([]);
   const [categoryType, setCategoryType] = useState("");
   const [sizee, setSizee] = useState("");
@@ -110,6 +110,4 @@ const Category = () => {
       </div> */}
     </div>
   );
-};
-
-export default Category;
+}
