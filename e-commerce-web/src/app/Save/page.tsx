@@ -2,10 +2,11 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaHeart } from "react-icons/fa";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Link from "next/link";
 // import { HeartIcon } from "@radix-ui/react-icons";
 import { HeartIconSvg } from "@/components/HeartIcon";
+import { Context } from "@/components/Card";
 
 const save = [
   {
@@ -35,6 +36,7 @@ export type savedProduct = {
 };
 
 export default function Save() {
+  const value = useContext(Context);
   const [heart, setHeart] = useState(true);
   const [cards, setCards] = useState();
   const [savedProduct, setSavedProduct] = useState<savedProduct[]>([]);
@@ -53,6 +55,7 @@ export default function Save() {
     await fetch(`http://localhost:4000/Save/${id}`, {
       method: "DELETE",
     });
+    value?.setLike(!value.like);
     loadSavedProduct();
   };
 

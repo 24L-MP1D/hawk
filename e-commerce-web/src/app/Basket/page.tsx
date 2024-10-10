@@ -2,20 +2,23 @@
 
 import Link from "next/link";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { BasketCard, shoppingCart } from "@/components/BasketCard";
+import { Context } from "@/components/Card";
+
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
+  const value = useContext(Context);
   const [quantity, setQuantity] = useState(1);
-  const [uploadShoppingCart, setUploadShoppingCart] = useState<shoppingCart[]>(
-    []
-  );
+  const router = useRouter();
   const totalPrice = () => {
     let sum = 0;
-    uploadShoppingCart.forEach((product) => {
+    value?.uploadShoppingCart.forEach((product) => {
       if (product.price) {
-        sum = sum + product.price * product.qty;
+        sum = sum + product.price * product.productCount;
       }
     });
     return sum;
@@ -27,7 +30,11 @@ export default function Home() {
   const getShoppingCart = async () => {
     const response = await fetch(`http://localhost:4000/ShoppingCart`);
     const data = await response.json();
-    setUploadShoppingCart(data);
+    value?.setUpdateShoppingCart(data);
+  };
+
+  const setUpdateShoppingCart = async () => {
+    await fetch(`http://localhost:4000/ShoppingCart`);
   };
   useEffect(() => {
     getShoppingCart();
@@ -53,16 +60,14 @@ export default function Home() {
           <div className="w-[638px] h-[] rounded-2xl mx-auto p-[32px]  bg-white">
             <div className="text-xl font-bold">1. Сагс </div>
             <div className="flex flex-col gap-[16px] mt-[16px]">
-              {uploadShoppingCart.map((cardItems, index) => (
+              {value?.uploadShoppingCart.map((cardItems, index) => (
                 <div key={cardItems._id}>
                   <BasketCard
                     index={index}
                     getShoppingCart={getShoppingCart}
                     cardItems={cardItems}
-                    quantity={quantity}
-                    setQuantity={setQuantity}
-                    uploadShoppingCart={uploadShoppingCart}
-                    setUploadShoppingCart={setUploadShoppingCart}
+                    uploadShoppingCart={value.uploadShoppingCart}
+                    setUploadShoppingCart={value.setUpdateShoppingCart}
                   />
                 </div>
               ))}
@@ -76,13 +81,15 @@ export default function Home() {
             </div>
             <div className="justify-between flex ">
               <div className=""></div>
-              <Link
+              <Button
+                onClick={() => {
+                  router.push(`/Basket/Address`);
+                }}
                 className="w-[175px] h-[36px] rounded-2xl bg-[#2563EB] text-center px-[36px] py-[8px] text-[14px] text-white  mt-[36px]"
                 rel="address"
-                href="/Basket/Address"
               >
                 Худалдан авах
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

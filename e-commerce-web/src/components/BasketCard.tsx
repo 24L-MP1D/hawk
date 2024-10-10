@@ -19,23 +19,24 @@ export type shoppingCart = {
 export const BasketCard = ({
   cardItems,
   getShoppingCart,
-  quantity,
-  setQuantity,
   uploadShoppingCart,
   setUploadShoppingCart,
   index,
 }: {
   cardItems: shoppingCart;
   getShoppingCart: () => void;
-  quantity: number;
-  setQuantity: (value: number) => void;
   uploadShoppingCart: shoppingCart[];
   setUploadShoppingCart: (value: shoppingCart[]) => void;
   index: number;
 }) => {
   const addQuintity = () => {
     const newUploadShoppingCart = [...uploadShoppingCart];
-    newUploadShoppingCart[index].qty++;
+    newUploadShoppingCart[index].productCount++;
+    setUploadShoppingCart(newUploadShoppingCart);
+  };
+  const minusQuintity = () => {
+    const newUploadShoppingCart = [...uploadShoppingCart];
+    newUploadShoppingCart[index].productCount--;
     setUploadShoppingCart(newUploadShoppingCart);
   };
   const deleteShoppingCart = async () => {
@@ -60,16 +61,16 @@ export const BasketCard = ({
         <div></div>
         <div>{cardItems.productName}</div>
         <div className="flex gap-3">
-          <div onClick={() => quantity != 1 && addQuintity()}>
+          <div onClick={() => cardItems.productCount != 1 && minusQuintity()}>
             <CircleMinus />
           </div>
-          <div>{cardItems.qty}</div>
+          <div>{cardItems.productCount}</div>
           <div onClick={() => addQuintity()}>
             <CirclePlus />
           </div>
         </div>
         <div className="font-bold">
-          {cardItems && cardItems.price * cardItems.qty}
+          {cardItems && cardItems.price * cardItems.productCount}
         </div>
       </div>
       <div className="left-[24px]">

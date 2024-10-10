@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer/Footer";
 import { Navigation } from "@/components/Header/Navigtaion";
 import { Context } from "@/components/Card";
 import { useState } from "react";
+import { shoppingCart } from "@/components/BasketCard";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,6 +31,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [like, setLike] = useState(false);
+  const [uploadShoppingCart, setUpdateShoppingCart] = useState<shoppingCart[]>(
+    []
+  );
   return (
     <html lang="en">
       <body
@@ -40,6 +44,8 @@ export default function RootLayout({
             value={{
               like,
               setLike,
+              uploadShoppingCart,
+              setUpdateShoppingCart,
             }}
           >
             <Navigation />

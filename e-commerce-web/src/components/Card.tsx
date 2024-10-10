@@ -6,9 +6,12 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { savedProduct } from "@/app/Save/page";
+import { shoppingCart } from "./BasketCard";
 type Props = {
   like: boolean;
   setLike: (value: boolean) => void;
+  uploadShoppingCart: shoppingCart[];
+  setUpdateShoppingCart: (value: shoppingCart[]) => void;
 };
 export const Context = createContext<Props | null>(null);
 

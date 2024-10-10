@@ -41,7 +41,7 @@ export const ProductDetail = () => {
 
   const defaultSize = productSize.find((p) => p.qty > 0)?.size || "";
   const [selectedSize, setSelectedSize] = useState<string>(defaultSize);
-  const [number, setNumber] = useState<number>(0);
+  const [number, setNumber] = useState<number>(1);
 
   const currentQty =
     productSize.find((item) => item.size === selectedSize)?.qty || 0;
@@ -51,10 +51,10 @@ export const ProductDetail = () => {
       const availableSize =
         productSize.find((item) => item.qty > 0)?.size || "";
       setSelectedSize(availableSize);
-      setNumber(0);
+      setNumber(1);
     }
   }, [currentQty, productSize]);
-  
+
   const nemeh = () => {
     setNumber((oldNumber) =>
       oldNumber < currentQty ? oldNumber + 1 : oldNumber
