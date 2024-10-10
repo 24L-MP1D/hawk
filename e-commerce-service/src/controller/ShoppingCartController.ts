@@ -30,6 +30,31 @@ export const getShoppingCart = async (req: Request, res: Response) => {
     res.send("find error")
   }
 }
+export const getCart = async (req: Request, res: Response) => {
+  // const { id } = req.params;
+  try{
+    const Carts = await ShoppingCart.find();
+    console.log(Carts)
+    res.send(Carts)
+  }catch(error){
+    console.log(error)
+    res.send("find error")
+  }
+}
+
+export const deleteOneCart = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  console.log({id})
+  try{
+    const Carts = await ShoppingCart.deleteOne({_id: id});
+    console.log(Carts)
+    res.send({ message: "deleted successfully" });
+  }catch(error){
+    console.log(error)
+    res.send("find error")
+  }
+}
 
 
 

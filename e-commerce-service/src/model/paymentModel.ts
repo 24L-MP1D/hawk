@@ -1,14 +1,15 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema} from "mongoose";
 
-
+import { User } from "./UserModel";
 
 const schema = new Schema({
   orderNumber: String,
-  paymentStatus: Boolean, 
+  paymentStatus: String, 
   paymentType: String, 
-  createdAt: Date, 
+  createAt: Date, 
   updateAt: Date, 
   paymentAmount: Number,
+  userId:{type: mongoose.Schema.Types.ObjectId,ref:User}
 });
 
 export const Payment = model("payment", schema);
