@@ -1,10 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { HeartIconSvg } from "./HeartIcon";
 import Image from "next/image";
 
 import Link from "next/link";
+import { savedProduct } from "@/app/Save/page";
+type Props = {
+  like: boolean;
+  setLike: (value: boolean) => void;
+};
+export const Context = createContext<Props | null>(null);
 
 export type ProductType =
   | {
@@ -36,29 +42,63 @@ export const Card = ({
   index: number;
 }) => {
   const [ready, setReady] = useState(false);
+  const [savedProduct, setSavedProduct] = useState<savedProduct[]>([]);
+  const value = useContext(Context);
+  if (!savedProduct) return;
 
   const SaveProduct = async () => {
-    await fetch("http://localhost:4000/Save", {
-      method: "POST",
-      body: JSON.stringify({
-        ProductId: cardItems?._id,
-        amount: cardItems?.price,
-        name: cardItems?.productName,
-        image: cardItems?.images[0],
-      }),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
-  };
-
-  const filled = () => {
-    if (ready) {
-      setReady(false);
-    } else {
+    try {
+      const response = await fetch("http://localhost:4000/Save", {
+        method: "POST",
+        body: JSON.stringify({
+          ProductId: cardItems?._id,
+          amount: cardItems?.price,
+          name: cardItems?.productName,
+          image: cardItems?.images[0],
+          heart: true,
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      value?.setLike(!value.like);
+      const data = await response.json();
       setReady(true);
+    } catch (err) {
+      console.error(err);
     }
   };
+  const deleteProduct = async () => {
+    try {
+      await fetch(`http://localhost:4000/saved/${cardItems?._id}`, {
+        method: "DELETE",
+      });
+      setReady(false);
+      value?.setLike(!value.like);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const SavedProduct = async () => {
+    try {
+      const response = await fetch(`http://localhost:4000/Save`);
+      const data = await response.json();
+      const has = data.findIndex(
+        (item: savedProduct) => item.ProductId == cardItems?._id
+      );
+      if (has !== -1) {
+        setReady(true);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    SavedProduct();
+  }, []);
+
   return (
     <div className="relative">
       <Link
@@ -81,12 +121,11 @@ export const Card = ({
       </Link>
       <div
         onClick={() => {
-          filled();
-          SaveProduct();
+          ready ? deleteProduct() : SaveProduct();
         }}
         className="absolute top-3 right-3 cursor-pointer"
       >
-        {index != 6 && index != 7 && <HeartIconSvg fill={ready} />}
+        <HeartIconSvg fill={ready} />
       </div>
     </div>
   );

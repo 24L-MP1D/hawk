@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaHeart } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import Link from "next/link";
 // import { HeartIcon } from "@radix-ui/react-icons";
 import { HeartIconSvg } from "@/components/HeartIcon";
@@ -25,13 +25,15 @@ const save = [
   },
 ];
 
-type savedProduct = {
+export type savedProduct = {
   name: string;
   amount: number;
   ProductId: string;
   image: string;
   _id: string;
+  heart: boolean;
 };
+
 export default function Save() {
   const [heart, setHeart] = useState(true);
   const [cards, setCards] = useState();
@@ -53,10 +55,11 @@ export default function Save() {
     });
     loadSavedProduct();
   };
+
   useEffect(() => {
     loadSavedProduct();
   }, []);
-  console.log({ heart });
+
   return (
     <div className="max-w-[622px] mx-auto">
       <div>
@@ -99,7 +102,7 @@ export default function Save() {
                 }}
                 className="flex p-4 hover:cursor-pointer"
               >
-                <HeartIconSvg fill={heart} />
+                <HeartIconSvg fill={title.heart} />
               </div>
             </div>
           ))}

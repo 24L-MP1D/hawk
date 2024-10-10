@@ -2,7 +2,11 @@ import { Request, Response, json, request } from "express";
 import "dotenv/config";
 import { User } from "../model/UserModel";
 
+
 import bcrypt from "bcrypt";
+
+import "dotenv/config";
+import jwt from "jsonwebtoken";
 
 const SALT_SECRET = process.env.SALT_SECRET || "";
 
@@ -15,19 +19,28 @@ export const createUser = async (req: Request, res: Response) => {
     Number(SALT_SECRET)
   );
 
+  //middleware
+  const token = req.cookies.token;
+  const isVeried = jwt.verify(token, SALT_SECRET);
+
+  if (!isVeried)
+    return res.status(401).send({ success: false, message: "Not auth" });
+  // middleware
+
   try {
     const users = await User.create({
       email,
       password: hashedPassword,
       userName,
     });
+
     res.send(user);
   } catch (error) {
     res.send("find error");
   }
 };
 export const updateUser = async (req: Request, res: Response) => {
-  const { userName, email, phoneNumber,address } = req.body;
+  const { userName, email, phoneNumber, address } = req.body;
   const { _id } = req.params;
   console.log(req.body);
   try {
@@ -36,7 +49,7 @@ export const updateUser = async (req: Request, res: Response) => {
       userName,
       email,
       phoneNumber,
-      address
+      address,
     });
     console.log(user);
     res.send(user);
