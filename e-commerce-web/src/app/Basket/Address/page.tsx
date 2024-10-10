@@ -5,6 +5,7 @@ import SidebarProducts from "@/app/datas.json";
 import Image from "next/image";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
+import * as yup from "yup";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,27 +13,59 @@ import { BasketCard, shoppingCart } from "@/components/BasketCard";
 
 import { SidebarCard } from "@/components/SidebarCard";
 
-type paymentStatus = 'Paid' | 'Not paid'
-type paymentType = 'Card' | 'Qpay' | 'SocialPay'
+import formik, { useFormik } from "formik";
+
+type paymentStatus = "Paid" | "Not paid";
+type paymentType = "Card" | "Qpay" | "SocialPay";
 type PaymentType = {
-  _id: string, 
-  orderNumber: string,
-  paymentStatus: paymentStatus, 
-  paymentType: paymentType, 
-  createdAt: Date, 
-  updateAt: Date, 
-  paymentAmount: number,
-}
+  _id: string;
+  orderNumber: string;
+  paymentStatus: paymentStatus;
+  paymentType: paymentType;
+  createdAt: Date;
+  updateAt: Date;
+  paymentAmount: number;
+};
+export type FormValues = {
+  lastName: string;
+  description: string;
+  firstName: string;
+  address: string;
+
+  phoneNumber: number;
+};
 export default function Home() {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const [counting, setCounting] = useState(0);
-  const paymentStatus = "Paid"
-  const paymentType = "card"
+  const paymentStatus = "Paid";
+  const paymentType = "card";
   //// address
   const [address, setAddress] = useState(0);
-  const id = "67064b67a760fd650c53810c";   
+  const id = "67064b67a760fd650c53810c";
+  const initialValues = {
+    lastName: "",
+    firstName: "",
+    phoneNumber: 0,
+    address: "",
+    description: "",
+  };
+  const validationSchema = yup.object({
+    lastName: yup.string().min(4).required("Овогоо оруулна уу"),
+    firstName: yup.string().min(2).required("Нэрээ оруулна уу"),
+    phoneNumber: yup.number().min(8).required("утасны дугаараа оруулна уу"),
+    address: yup.string().min(20).required(`гэрийн хаягаа оруулна уу`),
+    description: yup.string().min(0, "Нэмэлт мэдээллээ оруулна уу"),
+  });
 
+  const formik = useFormik({
+    initialValues,
+    onSubmit: async (values) => {
+      editAddress(values);
+    },
+
+    validationSchema,
+  });
   function submit() {
     fetch(`https://localhost:4000/updateUser/${id}`, {
       method: "PUT",
@@ -52,9 +85,9 @@ export default function Home() {
   }
 
   const [deleteAddress, setDeleteAddresses] = useState(0);
+
   const [updateAddress, setUpdateAddresses] = useState(0);
 
-  //get huselt gantsaaraa browseroor damjij bolno busad ni ylgaatai
   const getAddress = async () => {
     const response = await fetch(`http://localhost:4000/register`);
     const data = await response.json();
@@ -62,16 +95,13 @@ export default function Home() {
   };
   useEffect(() => {
     getAddress();
-    editAddress();
   }, []);
 
-  //update
-
-  const editAddress = async () => {
+  const editAddress = async (values: FormValues) => {
     const response = await fetch(`http://localhost:4000/updateUser/${id}`, {
       method: "PUT",
       body: JSON.stringify({
-        address,
+        values,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -80,54 +110,36 @@ export default function Home() {
     const data = await response.json();
     setUpdateAddresses(data);
   };
-  //// address
 
-
-
-  //// payment
-
-  {/* payment backend holboh  */}
- const [loadpayment, setLoadPayment] = useState <PaymentType[]> ();
+  const [loadpayment, setLoadPayment] = useState<PaymentType[]>();
 
   const getPayment = async () => {
     const response = await fetch(`http://localhost:4000/getPayments`);
     const data = await response.json();
     setLoadPayment(data);
-    console.log(setLoadPayment)
-  }
+    console.log(setLoadPayment);
+  };
   useEffect(() => {
     getPayment();
     // updatePayment();
     createPayment();
-  }, [])
+  }, []);
 
-  // const updatePayment = async () => {
-  //   const data = await fetch(`http://localhost:4000/updatePayment${search}` ,{
-  //     method: "PUT",
-  //     body: JSON.stringify({
-  //       paymentType,
-        
-  //     }),
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8",
-  //     }
-  //   });
-  // }
-    const createPayment = async () => {
-      const data = await fetch(`http://localhost:4000/buy` ,{
-        method: "POST",
-        body: JSON.stringify({     
-          paymentType,
-          paymentStatus,
-          paymentAmount:Math.floor(Math.random() * 100000),
-          orderNumber:Math.floor(Math.random() * 50000),
-          userId:id
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        }
-      });
-    }
+  const createPayment = async () => {
+    const data = await fetch(`http://localhost:4000/buy`, {
+      method: "POST",
+      body: JSON.stringify({
+        paymentType,
+        paymentStatus,
+        paymentAmount: Math.floor(Math.random() * 100000),
+        orderNumber: Math.floor(Math.random() * 50000),
+        userId: id,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+  };
   //// payment
 
   const [uploadShoppingCart, setUploadShoppingCart] = useState<shoppingCart[]>(
@@ -137,14 +149,13 @@ export default function Home() {
     const response = await fetch(`http://localhost:4000/ShoppingCart`);
     const data = await response.json();
     setUploadShoppingCart(data);
-    console.log({ data });
   };
   useEffect(() => {
     getShoppingCart();
   }, []);
 
   return (
-    <div className="bg-[#F7F7F8]">
+    <form onSubmit={formik.handleSubmit} className="bg-[#F7F7F8]">
       <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px] bg-[#F7F7F8]">
         <div className="w-[256px] h-[32px] mx-auto flex items-center justify-center mb-[66px] ">
           <div className="h-[32px] w-[32px] rounded-full font-bold bg-blue-500  text-white text-center p-[4px] border-[1px]">
@@ -185,47 +196,99 @@ export default function Home() {
                     className="h-[28px] rounded-[18px]"
                     type="text"
                     placeholder=""
+                    id="lastName"
+                    value={formik.values.lastName}
+                    onChange={formik.handleChange}
                   />
+                  <p
+                    className={`${
+                      formik.errors.lastName ? "block" : "hidden"
+                    } text-red-500`}
+                  >
+                    {formik.errors.lastName}
+                  </p>
                 </div>
               </div>
               <div className="h-[50px]">
                 <div>Нэр:</div>
                 <div>
                   <Input
+                    id="firstName"
                     className="h-[28px] rounded-[18px]"
                     type="text"
                     placeholder=""
+                    value={formik.values.firstName}
+                    onChange={formik.handleChange}
                   />
+                  <p
+                    className={`${
+                      formik.errors.firstName ? "block" : "hidden"
+                    } text-red-500`}
+                  >
+                    {formik.errors.firstName}
+                  </p>
                 </div>
               </div>
               <div className="h-[50px]">
                 <div>Утасны дугаар:</div>
                 <div>
                   <Input
+                    id="phoneNumber"
                     className="h-[28px] rounded-[18px]"
-                    type="numbers"
+                    type="number"
                     placeholder=""
+                    value={
+                      formik.values.phoneNumber ? formik.values.phoneNumber : ""
+                    }
+                    onChange={formik.handleChange}
                   />
+                  <p
+                    className={`${
+                      formik.errors.phoneNumber ? "block" : "hidden"
+                    } text-red-500`}
+                  >
+                    {formik.errors.phoneNumber}
+                  </p>
                 </div>
               </div>
               <div className="h-[116px]">
                 <div>Хаяг:</div>
                 <div>
                   <Input
+                    id="address"
                     className="h-[94px] rounded-[18px]"
                     type="text"
                     placeholder=""
+                    value={formik.values.address}
+                    onChange={formik.handleChange}
                   />
+                  <p
+                    className={`${
+                      formik.errors.address ? "block" : "hidden"
+                    } text-red-500`}
+                  >
+                    {formik.errors.address}
+                  </p>
                 </div>
               </div>
               <div className="h-[50px]">
                 <div>Нэмэлт мэдээлэл:</div>
                 <div>
                   <Input
+                    id="description"
                     className="h-[94px] rounded-[18px]"
                     type="text"
                     placeholder=""
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
                   />
+                  <p
+                    className={`${
+                      formik.errors.description ? "block" : "hidden"
+                    } text-red-500`}
+                  >
+                    {formik.errors.description}
+                  </p>
                   <div className="text-[#71717A]">
                     Хүргэлттэй холбоотой нэмэлт мэдээлэл үлдээгээрэй
                   </div>
@@ -238,7 +301,12 @@ export default function Home() {
                       Буцах
                     </Link>
 
-                    <Button className="bg-white rounded-[18px] text-slate-300 hover:bg-slate-500" onClick={createPayment}>Хүргэлтийн мэдээллийг шинэчлэх</Button>
+                    <Button
+                      type="submit"
+                      className="bg-white rounded-[18px] text-slate-300 hover:bg-slate-500"
+                    >
+                      Хүргэлтийн мэдээллийг шинэчлэх
+                    </Button>
 
                     <Link
                       className="bg-[#2563EB] rounded-[18px] w-[166px] hover:bg-slate-200 hover:text-black h-[36px] text-white px-[29px] py-[5px] text-[14px]"
@@ -247,8 +315,6 @@ export default function Home() {
                     >
                       Төлбөр төлөх
                     </Link>
-
-                    
                   </div>
                 </div>
               </div>
@@ -256,6 +322,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

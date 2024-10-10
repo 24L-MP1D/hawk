@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CircleMinus, CirclePlus, Trash2 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 
 export type shoppingCart = {
   orderNumber: string;

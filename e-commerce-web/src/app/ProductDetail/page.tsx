@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { string } from "yup";
 import Image from "next/image";
 
-
 export const ProductDetail = () => {
   const [selectPhoto, setSelectPhoto] = useState("");
   const reset = () => {
@@ -39,7 +38,6 @@ export const ProductDetail = () => {
     comments: string;
     _id: string;
   };
-
 
   const defaultSize = productSize.find((p) => p.qty > 0)?.size || "";
   const [selectedSize, setSelectedSize] = useState<string>(defaultSize);
@@ -129,7 +127,6 @@ export const ProductDetail = () => {
 
   const createReview = async () => {
     const data = await fetch(`http://localhost:4000/reviews`, {
-
       method: "POST",
       body: JSON.stringify({
         // orderNumber: ,
@@ -162,8 +159,6 @@ export const ProductDetail = () => {
     const data = await response.json();
     setProducts(data);
   };
-
-
 
   return (
     <div className="max-w-[1040px] mx-auto gap-5 pt-[52px] pb-20">
@@ -343,19 +338,15 @@ export const ProductDetail = () => {
                         placeholder="Энд бичнэ үү"
                         value={commentValue}
                         onChange={(e) => {
-
                           setCommentValue(e.target.value);
-
                         }}
                       />
                     </div>
                   </div>
                   <div>
-
                     <Button onClick={createReview} className="px-9 font-medium">
                       Үнэлэх
                     </Button>
-
                   </div>
                 </div>
               </div>
@@ -371,9 +362,7 @@ export const ProductDetail = () => {
             (cardItems: ProductType, index) =>
               cardItems &&
               index < 6 && (
-                <div
-                  key={index + cardItems.price}
-                >
+                <div key={index + cardItems.price}>
                   <Card index={index} cardItems={cardItems} />
                 </div>
               )

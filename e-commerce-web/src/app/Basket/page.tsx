@@ -1,15 +1,10 @@
 "use client";
 
-import { Card } from "@/components/Card";
-import basketProducts from "@/app/datas.json";
-import Image from "next/image";
 import Link from "next/link";
 
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+
 import { BasketCard, shoppingCart } from "@/components/BasketCard";
-import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const [quantity, setQuantity] = useState(1);
