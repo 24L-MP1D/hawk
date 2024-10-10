@@ -28,10 +28,13 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(201).send(accesstoken);
 
     // if (password === password) return res.status(201).send(user);
+
     // else return res.status(401).send("password incorrect");
 
     // const isEqual = bcrypt(String(password), user.password);
+
     // if (isEqual) return res.send(user);
+
     // res.status(401).send("password incorrect");
   } catch (error) {
     res.send("aldaaaa");
