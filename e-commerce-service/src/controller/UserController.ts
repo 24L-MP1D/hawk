@@ -2,6 +2,7 @@ import { Request, Response, json, request } from "express";
 import "dotenv/config";
 import { User } from "../model/UserModel";
 
+
 import bcrypt from "bcrypt";
 
 import "dotenv/config";
@@ -32,6 +33,7 @@ export const createUser = async (req: Request, res: Response) => {
       password: hashedPassword,
       userName,
     });
+
     res.send(user);
   } catch (error) {
     res.send("find error");

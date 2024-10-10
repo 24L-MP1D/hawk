@@ -27,6 +27,7 @@ export default function Home() {
   uploadShoppingCart.forEach((product) => {
     sum = sum + product.price;
   });
+
   const getShoppingCart = async () => {
     const response = await fetch(`http://localhost:4000/ShoppingCart`);
     const data = await response.json();
@@ -36,6 +37,7 @@ export default function Home() {
   useEffect(() => {
     getShoppingCart();
   }, [sum]);
+
 
   return (
     <div className="bg-[#F7F7F8]">

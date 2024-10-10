@@ -6,8 +6,22 @@ import Link from "next/link";
 import { Heart, Search, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
-
+import { createContext, useContext, useEffect, useState } from "react";
+import { Context } from "../Card";
 export const Navigation = () => {
+  const [savedProduct, setSavedProduct] = useState([]);
+  const value = useContext(Context);
+
+  const loadSavedProduct = async () => {
+    const response = await fetch("http://localhost:4000/Save");
+    const data = await response.json();
+    setSavedProduct(data);
+  };
+
+  useEffect(() => {
+    loadSavedProduct();
+  }, [value?.like]);
+
   return (
     <div className="bg-black">
       <div className="max-w-[1440px] mx-auto py-4 px-6  bg-[#000000] text-white">
@@ -26,7 +40,12 @@ export const Navigation = () => {
               <p>ECOMMERCEE</p>
             </a>
             <div>
-              <Link href={"/Category"} className="font-normal text-sm text-[#FFFFFF]">Ангилал</Link>
+              <Link
+                href={"/Category"}
+                className="font-normal text-sm text-[#FFFFFF]"
+              >
+                Ангилал
+              </Link>
             </div>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-[20px] bg-[#18181B]">
@@ -39,8 +58,15 @@ export const Navigation = () => {
           </div>
           <div className="flex items-center gap-6">
             <div className="flex  gap-6">
-              <Link href={"/Save"}>
+              <Link className="relative" href={"/Save"}>
                 <Heart />
+                <div
+                  className={`absolute ${
+                    savedProduct.length ? "block" : "hidden"
+                  } flex items-center justify-center text-sm right-[-7px] top-[-5px] rounded-full bg-[#2563EB] w-4 h-4`}
+                >
+                  {savedProduct.length}
+                </div>
               </Link>
 
               <Link href="/Basket">

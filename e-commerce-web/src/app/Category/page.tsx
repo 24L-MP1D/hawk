@@ -31,7 +31,7 @@ const Category = () => {
   const [cardList, setCardList] = useState<ProductType[]>([]);
   const [categoryType, setCategoryType] = useState("");
   const [sizee, setSizee] = useState("");
-  const [categoryTypeArray, setCategoryTypeArray] = useState<string[]>([]);
+  // const [categoryTypeArray, setCategoryTypeArray] = useState<string[]>([]);
   const [sizeeArray, setSizeeArray] = useState<string[]>([]);
   const productList = async () => {
     const response = await fetch(
@@ -54,14 +54,9 @@ const Category = () => {
   }, []);
 
   const typeFilter = (value: string) => {
-    if (categoryTypeArray.includes(value)) {
-      const array = categoryTypeArray.filter((filt) => filt !== value);
-      setCategoryTypeArray(array);
+    if (categoryType === value) {
       setCategoryType("");
     } else {
-      const array = [...categoryTypeArray];
-      array.push(value);
-      setCategoryTypeArray(array);
       setCategoryType(value);
     }
   };
@@ -71,14 +66,9 @@ const Category = () => {
   }, [categoryType, sizee]);
 
   const sizeFilter = (value: string) => {
-    if (sizeeArray.includes(value)) {
-      const array = sizeeArray.filter((filt) => filt !== value);
-      setSizeeArray(array);
+    if (sizee === value) {
       setSizee("");
     } else {
-      const array = [...sizeeArray];
-      array.push(value);
-      setSizeeArray(array);
       setSizee(value);
     }
   };
@@ -88,7 +78,10 @@ const Category = () => {
         <div className="flex flex-col gap-4">
           <div className="font-bold">Ангилал</div>
           {filters.map((filter) => (
-            <div key={filter.filt} className="flex gap-2 items-center">
+            <label
+              key={filter.filt}
+              className="flex gap-2 items-center select-none"
+            >
               <Checkbox
                 checked={filter.value === categoryType}
                 onClick={() => {
@@ -96,13 +89,13 @@ const Category = () => {
                 }}
               />
               <div>{filter.filt}</div>
-            </div>
+            </label>
           ))}
         </div>
         <div className="flex flex-col gap-4">
           <div className="font-bold">Хэмжээ</div>
           {sizes.map((size) => (
-            <div key={size} className="flex gap-2 items-center">
+            <label key={size} className="flex gap-2 items-center">
               <Checkbox
                 onClick={() => {
                   sizeFilter(size);
@@ -110,13 +103,13 @@ const Category = () => {
                 checked={size === sizee}
               />
               <div>{size}</div>
-            </div>
+            </label>
           ))}
         </div>
       </div>
       <div className="flex-1 grid grid-cols-3 gap-x-[21px] gap-y-12">
         {cardList.map((cardItems, index) => (
-          <Card cardItems={cardItems} key={index} />
+          <Card key={cardItems?._id} cardItems={cardItems} index={index} />
         ))}
       </div>
     </div>
