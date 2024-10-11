@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import * as yup from "yup";
-import { useFormik, FormikErrors } from "formik";
+import { useFormik, FormikErrors, Field } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -13,6 +13,7 @@ import { AddImage } from "@/components/addImage";
 import { AddProductName } from "@/components/addProductName";
 import { AddPrice } from "@/components/addPrice";
 import { AddCategory } from "@/components/addCategory";
+import Image from "next/image";
 
 export const sizes: string[] = ["Free", "S", "M", "L", "XL", "2XL", "3Xl"];
 
@@ -56,6 +57,7 @@ const AddProduct = () => {
       },
     });
   };
+  const [oneProduct, setOneProduct] = useState<FormValues>();
   const [size, setSize] = useState(false);
 
   const [color, setColor] = useState(false);
@@ -72,8 +74,13 @@ const AddProduct = () => {
 
   const [image, setImage] = useState<FileList | null>(null);
 
+  const [loader, setLoader] = useState(false);
+
   const [files, setFiles] = useState<FileList | null>();
+
   const [create, setCreate] = useState("");
+
+  const [imageURLs, setImageURLs] = useState<string[]>([]);
 
   const imageURls: string[] = [];
 
@@ -99,12 +106,14 @@ const AddProduct = () => {
   const formik = useFormik({
     initialValues,
     onSubmit: async (values, { resetForm }) => {
+      setLoader(true);
       if (edit) {
         updateProduct(values);
       } else {
         AddItems(values);
         resetForm();
       }
+      setLoader(false);
     },
 
     validationSchema,
@@ -156,16 +165,27 @@ const AddProduct = () => {
     reset();
   };
   const reset = () => {
+    setImageURLs([]);
+    setUploadImage([]);
     setCategoryType("");
     setProductColor([]);
     setProductSize([]);
     setImage(null);
-    setUploadImage([]);
   };
 
   const getOneProduct = async () => {
     const response = await fetch(`http://localhost:4000/products/${edit}`);
     const data = await response.json();
+    formik.setValues({
+      productName: data.productName,
+      description: data.description,
+      productCode: data.productId,
+      qty: data.qty,
+      price: data.price,
+      categoryType: data.categoryType,
+      productTag: data.productTag,
+    });
+
     setProductColor(data.color);
     setProductSize(data.size);
   };
@@ -174,9 +194,7 @@ const AddProduct = () => {
       getOneProduct();
     }, []);
   }
-  useEffect(() => {
-    console.log({ uploadImage });
-  }, [uploadImage]);
+
   return (
     <div>
       <form onSubmit={formik.handleSubmit} className="flex">
@@ -205,11 +223,15 @@ const AddProduct = () => {
           <div className="flex gap-5 px-6 mt-8">
             <div className="flex flex-col gap-6 flex-1">
               <AddProductName
+                valueTouched={formik.touched}
                 values={formik.values}
                 valuesChange={formik.handleChange}
                 valueError={formik.errors}
               />
               <AddImage
+                imageURLs={imageURLs}
+                setImageURLs={setImageURLs}
+                valueTouched={formik.touched}
                 create={create}
                 setCreate={setCreate}
                 uploadImage={uploadImage}
@@ -218,12 +240,14 @@ const AddProduct = () => {
                 image={image}
               />
               <AddPrice
+                valueTouched={formik.touched}
                 values={formik.values}
                 valuesChange={formik.handleChange}
                 valueError={formik.errors}
               />
             </div>
             <AddCategory
+              valueTouched={formik.touched}
               categoryType={categoryType}
               setCategoryType={setCategoryType}
               values={formik.values}
@@ -241,7 +265,7 @@ const AddProduct = () => {
               valueError={formik.errors}
             />
           </div>
-          <div className="flex justify-end gap-6 px-6 mt-[21px] mb-[106px]">
+          <div className="flex justify-end gap-6 px-6 mt-[21px] items-center mb-[106px]">
             <Button
               type="submit"
               className="bg-[#FFFFFF] text-black border-[1px]"
@@ -249,6 +273,15 @@ const AddProduct = () => {
               Ноорог
             </Button>
             <Button type="submit">{edit ? "засах" : "нийтлэх"}</Button>
+            {loader && (
+              <Image
+                src={"/spinner.png"}
+                width={50}
+                height={50}
+                className="w-3 h-3"
+                alt="loader"
+              />
+            )}
           </div>
         </div>
       </form>

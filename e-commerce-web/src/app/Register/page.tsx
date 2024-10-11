@@ -10,6 +10,8 @@ import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { Toast } from "@radix-ui/react-toast";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Register() {
   const initialValues = {
@@ -52,9 +54,9 @@ export default function Register() {
   const formik = useFormik({
     initialValues,
 
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       setLoader(true);
-      const data = await fetch("http://localhost:4000/register", {
+      await fetch("http://localhost:4000/register", {
         method: "POST",
         body: JSON.stringify({
           userName: values.name,
@@ -75,7 +77,9 @@ export default function Register() {
         //   </ToastAction>
         // ),
       });
-      console.log(data);
+
+      alert("amjiltta nevterlee");
+      resetForm();
     },
     validationSchema,
   });
@@ -96,7 +100,11 @@ export default function Register() {
             value={formik.values.email}
             onChange={formik.handleChange}
           />
-          <div className="text-red-500 text-sm pl-2">{formik.errors.email}</div>
+          {formik.touched.email && (
+            <div className="text-red-500 text-sm pl-2">
+              {formik.errors.email}
+            </div>
+          )}
         </div>
         <Input
           className="h-[36] rounded-[18px]"
@@ -106,6 +114,7 @@ export default function Register() {
           value={formik.values.name}
           onChange={formik.handleChange}
         />
+        {formik.touched.name && <p>{formik.errors.name}</p>}
         <Input
           className="h-[36] rounded-[18px]"
           type="password"
@@ -114,6 +123,7 @@ export default function Register() {
           value={formik.values.password}
           onChange={formik.handleChange}
         />
+        {formik.touched.password && <p>{formik.errors.password}</p>}
         <div className="text-start">
           <Input
             className="h-[36] rounded-[18px]"
@@ -123,9 +133,11 @@ export default function Register() {
             value={formik.values.passwordConfirm}
             onChange={formik.handleChange}
           />
-          <div className="text-red-500 text-sm pl-2">
-            {formik.errors.passwordConfirm}
-          </div>
+          {formik.touched.passwordConfirm && (
+            <div className="text-red-500 text-sm pl-2">
+              {formik.errors.passwordConfirm}
+            </div>
+          )}
         </div>
         <Button
           type="submit"
@@ -133,15 +145,25 @@ export default function Register() {
         >
           Үүсгэх
         </Button>
+        {Loader && (
+          <Image
+            src={"/spinner.png"}
+            width={50}
+            height={50}
+            alt="loading"
+            className="w-2 h-2 animate-spin"
+          />
+        )}
+
         <div className="text-red-500 text-sm pl-2 text-start">
           <div>{formik.errors.password}</div>
         </div>
-        <Button
-          variant="outline"
-          className="h-[36] rounded-[18px] border-blue-700 text-blue-700 hover:text-blue-700 hover:bg-black mt-8"
+        <Link
+          href={"/Login"}
+          className="h-[36] rounded-[18px] bg-white border-2 py-1 border-blue-700 text-blue-700 hover:text-blue-700 hover:bg-black mt-8"
         >
           Нэвтрэх
-        </Button>
+        </Link>
       </form>
     </div>
   );

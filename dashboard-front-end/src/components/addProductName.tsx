@@ -1,13 +1,19 @@
 import { FormValues } from "@/app/dashboard/addproduct/page";
 import { Textarea } from "./ui/textarea";
 import { ChangeEvent } from "react";
-import { FormikErrors } from "formik";
+import { FormikErrors, FormikTouched } from "formik";
 type Props = {
   values: FormValues;
   valuesChange: (e: ChangeEvent) => void;
   valueError: FormikErrors<FormValues>;
+  valueTouched: FormikTouched<FormValues>;
 };
-export const AddProductName = ({ values, valuesChange, valueError }: Props) => {
+export const AddProductName = ({
+  values,
+  valuesChange,
+  valueError,
+  valueTouched,
+}: Props) => {
   return (
     <div className="p-6 flex flex-col gap-4 bg-[#ffffff] rounded-[8px]">
       <div className="flex flex-col gap-2">
@@ -20,7 +26,7 @@ export const AddProductName = ({ values, valuesChange, valueError }: Props) => {
           type="text"
           placeholder="Нэр"
         />
-        {valueError.productName && (
+        {valueTouched.productName && (
           <p className="text-red-500 text-sm pl-2">{valueError.productName}</p>
         )}
       </div>
@@ -34,7 +40,7 @@ export const AddProductName = ({ values, valuesChange, valueError }: Props) => {
           onChange={valuesChange}
           placeholder="Гол онцлог, давуу тал, техникийн үзүүлэлтүүдийг онцолсон дэлгэрэнгүй, сонирхолтой тайлбар."
         />
-        {valueError.description && (
+        {valueTouched.description && (
           <p className="text-red-500 text-sm pl-2">{valueError.description}</p>
         )}
       </div>
@@ -48,7 +54,7 @@ export const AddProductName = ({ values, valuesChange, valueError }: Props) => {
           type="number"
           placeholder="#12345678"
         />
-        {valueError.productCode && (
+        {valueTouched.productCode && (
           <p className="text-red-500 text-sm pl-2">{valueError.productCode}</p>
         )}
       </div>

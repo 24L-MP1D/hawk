@@ -2,7 +2,6 @@ import { Request, Response, json, request } from "express";
 import "dotenv/config";
 import { User } from "../model/UserModel";
 
-
 import bcrypt from "bcrypt";
 
 import "dotenv/config";
@@ -11,21 +10,12 @@ import jwt from "jsonwebtoken";
 const SALT_SECRET = process.env.SALT_SECRET || "";
 
 export const createUser = async (req: Request, res: Response) => {
-  let user = req.body;
-  let { email, password, userName } = req.body;
-  console.log(SALT_SECRET);
+  const { email, password, userName } = req.body;
+
   const hashedPassword = await bcrypt.hash(
     String(password),
     Number(SALT_SECRET)
   );
-
-  //middleware
-  const token = req.cookies.token;
-  const isVeried = jwt.verify(token, SALT_SECRET);
-
-  if (!isVeried)
-    return res.status(401).send({ success: false, message: "Not auth" });
-  // middleware
 
   try {
     const users = await User.create({
@@ -34,7 +24,7 @@ export const createUser = async (req: Request, res: Response) => {
       userName,
     });
 
-    res.send(user);
+    res.send(users);
   } catch (error) {
     res.send("find error");
   }

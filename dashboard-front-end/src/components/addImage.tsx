@@ -4,6 +4,8 @@ import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
+import { FormikTouched } from "formik";
+import { FormValues } from "@/app/dashboard/addproduct/page";
 type Props = {
   setImage: (value: FileList) => void;
   image: FileList | null;
@@ -11,6 +13,9 @@ type Props = {
   setUploadImage: (value: string[]) => void;
   create: string;
   setCreate: (value: string) => void;
+  valueTouched: FormikTouched<FormValues>;
+  imageURLs: string[];
+  setImageURLs: (value: string[]) => void;
 };
 export const AddImage = ({
   image,
@@ -19,9 +24,10 @@ export const AddImage = ({
   uploadImage,
   setUploadImage,
   setCreate,
+  valueTouched,
+  imageURLs,
+  setImageURLs,
 }: Props) => {
-  const [imageURLs, setImageURLs] = useState<string[]>([]);
-
   useEffect(() => {
     const urls: string[] = [];
 

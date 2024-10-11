@@ -4,7 +4,7 @@ import { User } from "../model/UserModel";
 import "dotenv/config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "";
+const ACCESS_TOKEN_SECRET = process.env.ACCESSTOKEN_SECRET || "";
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
@@ -12,8 +12,6 @@ export const loginUser = async (req: Request, res: Response) => {
     const user = await User.findOne({ email });
 
     if (!user) return res.status(401).send("user does not exist");
-
-
 
     if (!user.password) return;
     const isEqual = await bcrypt.compare(String(password), user.password);
@@ -25,13 +23,13 @@ export const loginUser = async (req: Request, res: Response) => {
           expiresIn: "2h",
         }
       );
-      return res.send({
+      return res.status(201).send({
         accessToken,
       });
     }
-    res.status(401).send("Password is incorrect");
+    res.status(404).send("Password is incorrect");
   } catch (err) {
+    console.error(err);
     res.sendStatus(401);
-
   }
 };

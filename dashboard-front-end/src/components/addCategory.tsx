@@ -5,7 +5,7 @@ import { colors } from "@/app/dashboard/addProduct";
 import { filters } from "./DashboardSelect";
 import { FormValues, sizes } from "@/app/dashboard/addproduct/page";
 import { ChangeEvent } from "react";
-import { FormikErrors } from "formik";
+import { FormikErrors, FormikTouched } from "formik";
 type Props = {
   setShowCategory: (value: boolean) => void;
   showCategory: boolean;
@@ -22,8 +22,10 @@ type Props = {
   categoryType: string;
   setCategoryType: (value: string) => void;
   valueError: FormikErrors<FormValues>;
+  valueTouched: FormikTouched<FormValues>;
 };
 export const AddCategory = ({
+  valueTouched,
   categoryType,
   valueError,
   setCategoryType,
@@ -202,7 +204,7 @@ export const AddCategory = ({
             onChange={valuesChange}
             value={values.productTag}
           />
-          {valueError.productTag && (
+          {valueTouched.productTag && (
             <p className="text-red-500 text-sm pl-2">{valueError.productTag}</p>
           )}
         </div>

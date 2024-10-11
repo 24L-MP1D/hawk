@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 import {
   Table,
@@ -58,9 +58,10 @@ export type ProductType =
   | undefined;
 
 const Product = () => {
+  const includesArray = [];
   const [categoryTypeValue, setCategoryTypeValue] = useState("Бүгд");
 
-  const [readProduct, setReadProduct] = useState([]);
+  const [readProduct, setReadProduct] = useState<ProductType[]>([]);
 
   const [showCategories, setShowCategories] = useState(false);
 
@@ -73,6 +74,8 @@ const Product = () => {
   const [date, setDate] = useState<DateRange | undefined>();
 
   const [deleteList, setDeleteList] = useState<string[]>([]);
+
+  const [searchValue, setSearchValue] = useState("");
 
   const loadProduct = async () => {
     if (lowPrice && highPrice) {
@@ -145,6 +148,10 @@ const Product = () => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const searchFilt = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
   };
   return (
     <div className="flex min-h-screen text-nowrap">
@@ -336,8 +343,36 @@ const Product = () => {
                 </div>
               )}
             </div>
-            <div>
-              <Input placeholder="Бүтээгдэхүүний нэр, SKU, UPC" />
+            <div className="mr-7 relative">
+              <Input
+                value={searchValue}
+                onChange={(e) => searchFilt(e)}
+                placeholder="Бүтээгдэхүүний нэр, SKU, UPC"
+              />
+              <div className="absolute top-10 w-full z-50 flex flex-col gap-1">
+                {searchValue &&
+                  readProduct.map(
+                    (product) =>
+                      product?.productName
+                        .toLowerCase()
+                        .includes(searchValue.toLowerCase()) && (
+                        <div
+                          onClick={() => {
+                            setCategoryTypeValue(product.categoryType);
+                            setHighPrice(product.price + 1);
+                            setLowPrice(product.price - 1);
+                          }}
+                          className="flex gap-1 border-2 rounded-lg shadow-2xl items-center cursor-pointer bg-slate-200"
+                        >
+                          <Avatar>
+                            <AvatarImage src={product.images[0]} alt="image" />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                          <div>{product.productName}</div>
+                        </div>
+                      )
+                  )}
+              </div>
             </div>
           </div>
           <div>

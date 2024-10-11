@@ -63,11 +63,12 @@ export const getFiltProducts = async (req: Request, res: Response) => {
       price?: { $gt: number; $lt: number };
       // fromDate?: { $gt: string };
       // toDate?: { $lt: string };
-      date?: { $gt: string; $lt: string };
+      createAt?: { $gt: string; $lt: string };
     } = {};
 
     if (categoryType) {
       filter.categoryType = String(categoryType);
+      console.log(categoryType);
     }
 
     if (Number(lowprice) != 0 && Number(highprice) != 0) {
@@ -78,11 +79,12 @@ export const getFiltProducts = async (req: Request, res: Response) => {
     //   filter.toDate = { $lt: String(toDate) };
     // }
     if (fromDate != "undefined" && toDate != "undefined") {
-      filter.date = { $gt: String(fromDate), $lt: String(toDate) };
+      filter.createAt = { $gt: String(fromDate), $lt: String(toDate) };
     }
+    console.log(filter);
 
     const filtProduct = await Product.find(filter);
-
+    console.log(filtProduct);
     res.send(filtProduct);
   } catch (err) {
     res.send(err);

@@ -1,12 +1,8 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-
-import { cookies } from "next/headers";
 
 export default function Login() {
   const login = async () => {
@@ -22,9 +18,20 @@ export default function Login() {
     });
 
     if (response.status === 201) {
-      const { accesstoken } = await response.json();
+      const { accessToken } = await response.json();
+
+      console.log(accessToken);
+    }
+    if (response.status === 401) {
+      alert("email хаяг бүртгэгдээгүй байна эхлээд бүртгүүлнэ үү");
+      setEmail("");
+    }
+    if (response.status === 404) {
+      alert("таны нууц үг буруу байна");
+      setPassword("");
     }
   };
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
