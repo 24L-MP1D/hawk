@@ -146,9 +146,10 @@ export default function Home() {
     []
   );
   const getShoppingCart = async () => {
-    const response = await fetch(`http://localhost:4000/ShoppingCart`);
-    const data = await response.json();
-    setUploadShoppingCart(data);
+    const basketProducts = JSON.parse(
+      localStorage.getItem("basketProducts") || "[]"
+    );
+    setUploadShoppingCart(basketProducts);
   };
   useEffect(() => {
     getShoppingCart();

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { CircleMinus, CirclePlus, Trash2 } from "lucide-react";
+import { productItem } from "@/app/ProductDetail/page";
 
 export type shoppingCart = {
   orderNumber: string;
@@ -43,26 +44,38 @@ export const BasketCard = ({
   setUploadShoppingCart,
   index,
 }: {
-  cardItems: shoppingCart;
+  cardItems: productItem;
   getShoppingCart: () => void;
-  uploadShoppingCart: shoppingCart[];
-  setUploadShoppingCart: (value: shoppingCart[]) => void;
+  uploadShoppingCart: productItem[];
+  setUploadShoppingCart: (value: productItem[]) => void;
   index: number;
 }) => {
   const addQuintity = () => {
-    const newUploadShoppingCart = [...uploadShoppingCart];
-    newUploadShoppingCart[index].productCount++;
-    setUploadShoppingCart(newUploadShoppingCart);
+    const basketProducts = JSON.parse(
+      localStorage.getItem("basketProducts") || "[]"
+    );
+    basketProducts[index].productCount++;
+    localStorage.setItem("basketProducts", JSON.stringify(basketProducts));
+    setUploadShoppingCart(basketProducts);
   };
   const minusQuintity = () => {
-    const newUploadShoppingCart = [...uploadShoppingCart];
-    newUploadShoppingCart[index].productCount--;
-    setUploadShoppingCart(newUploadShoppingCart);
+    const basketProducts = JSON.parse(
+      localStorage.getItem("basketProducts") || "[]"
+    );
+    basketProducts[index].productCount--;
+    localStorage.setItem("basketProducts", JSON.stringify(basketProducts));
+    setUploadShoppingCart(basketProducts);
   };
   const deleteShoppingCart = async () => {
-    await fetch(`http://localhost:4000/deleteOneCart/${cardItems._id}`, {
-      method: "DELETE",
-    });
+    let basketProducts = JSON.parse(
+      localStorage.getItem("basketProducts") || "[]"
+    );
+
+    basketProducts = basketProducts.filter(
+      (item: productItem) => item.productId !== basketProducts[index].productId
+    );
+    localStorage.setItem("basketProducts", JSON.stringify(basketProducts));
+    setUploadShoppingCart(basketProducts);
     getShoppingCart(); // dahin render hiij uldsen baraag harah
   };
 

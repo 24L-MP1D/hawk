@@ -8,10 +8,15 @@ import { Heart, Search, ShoppingCart } from "lucide-react";
 import { Input } from "../ui/input";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Context } from "../Card";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
+
 export const Navigation = () => {
   const [savedProduct, setSavedProduct] = useState([]);
-  const value = useContext(Context);
 
+  const router = useRouter();
+  const value = useContext(Context);
   const loadSavedProduct = async () => {
     const response = await fetch("http://localhost:4000/Save");
     const data = await response.json();
@@ -20,7 +25,7 @@ export const Navigation = () => {
 
   useEffect(() => {
     loadSavedProduct();
-  }, [value?.like]);
+  }, [value?.like, value?.cookie]);
 
   return (
     <div className="bg-black">
@@ -69,25 +74,45 @@ export const Navigation = () => {
                 </div>
               </Link>
 
-              <Link href="/Basket">
+              <button
+                onClick={() => {
+                  Cookies.get("token")
+                    ? router.push("/Basket")
+                    : alert("худалдан авалт хийхээс өмнө нэвтэрнэ үү");
+                }}
+              >
                 <ShoppingCart />
-              </Link>
+              </button>
             </div>
-            <div className="flex gap-2">
-              <Link
-                href={"/Register"}
-                className="py-2 px-3 bg-[black] rounded-[20px] text-white cursor-pointer hover:bg-[#2563EB] hover:transition-all hover:border-white border text-sm font-medium"
-              >
-                Бүртгүүлэх
-              </Link>
+            {value?.cookie ? (
+              <div>
+                <Button
+                  onClick={() => {
+                    Cookies.remove("token");
+                    value?.setCookie(false);
+                    alert("амжилттай гарлаа");
+                  }}
+                >
+                  logout
+                </Button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Link
+                  href={"/Register"}
+                  className="py-2 px-3 bg-[black] rounded-[20px] text-white cursor-pointer hover:bg-[#2563EB] hover:transition-all hover:border-white border text-sm font-medium"
+                >
+                  Бүртгүүлэх
+                </Link>
 
-              <Link
-                href={"/Login"}
-                className="py-2 px-3 bg-[#2563EB] rounded-[20px] text-white cursor-pointer hover:bg-black hover:transition-all hover:border-white hover:border border text-sm font-medium"
-              >
-                Нэвтрэх
-              </Link>
-            </div>
+                <Link
+                  href={"/Login"}
+                  className="py-2 px-3 bg-[#2563EB] rounded-[20px] text-white cursor-pointer hover:bg-black hover:transition-all hover:border-white hover:border border text-sm font-medium"
+                >
+                  Нэвтрэх
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

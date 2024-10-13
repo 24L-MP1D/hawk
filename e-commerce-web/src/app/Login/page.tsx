@@ -2,9 +2,13 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { Context } from "@/components/Card";
 export default function Login() {
+  const router = useRouter();
+  const value = useContext(Context);
   const login = async () => {
     const response = await fetch("http://localhost:4000/login", {
       method: "POST",
@@ -19,8 +23,8 @@ export default function Login() {
 
     if (response.status === 201) {
       const { accessToken } = await response.json();
-
-      console.log(accessToken);
+      Cookies.set("token", accessToken, { expires: 3 });
+      router.push("/");
     }
     if (response.status === 401) {
       alert("email хаяг бүртгэгдээгүй байна эхлээд бүртгүүлнэ үү");
@@ -29,6 +33,10 @@ export default function Login() {
     if (response.status === 404) {
       alert("таны нууц үг буруу байна");
       setPassword("");
+    }
+    if (Cookies.get("token")) {
+      value?.setCookie(true);
+      alert("амжилттай нэвтэрлээ");
     }
   };
 
@@ -55,7 +63,12 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Button onClick={login} className="h-[36] rounded-[18px] bg-blue-700">
+        <Button
+          onClick={() => {
+            login();
+          }}
+          className="h-[36] rounded-[18px] bg-blue-700"
+        >
           Нэвтрэх
         </Button>
 

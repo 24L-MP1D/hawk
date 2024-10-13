@@ -16,7 +16,14 @@ import { title } from "process";
 import { Input } from "@/components/ui/input";
 import { string } from "yup";
 import Image from "next/image";
-
+export type productItem = {
+  productId: string;
+  productCount: number;
+  size: string;
+  images: string[];
+  price: number;
+  productName: string;
+};
 export const ProductDetail = () => {
   const [selectPhoto, setSelectPhoto] = useState("");
   const reset = () => {
@@ -100,24 +107,55 @@ export const ProductDetail = () => {
   };
 
   const createShoppingCart = async () => {
-    const data = await fetch("http://localhost:4000/ShoppingCart", {
-      method: "POST",
-      body: JSON.stringify({
-        // orderNumber: ,
-        productCount: number,
-        size: selectedSize,
-        images: uploadShoppingCart?.images,
-        price: uploadShoppingCart?.price,
-        productName: uploadShoppingCart?.productName,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-    alert("amjilttai sagsand nemlee");
+    // const data = await fetch("http://localhost:4000/ShoppingCart", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     // orderNumber: ,
+    //     productCount: number,
+    //     size: selectedSize,
+    //     images: uploadShoppingCart?.images,
+    //     price: uploadShoppingCart?.price,
+    //     productName: uploadShoppingCart?.productName,
+    //   }),
+    //   headers: {
+    //     "Content-type": "application/json; charset=UTF-8",
+    //   },
+    // });
+    // alert("amjilttai sagsand nemlee");
+    // reseted();
+    // console.log(data);
+    try {
+      const existProduct = JSON.parse(
+        localStorage.getItem("basketProducts") || "[]"
+      );
+      const existProductIndex = existProduct.findIndex(
+        (item: productItem) => item.productId === search
+      );
+      if (
+        existProductIndex !== -1 &&
+        existProduct[existProductIndex].size === selectedSize
+      ) {
+        existProduct[existProductIndex].productCount += number;
+      } else {
+        const productItem = {
+          productId: search,
+          productCount: number,
+          size: selectedSize,
+          images: uploadShoppingCart?.images,
+          price: uploadShoppingCart?.price
+            ? uploadShoppingCart.price * number
+            : uploadShoppingCart?.price,
+          productName: uploadShoppingCart?.productName,
+        };
+        existProduct.push(productItem);
+      }
 
-    reseted();
-    console.log(data);
+      localStorage.setItem("basketProducts", JSON.stringify(existProduct));
+
+      alert("Бараа амжилттай сагсанд орлоо");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const reseted = () => {

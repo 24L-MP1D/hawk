@@ -6,8 +6,10 @@ import "./globals.css";
 import { Footer } from "@/components/Footer/Footer";
 import { Navigation } from "@/components/Header/Navigtaion";
 import { Context } from "@/components/Card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { shoppingCart } from "@/components/BasketCard";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,10 +32,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const router = useRouter();
   const [like, setLike] = useState(false);
   const [uploadShoppingCart, setUpdateShoppingCart] = useState<shoppingCart[]>(
     []
   );
+  const [cookie, setCookie] = useState(false);
+
+  useEffect(() => {
+    if (Cookies.get("token")) {
+      setCookie(true);
+    } else {
+      setCookie(false);
+    }
+  }, []);
   return (
     <html lang="en">
       <body
@@ -46,6 +58,8 @@ export default function RootLayout({
               setLike,
               uploadShoppingCart,
               setUpdateShoppingCart,
+              cookie,
+              setCookie,
             }}
           >
             <Navigation />

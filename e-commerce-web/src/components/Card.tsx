@@ -7,11 +7,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { savedProduct } from "@/app/Save/page";
 import { shoppingCart } from "./BasketCard";
+import { productItem } from "@/app/ProductDetail/page";
 type Props = {
   like: boolean;
   setLike: (value: boolean) => void;
-  uploadShoppingCart: shoppingCart[];
-  setUpdateShoppingCart: (value: shoppingCart[]) => void;
+  uploadShoppingCart: productItem[];
+  setUpdateShoppingCart: (value: productItem[]) => void;
+  cookie: boolean;
+  setCookie: (value: boolean) => void;
 };
 export const Context = createContext<Props | null>(null);
 

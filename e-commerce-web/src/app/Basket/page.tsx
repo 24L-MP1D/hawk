@@ -7,7 +7,8 @@ import { Context } from "@/components/Card";
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-
+import Cookies from "js-cookie";
+import { productItem } from "../ProductDetail/page";
 export default function Home() {
   const value = useContext(Context);
   const [quantity, setQuantity] = useState(1);
@@ -26,13 +27,11 @@ export default function Home() {
   }, [quantity]);
 
   const getShoppingCart = async () => {
-    const response = await fetch(`http://localhost:4000/ShoppingCart`);
-    const data = await response.json();
-    value?.setUpdateShoppingCart(data);
-  };
+    const basketProducts = JSON.parse(
+      localStorage.getItem("basketProducts") || "[]"
+    );
 
-  const setUpdateShoppingCart = async () => {
-    await fetch(`http://localhost:4000/ShoppingCart`);
+    value?.setUpdateShoppingCart(basketProducts);
   };
 
   useEffect(() => {
@@ -60,7 +59,7 @@ export default function Home() {
             <div className="text-xl font-bold">1. Сагс </div>
             <div className="flex flex-col gap-[16px] mt-[16px]">
               {value?.uploadShoppingCart.map((cardItems, index) => (
-                <div key={cardItems._id}>
+                <div key={cardItems.price * cardItems.productCount * index}>
                   <BasketCard
                     index={index}
                     getShoppingCart={getShoppingCart}
