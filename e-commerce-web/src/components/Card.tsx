@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { savedProduct } from "@/app/Save/page";
-import { shoppingCart } from "./BasketCard";
+
 import { productItem } from "@/app/ProductDetail/page";
 type Props = {
   like: boolean;

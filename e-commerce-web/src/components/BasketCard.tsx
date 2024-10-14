@@ -4,18 +4,6 @@ import Image from "next/image";
 import { CircleMinus, CirclePlus, Trash2 } from "lucide-react";
 import { productItem } from "@/app/ProductDetail/page";
 
-export type shoppingCart = {
-  orderNumber: string;
-  productCount: number;
-  size: string;
-  createAt: Date;
-  updateAt: Date;
-  productName: string;
-  _id: string;
-  price: number;
-  images: [string];
-  qty: number;
-};
 export type filtType = {
   filt: string;
   value: string;

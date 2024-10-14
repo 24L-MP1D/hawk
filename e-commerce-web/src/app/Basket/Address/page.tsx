@@ -1,19 +1,19 @@
 "use client";
 
-import { Card } from "@/components/Card";
+import { Card, Context } from "@/components/Card";
 import SidebarProducts from "@/app/datas.json";
 import Image from "next/image";
 import Link from "next/link";
-import { use, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import * as yup from "yup";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { BasketCard, shoppingCart } from "@/components/BasketCard";
+import { BasketCard } from "@/components/BasketCard";
 
 import { SidebarCard } from "@/components/SidebarCard";
 
-import formik, { useFormik } from "formik";
+import { useFormik } from "formik";
 
 type paymentStatus = "Paid" | "Not paid";
 type paymentType = "Card" | "Qpay" | "SocialPay";
@@ -40,6 +40,7 @@ export default function Home() {
   const [counting, setCounting] = useState(0);
   const paymentStatus = "Paid";
   const paymentType = "card";
+  const value = useContext(Context);
   //// address
   const [address, setAddress] = useState(0);
   const id = "67064b67a760fd650c53810c";
@@ -142,14 +143,11 @@ export default function Home() {
   };
   //// payment
 
-  const [uploadShoppingCart, setUploadShoppingCart] = useState<shoppingCart[]>(
-    []
-  );
   const getShoppingCart = async () => {
     const basketProducts = JSON.parse(
       localStorage.getItem("basketProducts") || "[]"
     );
-    setUploadShoppingCart(basketProducts);
+    value?.setUpdateShoppingCart(basketProducts);
   };
   useEffect(() => {
     getShoppingCart();
@@ -175,8 +173,8 @@ export default function Home() {
           <div className="w-[333px] rounded-2xl bg-white px-[24px] py-[32px] ">
             <div className="font-bold">Сагс</div>
             <div className="flex flex-col gap-[16px] mt-[16px] items-center">
-              {uploadShoppingCart.map((cardItems, index) => (
-                <div key={cardItems._id}>
+              {value?.uploadShoppingCart.map((cardItems, index) => (
+                <div key={cardItems.price * cardItems.productCount * index}>
                   <SidebarCard
                     // getShoppingCart={getShoppingCart}
                     cardItems={cardItems}

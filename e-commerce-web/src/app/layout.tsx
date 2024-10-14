@@ -1,15 +1,14 @@
 "use client";
 
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Footer } from "@/components/Footer/Footer";
 import { Navigation } from "@/components/Header/Navigtaion";
 import { Context } from "@/components/Card";
 import { useEffect, useState } from "react";
-import { shoppingCart } from "@/components/BasketCard";
+
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { productItem } from "./ProductDetail/page";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,7 +33,7 @@ export default function RootLayout({
 }>) {
   // const router = useRouter();
   const [like, setLike] = useState(false);
-  const [uploadShoppingCart, setUpdateShoppingCart] = useState<shoppingCart[]>(
+  const [uploadShoppingCart, setUpdateShoppingCart] = useState<productItem[]>(
     []
   );
   const [cookie, setCookie] = useState(false);

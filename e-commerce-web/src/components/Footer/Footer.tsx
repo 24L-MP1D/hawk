@@ -14,7 +14,12 @@ export const Footer = () => {
       <div className="bg-black text-white px-6 max-w-[1440px] mx-auto">
         <div className="flex justify-between pt-16 items-center">
           <div className="w-[41px] h-[35px]">
-            <Image width={41} height={35} alt={"logo"} src={"/Pinecone@2x.png"} />
+            <Image
+              width={41}
+              height={35}
+              alt={"logo"}
+              src={"/Pinecone@2x.png"}
+            />
           </div>
           <div className="flex gap-10">
             <div className="flex items-center gap-4">

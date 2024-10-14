@@ -7,8 +7,7 @@ import { Context } from "@/components/Card";
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Cookies from "js-cookie";
-import { productItem } from "../ProductDetail/page";
+
 export default function Home() {
   const value = useContext(Context);
   const [quantity, setQuantity] = useState(1);
