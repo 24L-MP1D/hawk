@@ -7,14 +7,16 @@ import { Heart, Search, ShoppingCart } from "lucide-react";
 
 import { Input } from "../ui/input";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Context } from "../Card";
+import { Context, ProductType } from "../Card";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export const Navigation = () => {
   const [savedProduct, setSavedProduct] = useState([]);
-
+  const [searchValue, setSearchValue] = useState<ProductType[]>([]);
+  const [search, setSearch] = useState("");
   const router = useRouter();
   const value = useContext(Context);
   const loadSavedProduct = async () => {
@@ -22,10 +24,17 @@ export const Navigation = () => {
     const data = await response.json();
     setSavedProduct(data);
   };
-
+  const loadProduct = async () => {
+    const response = await fetch("http://localhost:4000/products");
+    const data = await response.json();
+    setSearchValue(data);
+  };
   useEffect(() => {
+    if (search) {
+      loadProduct();
+    }
     loadSavedProduct();
-  }, [value?.like, value?.cookie]);
+  }, [value?.like, value?.cookie, search]);
 
   return (
     <div className="bg-black">
@@ -53,13 +62,36 @@ export const Navigation = () => {
               </Link>
             </div>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-[20px] bg-[#18181B]">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-[20px] bg-[#18181B] relative">
             <Search className="" />
             <Input
               className="w-[200px]  outline-none resize-none border-[#18181B] text-sm font-normal focus-visible:ring-0"
               type="input"
               placeholder="Бүтээгдэхүүн хайх"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
             />
+            <div className="absolute">
+              {search &&
+                searchValue.map(
+                  (item, index) =>
+                    item?.productName
+                      .toLowerCase()
+                      .includes(search.toLowerCase()) && (
+                      <div className="flex" key={item._id}>
+                        <div>{item.productName}</div>
+                        <div>
+                          <Avatar>
+                            <AvatarImage src={item.images[0]} alt="@shadcn" />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                        </div>
+                      </div>
+                    )
+                )}
+            </div>
           </div>
           <div className="flex items-center gap-6">
             <div className="flex  gap-6">

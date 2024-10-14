@@ -24,12 +24,17 @@ export const getOneProduct = async (req: Request, res: Response) => {
 };
 
 export const getProducts = async (req: Request, res: Response) => {
-  const { lowprice, highprice, toDate, fromDate } = req.query;
+  const {
+    lowprice,
+    highprice,
+    toDate = new Date(),
+    fromDate = new Date(),
+  } = req.query;
   const filt: {
     price?: { $gt: number; $lt: number };
     createAt?: { $gt: Date; $lt: Date };
   } = {};
-  if (toDate !== "undefined" && fromDate !== "undefined") {
+  if (toDate !== new Date() && fromDate !== new Date()) {
     filt.createAt = {
       $gt: new Date(String(fromDate)),
       $lt: new Date(String(toDate)),

@@ -11,8 +11,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-import { useEffect, useState } from "react";
-import Card from "@/components/Card";
+import { useContext, useEffect, useState } from "react";
+import Card, { Context } from "@/components/Card";
 
 type ProductType = {
   _id: string;
@@ -37,6 +37,7 @@ type ProductType = {
 
 export default function Home() {
   const [products, setProducts] = useState<ProductType[]>([]);
+  const value = useContext(Context);
   const loadProduct = async () => {
     const response = await fetch(
       `http://localhost:4000/products?fromDate=undefined&toDate=undefined`
