@@ -44,7 +44,10 @@ export default function Page() {
       }
     });
   }
+  
+function loadPage() {
 
+}
   return (
     <div className="flex flex-col vh-100%">
       <div className="flex flex-col mx-auto w-[440px] items-center border-2 rounded-lg my-[100px]">
