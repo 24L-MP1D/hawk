@@ -1,5 +1,5 @@
 import express from "express";
-import { loginUser } from "../controller/LoginController";
+import { login } from "../controller/loginController";
 export const loginRouter = express.Router();
 
-loginRouter.post("/login", loginUser);
+loginRouter.post("/login", login);
