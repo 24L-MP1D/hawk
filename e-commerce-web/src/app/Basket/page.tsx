@@ -7,7 +7,7 @@ import { Context } from "@/components/Card";
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-
+import Cookies from "js-cookie";
 export default function Home() {
   const value = useContext(Context);
   const [quantity, setQuantity] = useState(1);
@@ -34,6 +34,9 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (!Cookies.get("token")) {
+      router.push("/Login");
+    }
     getShoppingCart();
   }, []);
 

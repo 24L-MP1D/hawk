@@ -14,6 +14,7 @@ import { BasketCard } from "@/components/BasketCard";
 import { SidebarCard } from "@/components/SidebarCard";
 
 import { useFormik } from "formik";
+import { FormValues } from "@/components/types";
 
 type paymentStatus = "Paid" | "Not paid";
 type paymentType = "Card" | "Qpay" | "SocialPay";
@@ -26,14 +27,7 @@ type PaymentType = {
   updateAt: Date;
   paymentAmount: number;
 };
-export type FormValues = {
-  lastName: string;
-  description: string;
-  firstName: string;
-  address: string;
 
-  phoneNumber: number;
-};
 export default function Home() {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);

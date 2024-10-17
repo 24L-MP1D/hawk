@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-
-import { productItem } from "@/app/ProductDetail/page";
+import { productItem } from "./types";
 
 export const SidebarCard = ({ cardItems }: { cardItems: productItem }) => {
   return (

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { CircleMinus, CirclePlus, Trash2 } from "lucide-react";
-import { productItem } from "@/app/ProductDetail/page";
+import { productItem } from "./types";
 
 export type filtType = {
   filt: string;

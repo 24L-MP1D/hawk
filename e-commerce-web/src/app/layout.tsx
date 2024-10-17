@@ -8,7 +8,7 @@ import { Context } from "@/components/Card";
 import { useEffect, useState } from "react";
 
 import Cookies from "js-cookie";
-import { productItem } from "./ProductDetail/page";
+import { productItem } from "@/components/types";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

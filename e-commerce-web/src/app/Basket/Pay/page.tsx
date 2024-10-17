@@ -27,7 +27,6 @@ export default function Home() {
   const [count, setCount] = useState(0);
   const [counting, setCounting] = useState(0);
 
-
   let sum = 0;
   basketProducts.forEach((product) => {
     sum = sum + product.price;
@@ -65,17 +64,12 @@ export default function Home() {
   const createPayment = async () => {
     const data = await fetch(`http://localhost:4000/buy`, {
       method: "POST",
-      body: JSON.stringify({
-        paymentType,
-        paymentStatus,
-      }),
+      body: JSON.stringify({}),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
   };
-
-
 
   return (
     <div className="bg-[#F7F7F8]">
@@ -107,9 +101,7 @@ export default function Home() {
             />
           </div>
           <div>
-
-            <Link 
-
+            <Link
               className="w-[114px] h-[36px] rounded-2xl border-[1px] border-[#E4E4E7] text-center px-[36px] py-[8px] text-[14px]"
               rel="address"
               href="/Basket/Address"

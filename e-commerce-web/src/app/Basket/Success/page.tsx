@@ -1,14 +1,8 @@
 "use client";
 
-import { Card } from "@/components/Card";
 import basketProducts from "@/app/datas.json";
-import Image from "next/image";
 
 import * as React from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { BasketCard } from "@/components/BasketCard";
-import { cardItems } from "@/app/Category/page";
 import { CircleCheckBig } from "lucide-react";
 
 export default function Home() {

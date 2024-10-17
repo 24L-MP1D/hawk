@@ -6,8 +6,8 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { savedProduct } from "@/app/Save/page";
+import { productItem } from "./types";
 
-import { productItem } from "@/app/ProductDetail/page";
 type Props = {
   like: boolean;
   setLike: (value: boolean) => void;
