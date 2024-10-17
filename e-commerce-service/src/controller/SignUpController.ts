@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export const createUserSignUp = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const isAuthenticated = true; // DB user fetch compare
+  // const isAuthenticated = true; // DB user fetch compare
   // if(password.length >=8) {
   // return res.sendStatus(401).json({message:"password 7oos urt baih yoestoi"})
   // if(tom useg orson bn uu) {
@@ -29,28 +29,8 @@ export const createUserSignUp = async (req: Request, res: Response) => {
   try {
     const user = await UserSignUpModel.create(form);
 
-    if (isAuthenticated) {
-      const privateKey = "1234"; // .env file deeree nuuna
-      const token = jwt.sign({ email: email }, privateKey, {
-        expiresIn: "2h",
-      });
-
-      return res.send({ token });
-    } else {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    return res.status(200).json({ message: "Signed Up! Successfully" });
   } catch (error) {
-    return;
-    res.send("Error, to SignUp!");
+    return res.status(401).json({ message: "Error, to SignUp!" });
   }
-};
-
-const login = async (req: Request, res: Response) => {
-  // try {
-  //     const {loginUser} = req.body;
-  //     // const user = await .findOne({mail});
-  // //     if ()
-  // // } catch (error) {
-  // //     res.send({error: "Not valid email or password"})
-  // // }
 };
