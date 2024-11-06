@@ -38,7 +38,9 @@ export default function Home() {
   const [loadpayment, setLoadPayment] = useState<PaymentType[]>();
 
   const getPayment = async () => {
-    const response = await fetch(`http://localhost:4000/getPayments`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/getPayments`
+    );
     const data = await response.json();
     setLoadPayment(data);
     console.log(setLoadPayment);
@@ -50,7 +52,7 @@ export default function Home() {
   }, []);
 
   // const updatePayment = async () => {
-  //   const data = await fetch(`http://localhost:4000/updatePayment${search}` ,{
+  //   const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/updatePayment${search}` ,{
   //     method: "PUT",
   //     body: JSON.stringify({
   //       paymentType,
@@ -62,7 +64,7 @@ export default function Home() {
   //   });
   // }
   const createPayment = async () => {
-    const data = await fetch(`http://localhost:4000/buy`, {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buy`, {
       method: "POST",
       body: JSON.stringify({}),
       headers: {

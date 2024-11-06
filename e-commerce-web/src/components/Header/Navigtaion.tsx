@@ -20,12 +20,12 @@ export const Navigation = () => {
   const router = useRouter();
   const value = useContext(Context);
   const loadSavedProduct = async () => {
-    const response = await fetch("http://localhost:4000/Save");
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Save`);
     const data = await response.json();
     setSavedProduct(data);
   };
   const loadProduct = async () => {
-    const response = await fetch("http://localhost:4000/products");
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
     const data = await response.json();
     setSearchValue(data);
   };
@@ -73,21 +73,27 @@ export const Navigation = () => {
                 setSearch(e.target.value);
               }}
             />
-            <div className="absolute">
+            <div className="absolute top-12 z-50 left-0 w-full">
               {search &&
                 searchValue.map(
                   (item, index) =>
                     item?.productName
                       .toLowerCase()
                       .includes(search.toLowerCase()) && (
-                      <div className="flex" key={item._id}>
-                        <div>{item.productName}</div>
+                      <div
+                        className="flex gap-2 bg-white text-[#000000] rounded-lg shadow border w-full"
+                        key={item._id}
+                      >
                         <div>
-                          <Avatar>
-                            <AvatarImage src={item.images[0]} alt="@shadcn" />
-                            <AvatarFallback>CN</AvatarFallback>
-                          </Avatar>
+                          <Image
+                            src={item.images[0] || "/"}
+                            alt="image"
+                            width={50}
+                            height={50}
+                            className="rounded-full object-cover w-10 h-10"
+                          />
                         </div>
+                        <div>{item.productName}</div>
                       </div>
                     )
                 )}

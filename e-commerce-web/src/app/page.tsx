@@ -40,7 +40,7 @@ export default function Home() {
   const value = useContext(Context);
   const loadProduct = async () => {
     const response = await fetch(
-      `http://localhost:4000/products?fromDate=undefined&toDate=undefined`
+      `${process.env.NEXT_PUBLIC_API_URL}/products?fromDate=undefined&toDate=undefined`
     );
     const data = await response.json();
     setProducts(data);

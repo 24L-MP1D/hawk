@@ -54,7 +54,7 @@ export const Card = ({
 
   const SaveProduct = async () => {
     try {
-      const response = await fetch("http://localhost:4000/Save", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Save`, {
         method: "POST",
         body: JSON.stringify({
           ProductId: cardItems?._id,
@@ -76,9 +76,12 @@ export const Card = ({
   };
   const deleteProduct = async () => {
     try {
-      await fetch(`http://localhost:4000/saved/${cardItems?._id}`, {
-        method: "DELETE",
-      });
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/saved/${cardItems?._id}`,
+        {
+          method: "DELETE",
+        }
+      );
       setReady(false);
       value?.setLike(!value.like);
     } catch (err) {
@@ -88,7 +91,7 @@ export const Card = ({
 
   const SavedProduct = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/Save`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Save`);
       const data = await response.json();
       const has = data.findIndex(
         (item: savedProduct) => item.ProductId == cardItems?._id

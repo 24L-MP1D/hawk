@@ -27,7 +27,7 @@ export default function Page() {
   console.log("here: ", { email, password });
 
   function Submit() {
-    fetch("http://localhost:4000/Auth/SignUp", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/Auth/SignUp`, {
       method: "POST",
       body: JSON.stringify({
         email,

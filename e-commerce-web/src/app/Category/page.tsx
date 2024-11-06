@@ -12,7 +12,7 @@ export default function Home() {
 
   const productList = async () => {
     const response = await fetch(
-      "http://localhost:4000/products?fromDate=undefined&toDate=undefined"
+      `${process.env.NEXT_PUBLIC_API_URL}/products?fromDate=${""}&toDate=${""}`
     );
     const data = await response.json();
     setCardList(data);
@@ -20,7 +20,7 @@ export default function Home() {
 
   const filtproduct = async () => {
     const response = await fetch(
-      `http://localhost:4000/category?categoryType=${categoryType}&size=${sizee}`
+      `${process.env.NEXT_PUBLIC_API_URL}/category?categoryType=${categoryType}&size=${sizee}`
     );
     const data = await response.json();
     setCardList(data);

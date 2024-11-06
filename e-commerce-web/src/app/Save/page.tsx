@@ -46,13 +46,13 @@ export default function Save() {
   //    setHeart(true)
   // },[])
   const loadSavedProduct = async () => {
-    const response = await fetch("http://localhost:4000/Save");
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Save`);
     const data = await response.json();
     setSavedProduct(data);
   };
 
   const deleteSavedProduct = async (id: string) => {
-    await fetch(`http://localhost:4000/Save/${id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Save/${id}`, {
       method: "DELETE",
     });
     value?.setLike(!value.like);

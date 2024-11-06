@@ -62,7 +62,7 @@ export default function Home() {
     validationSchema,
   });
   function submit() {
-    fetch(`https://localhost:4000/updateUser/${id}`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/updateUser/${id}`, {
       method: "PUT",
       body: JSON.stringify({
         address,
@@ -84,7 +84,7 @@ export default function Home() {
   const [updateAddress, setUpdateAddresses] = useState(0);
 
   const getAddress = async () => {
-    const response = await fetch(`http://localhost:4000/register`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`);
     const data = await response.json();
     setAddress(data);
   };
@@ -93,15 +93,18 @@ export default function Home() {
   }, []);
 
   const editAddress = async (values: FormValues) => {
-    const response = await fetch(`http://localhost:4000/updateUser/${id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        values,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/updateUser/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          values,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    );
     const data = await response.json();
     setUpdateAddresses(data);
   };
@@ -109,7 +112,9 @@ export default function Home() {
   const [loadpayment, setLoadPayment] = useState<PaymentType[]>();
 
   const getPayment = async () => {
-    const response = await fetch(`http://localhost:4000/getPayments`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/getPayments`
+    );
     const data = await response.json();
     setLoadPayment(data);
     console.log(setLoadPayment);
@@ -121,7 +126,7 @@ export default function Home() {
   }, []);
 
   const createPayment = async () => {
-    const data = await fetch(`http://localhost:4000/buy`, {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buy`, {
       method: "POST",
       body: JSON.stringify({
         paymentType,

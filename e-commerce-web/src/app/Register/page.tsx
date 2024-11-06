@@ -56,7 +56,7 @@ export default function Register() {
 
     onSubmit: async (values, { resetForm }) => {
       setLoader(true);
-      await fetch("http://localhost:4000/register", {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
         method: "POST",
         body: JSON.stringify({
           userName: values.name,
@@ -70,7 +70,7 @@ export default function Register() {
       setLoader(false);
       toast({
         title: "Алдаа гарлаа",
-        description: "Backend ээс имэйл давхардсан байвал энд гаргаж өгнө",
+        description: "Бүртгэлтэй хэрэглэгч байна.",
         // action: (
         //   <ToastAction className="text-red-500" altText="Try again">
         //     Try again
@@ -78,7 +78,6 @@ export default function Register() {
         // ),
       });
 
-      alert("amjiltta nevterlee");
       resetForm();
     },
     validationSchema,

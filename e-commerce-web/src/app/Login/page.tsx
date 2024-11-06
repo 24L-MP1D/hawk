@@ -10,7 +10,7 @@ export default function Login() {
   const router = useRouter();
   const value = useContext(Context);
   const login = async () => {
-    const response = await fetch("http://localhost:4000/login", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
       method: "POST",
       body: JSON.stringify({
         email,
