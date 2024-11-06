@@ -49,7 +49,12 @@ export default function Home() {
   useEffect(() => {
     loadProduct();
   }, []);
-
+  if (!products.length)
+    return (
+      <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
+        loading...
+      </div>
+    );
   return (
     <div className="max-w-[1040px] mx-auto pt-[52px] pb-[100px]">
       <div className="w-[1040px] h-[446px] mb-[20px]">
