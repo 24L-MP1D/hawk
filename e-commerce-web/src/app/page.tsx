@@ -13,6 +13,7 @@ import {
 
 import { useContext, useEffect, useState } from "react";
 import Card, { Context } from "@/components/Card";
+import Link from "next/link";
 
 type ProductType = {
   _id: string;
@@ -64,29 +65,31 @@ export default function Home() {
               (product: ProductType, index) =>
                 index < 5 && (
                   <CarouselItem key={product._id}>
-                    <CardShadcn>
-                      <CardContent className="flex items-center justify-center ">
-                        {product.images[0] && (
-                          <div className="relative">
-                            <Image
-                              className=" rounded-lg object-cover w-[1040px] h-[446px]"
-                              width={2000}
-                              height={2000}
-                              src={product.images[0]}
-                              alt="item"
-                            />
-                            <div className="flex flex-col gap-1 absolute bottom-[32px] left-[32px]">
-                              <div className="text-[18px]">
-                                {product.productName}
-                              </div>
-                              <div className="font-bold text-[36px]">
-                                {product.price}
+                    <Link href={`/ProductDetail?id=${product?._id}`}>
+                      <CardShadcn>
+                        <CardContent className="flex items-center justify-center ">
+                          {product.images[0] && (
+                            <div className="relative">
+                              <Image
+                                className=" rounded-lg object-cover w-[1040px] h-[446px]"
+                                width={2000}
+                                height={2000}
+                                src={product.images[0]}
+                                alt="item"
+                              />
+                              <div className="flex flex-col gap-1 absolute bottom-[32px] left-[32px]">
+                                <div className="text-[18px]">
+                                  {product.productName}
+                                </div>
+                                <div className="font-bold text-[36px]">
+                                  {product.price}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
-                      </CardContent>
-                    </CardShadcn>
+                          )}
+                        </CardContent>
+                      </CardShadcn>
+                    </Link>
                   </CarouselItem>
                 )
             )}

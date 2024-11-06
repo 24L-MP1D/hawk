@@ -48,6 +48,12 @@ export default function Home() {
       setSizee(value);
     }
   };
+  if (!cardList.length)
+    return (
+      <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
+        loading...
+      </div>
+    );
   return (
     <div className="max-w-[1039px] mx-auto flex gap-[20px] pb-[100px] pt-[52px]">
       <div className="max-w-[245px] w-full flex flex-col gap-12">

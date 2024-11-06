@@ -15,6 +15,7 @@ import { SidebarCard } from "@/components/SidebarCard";
 
 import { useFormik } from "formik";
 import { FormValues } from "@/components/types";
+import { useRouter } from "next/navigation";
 
 type paymentStatus = "Paid" | "Not paid";
 type paymentType = "Card" | "Qpay" | "SocialPay";
@@ -38,6 +39,7 @@ export default function Home() {
   //// address
   const [address, setAddress] = useState(0);
   const id = "67064b67a760fd650c53810c";
+  const router = useRouter();
   const initialValues = {
     lastName: "",
     firstName: "",
@@ -107,6 +109,7 @@ export default function Home() {
     );
     const data = await response.json();
     setUpdateAddresses(data);
+    router.push("/Basket/Pay");
   };
 
   const [loadpayment, setLoadPayment] = useState<PaymentType[]>();
@@ -198,13 +201,9 @@ export default function Home() {
                     value={formik.values.lastName}
                     onChange={formik.handleChange}
                   />
-                  <p
-                    className={`${
-                      formik.errors.lastName ? "block" : "hidden"
-                    } text-red-500`}
-                  >
-                    {formik.errors.lastName}
-                  </p>
+                  {formik.touched.lastName && formik.errors.lastName && (
+                    <p className="text-red-500">{formik.errors.lastName}</p>
+                  )}
                 </div>
               </div>
               <div className="h-[50px]">
@@ -218,13 +217,9 @@ export default function Home() {
                     value={formik.values.firstName}
                     onChange={formik.handleChange}
                   />
-                  <p
-                    className={`${
-                      formik.errors.firstName ? "block" : "hidden"
-                    } text-red-500`}
-                  >
-                    {formik.errors.firstName}
-                  </p>
+                  {formik.touched.firstName && formik.errors.firstName && (
+                    <p className="text-red-500">{formik.errors.firstName}</p>
+                  )}
                 </div>
               </div>
               <div className="h-[50px]">
@@ -240,13 +235,9 @@ export default function Home() {
                     }
                     onChange={formik.handleChange}
                   />
-                  <p
-                    className={`${
-                      formik.errors.phoneNumber ? "block" : "hidden"
-                    } text-red-500`}
-                  >
-                    {formik.errors.phoneNumber}
-                  </p>
+                  {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+                    <p className="text-red-500">{formik.errors.phoneNumber}</p>
+                  )}
                 </div>
               </div>
               <div className="h-[116px]">
@@ -260,13 +251,9 @@ export default function Home() {
                     value={formik.values.address}
                     onChange={formik.handleChange}
                   />
-                  <p
-                    className={`${
-                      formik.errors.address ? "block" : "hidden"
-                    } text-red-500`}
-                  >
-                    {formik.errors.address}
-                  </p>
+                  {formik.touched.address && formik.errors.address && (
+                    <p className="text-red-500">{formik.errors.address}</p>
+                  )}
                 </div>
               </div>
               <div className="h-[50px]">
@@ -280,13 +267,9 @@ export default function Home() {
                     value={formik.values.description}
                     onChange={formik.handleChange}
                   />
-                  <p
-                    className={`${
-                      formik.errors.description ? "block" : "hidden"
-                    } text-red-500`}
-                  >
-                    {formik.errors.description}
-                  </p>
+                  {formik.touched.description && formik.errors.description && (
+                    <p className="text-red-500">{formik.errors.description}</p>
+                  )}
                   <div className="text-[#71717A]">
                     Хүргэлттэй холбоотой нэмэлт мэдээлэл үлдээгээрэй
                   </div>
@@ -301,18 +284,10 @@ export default function Home() {
 
                     <Button
                       type="submit"
-                      className="bg-white rounded-[18px] text-slate-300 hover:bg-slate-500"
-                    >
-                      Хүргэлтийн мэдээллийг шинэчлэх
-                    </Button>
-
-                    <Link
                       className="bg-[#2563EB] rounded-[18px] w-[166px] hover:bg-slate-200 hover:text-black h-[36px] text-white px-[29px] py-[5px] text-[14px]"
-                      rel="address"
-                      href="/Basket/Pay"
                     >
                       Төлбөр төлөх
-                    </Link>
+                    </Button>
                   </div>
                 </div>
               </div>

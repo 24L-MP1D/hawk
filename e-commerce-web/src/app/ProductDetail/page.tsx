@@ -162,7 +162,12 @@ const ProductDetail = () => {
     const data = await response.json();
     setProducts(data);
   };
-
+  if (!uploadShoppingCart)
+    return (
+      <div className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
+        loading...
+      </div>
+    );
   return (
     <div className="max-w-[1040px] mx-auto gap-5 pt-[52px] pb-20">
       <div className="flex justify-center gap-5 mb-20">
